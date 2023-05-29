@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import Introduction from './src/screens/Introduction'
 
 const App = () => {
   return (
-    <View>
-      <Text>hello world</Text>
-    </View>
+    <Introduction/>
   )
 }
 
