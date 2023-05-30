@@ -26,7 +26,7 @@ const DATA: datatype[] = [
   {
     key: 'onboard1',
     title: 'Gain total control of your money',
-    description: 'Become your own money manager and make every cent count',
+    description: 'Become your own money manager and make every rupee count',
     image: require('../assets/images/ob1.png'),
   },
   {
@@ -39,7 +39,7 @@ const DATA: datatype[] = [
   {
     key: 'onboard3',
     title: 'Planning ahead',
-    description: 'Setup your budget for each category so you in control',
+    description: 'Setup your budget for each category so you are in control',
     image: require('../assets/images/Onboarding3.png'),
   },
 ];
