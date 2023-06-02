@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View,TouchableOpacity, Image, Pressable} from 'react-native';
+import { StyleSheet, Text, TextInput, View,TouchableOpacity, Image, Pressable, Alert} from 'react-native';
 import { COLORS } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useState } from 'react';
@@ -8,8 +8,30 @@ import { useNavigation } from '@react-navigation/native';
 import Login from './Login';
 import { AppNavigationParams } from '../navigation/AppNavigation';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Formik, Form, Field } from 'formik';
+ import * as Yup from 'yup';
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
+
+const SignupSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(3, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Please enter your name'),
+    email: Yup.string().email('Invalid email').required('Please enter your Email'),
+    password: Yup.string()
+    .min(8)
+    .required('Please Enter Password')
+    .matches(
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Must be 8 digits and combination of Uppercase, Lowercase, number and specialsymbols"
+    ),
+    confirmPassword: Yup.string()
+        .min(8)
+        .oneOf([Yup.ref('password')], "Passwords not matching")
+        .required('Confirm your Password')
+        
+  });
 
 const SignUp:React.FC<Props> = ({navigation}) => {
     
@@ -27,8 +49,21 @@ const SignUp:React.FC<Props> = ({navigation}) => {
    
 
   return (
+   <Formik initialValues={{
+        name: '',
+        email: '',
+        password:'',
+        confirmPassword:'',
+        //agreedToTerms: false
+   }}
+    validationSchema={SignupSchema}
+    onSubmit={ values =>Alert.alert(JSON.stringify(values))}
+   >
+    {({values,errors,touched,handleChange,isValid,setFieldTouched ,handleSubmit})=>(
+
+    
     <View style = {{flex:1, backgroundColor:COLORS.white}}>
-        <View style = {{flex:1, marginHorizontal:22}}>
+        <View style = {{flex:1, marginHorizontal:20}}>
             <View style = {{marginVertical:22}}>
             <View style={{flexDirection:'row',alignItems:'center', justifyContent:"space-evenly", marginBottom:15}}>
             <TouchableOpacity
@@ -44,8 +79,7 @@ const SignUp:React.FC<Props> = ({navigation}) => {
           </View>
             <Text style = {{fontSize:16, color:COLORS.grey,textAlign:'center'}}>Manage your expenses starting from today !!</Text>
             </View>
-            
-            <View style={{ marginBottom: 18 }}>
+            <View style={{ marginBottom: 15 }}>
                 {/* <Text style = {styles.inputTitle}>
                     NAME
                 </Text> */}
@@ -54,26 +88,42 @@ const SignUp:React.FC<Props> = ({navigation}) => {
                     placeholder='Name'
                     placeholderTextColor ='grey'
                     style = {styles.inputText}
+                    value={values.name}
+                    onChangeText={handleChange('name')}
+                    onBlur={()=> setFieldTouched('name')}
                 />
             </View>
+            {touched.name && errors.name &&(
+                    <Text style = {styles.errorText}>{errors.name}</Text>
+                )}
             </View>
-            <View style={{ marginBottom: 18 }}>
+            <View style={{ marginBottom: 15 }}>
             <View style = {styles.inputBox}>
                 <TextInput
                     placeholder='Email Address'
                     placeholderTextColor ='grey'
                     keyboardType='email-address'
                     style = {styles.inputText}
+                    value={values.email}
+                    onChangeText={handleChange('email')}
+                    onBlur={()=> setFieldTouched('email')}
+                    
                 />
             </View>
+            {touched.email && errors.email &&(
+                    <Text style = {styles.errorText}>{errors.email}</Text>
+                )}
             </View>
-            <View style={{ marginBottom: 18 }}>
+            <View style={{ marginBottom: 15 }}>
             <View style = {styles.inputBox}>
                 <TextInput
                     placeholder='Password'
                     placeholderTextColor ='grey'
                     secureTextEntry = {showPass}
                     style = {styles.inputText}
+                    value={values.password}
+                    onChangeText={handleChange('password')}
+                    onBlur={()=> setFieldTouched('password')}
                 />
                 <TouchableOpacity
                     onPress = {()=>setShowPass(!showPass)}
@@ -84,13 +134,33 @@ const SignUp:React.FC<Props> = ({navigation}) => {
                 >
                     {
                         showPass == true ?(
-                            <Ionicons name="eye-off" size={25} color={COLORS.black} /> 
+                            <Ionicons name="eye-off" size={25} color={COLORS.grey} /> 
                         ):(
                             <Ionicons name="eye" size={25} color={COLORS.black} />
                         )
                     }
                 </TouchableOpacity>
             </View>
+            {touched.password && errors.password &&(
+                    <Text style = {styles.errorText}>{errors.password}</Text>
+                )}
+            </View>
+
+            <View style={{ marginBottom: 15 }}>
+            <View style = {styles.inputBox}>
+                <TextInput
+                    placeholder='Confirm Password'
+                    placeholderTextColor ='grey'
+                    secureTextEntry = {showPass}
+                    style = {styles.inputText}
+                    value={values.confirmPassword}
+                    onChangeText={handleChange('confirmPassword')}
+                    onBlur={()=> setFieldTouched('confirmPassword')}
+                />
+            </View>
+            {touched.confirmPassword && errors.confirmPassword &&(
+                    <Text style = {styles.errorText}>{errors.confirmPassword}</Text>
+                )}
             </View>
 
         <View style = {{
@@ -123,9 +193,10 @@ const SignUp:React.FC<Props> = ({navigation}) => {
         
         <CustomButton
           title="Sign Up"
-          onPress={onSignUpPress}
-          Style={styles.button}
+          onPress={handleSubmit}
+          Style={[styles.button, {backgroundColor : isValid ? COLORS.primary: COLORS.grey}]}
           titleStyle={styles.ButtonText}
+          disabled = {!isValid}
         />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
@@ -198,9 +269,10 @@ const SignUp:React.FC<Props> = ({navigation}) => {
                         </Text>
                 </Pressable>
             </View>
-
         </View>
     </View>
+    )}
+    </Formik>
   )
 }
 
@@ -215,18 +287,19 @@ const styles = StyleSheet.create({
     },
     inputBox:{
         width:'100%',
-        height: 65,
+        height: 58,
         borderColor:COLORS.grey,
         borderWidth:1,
         borderRadius: 15,
         alignItems:'center',
         justifyContent:'center',
-        paddingLedt:22
+        paddingLeft:18
     },
     inputText:{
         textAlign:'left',
         width:'100%',
-        paddingLeft:12
+        paddingLeft:12,
+        fontSize:15
     },
     inputTitle:{
         fontSize: 16,
@@ -238,7 +311,7 @@ const styles = StyleSheet.create({
     button: {
         width:'100%',
         minHeight: 60,
-        backgroundColor: COLORS.primary,
+        //backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 5,
@@ -261,7 +334,11 @@ const styles = StyleSheet.create({
         borderColor:COLORS.grey,
         borderRadius:10,
         marginRight: 4,
-        
-
+      },
+      errorText:{
+        fontSize: 10,
+        color:'red',
+        paddingLeft:10,
+        paddingTop:2
       }
 })

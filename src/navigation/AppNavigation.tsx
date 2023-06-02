@@ -6,6 +6,8 @@ import SignUp from '../screens/SignUp';
 import Login from '../screens/Login';
 import Introduction from '../screens/Introduction';
 import Welcome from '../screens/Welcome';
+import ForgotPassword from '../screens/ForgotPassword';
+import Confirmation from '../screens/Confirmation';
 
 
 export
@@ -15,13 +17,15 @@ type AppNavigationParams = {
 "Login": undefined
 "SignUp": undefined
 "Welcome": undefined
+"ForgotPassword": any
+"Confirmation": any
 }
 
 
 
 const Stack = createNativeStackNavigator<AppNavigationParams>();
 
-const AppNavigation:React.FC = () => {
+const AppNavigation:React.FC<AppNavigationParams>= ({}) => {
 
     return (
         
@@ -31,6 +35,8 @@ const AppNavigation:React.FC = () => {
             <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
+            <Stack.Screen name="Confirmation" component={Confirmation} />
           </Stack.Navigator> 
         </NavigationContainer>
       );
