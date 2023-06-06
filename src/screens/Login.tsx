@@ -1,18 +1,21 @@
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Pressable, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Pressable, Alert , ActivityIndicator} from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 //import CheckBox from '@react-native-community/checkbox';
 import CustomButton from '../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
+
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppNavigationParams } from '../navigation/AppNavigation';
 
-import { Formik, Form, Field } from 'formik';
- import * as Yup from 'yup';
+import { Formik, useFormikContext } from 'formik';
+import * as Yup from 'yup';
 
-type Props = NativeStackScreenProps<AppNavigationParams,'SignUp'>
+import { AuthContext } from '../navigation/AuthStackProvider';
+
+
+type Props = NativeStackScreenProps<AppNavigationParams,'Home'>
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -23,8 +26,8 @@ const Login: React.FC<Props> = ({navigation}) => {
 
   //const navigation = useNavigation();
 
-  const onSignUpPress = () => {
-    console.log("Login pressed");
+  const onLoginPress = () => {
+    navigation.navigate("Home")
   };
 
   const pressHandler = () => {
@@ -35,20 +38,47 @@ const Login: React.FC<Props> = ({navigation}) => {
     navigation.navigate('ForgotPassword')
   }
 
-  const [showPass, setShowPass] = useState(false);
+  const [showPass, setShowPass] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+ 
+  //const formik = useFormikContext();
 
+  const {login} = useContext(AuthContext);
+  const initialValues = {
+    email: '',
+    password: ''
+}
+  
   return (
 
-    <Formik initialValues={{
-      email: '',
-      password: ''
-    }}
+    <Formik 
+      initialValues={initialValues}
     validationSchema={loginSchema}
-    onSubmit={values =>Alert.alert(JSON.stringify(values))}
+    onSubmit={ async (values,{resetForm}) => {
+      {
+        console.log('Form submitted');
+        console.log('Form values:', values);
+        try {
+          setIsLoading(true);
+          await login(values.email, values.password);
+          resetForm({values: initialValues})
+          navigation.navigate("Home");
+        } catch (error) {
+          console.log("Login error:", error);
+        }finally {
+          setIsLoading(false); // Set loading state back to false
+        }
+    }
+    }}
     >
       {({values,errors,touched,handleChange,isValid,setFieldTouched ,handleSubmit})=>(
 
     <View style={{ flex: 1, backgroundColor: COLORS.white, height:'100%' }}>
+      {isLoading ? (
+             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size={100} color="#0000ff" /> 
+            </View>// Replace with your loader component or indicator
+          ) : (
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
           <View style={{flexDirection:'row',alignItems:'center', justifyContent:"space-evenly", marginBottom:10}}>
@@ -129,7 +159,7 @@ const Login: React.FC<Props> = ({navigation}) => {
                 elevation:8
             }}>
                 <TouchableOpacity 
-                onPress={()=>console.log("Google SIGNUP Pressed")}
+                onPress={()=>console.log("Google LOGIN Pressed")}
                 style = {styles.googleLogin}>
                     <Image
                         source = {require("../assets/images/google.png")}
@@ -181,6 +211,7 @@ const Login: React.FC<Props> = ({navigation}) => {
         </View>
 
       </View>
+          )}
     </View> 
     )}
   </Formik>

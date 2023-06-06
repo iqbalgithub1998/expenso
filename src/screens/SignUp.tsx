@@ -1,15 +1,14 @@
-import { StyleSheet, Text, TextInput, View,TouchableOpacity, Image, Pressable, Alert} from 'react-native';
+import { StyleSheet, Text, TextInput, View,TouchableOpacity, Image, Pressable, ActivityIndicator} from 'react-native';
 import { COLORS } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Checkbox } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
-import Login from './Login';
 import { AppNavigationParams } from '../navigation/AppNavigation';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Formik, Form, Field } from 'formik';
+import { Formik, useFormikContext } from 'formik';
  import * as Yup from 'yup';
+ import { AuthContext } from '../navigation/AuthStackProvider';
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
 
@@ -36,33 +35,59 @@ const SignupSchema = Yup.object().shape({
 const SignUp:React.FC<Props> = ({navigation}) => {
     
     //const navigation = useNavigation();
-    const [showPass, setShowPass] = useState(false);
+    const [showPass, setShowPass] = useState(true);
     const [isChecked,setIsChecked] = useState(false);
+    const [isLoading,setIsLoading]  = useState(false);
 
-    const onSignUpPress = () => {
-        console.log('sign up press');
-      };
+    const {register} = useContext(AuthContext);
 
+    const initialValues = {
+        name: '',
+        email: '',
+        password:'',
+        confirmPassword:''
+    }
     const handlePress = () =>{
-        navigation.navigate("Login");
+        navigation.goBack();
     }
    
 
   return (
-   <Formik initialValues={{
-        name: '',
-        email: '',
-        password:'',
-        confirmPassword:'',
-        //agreedToTerms: false
-   }}
+   <Formik initialValues={initialValues}
     validationSchema={SignupSchema}
-    onSubmit={ values =>Alert.alert(JSON.stringify(values))}
+    onSubmit={ async (values, {resetForm}) =>{
+        {
+        console.log('Form submitted');
+        console.log('Form values:', values);
+        // register(values.name, values.email, values.password)
+        // navigation.navigate("Login")
+        try {
+            setIsLoading(true);
+  
+            await register(values.name,values.email, values.password);
+            resetForm({values: initialValues})
+            navigation.navigate("Login");
+          } catch (error) {
+            console.log("SignUp error:", error);
+          }finally {
+            setIsLoading(false); // Set loading state back to false
+          }
+        }
+    }
+         
+        }
    >
     {({values,errors,touched,handleChange,isValid,setFieldTouched ,handleSubmit})=>(
 
     
     <View style = {{flex:1, backgroundColor:COLORS.white}}>
+
+{isLoading ? (
+             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size={100} color="#0000ff" /> 
+            </View>// Replace with your loader component or indicator
+          ) : (
+
         <View style = {{flex:1, marginHorizontal:20}}>
             <View style = {{marginVertical:22}}>
             <View style={{flexDirection:'row',alignItems:'center', justifyContent:"space-evenly", marginBottom:15}}>
@@ -126,7 +151,7 @@ const SignUp:React.FC<Props> = ({navigation}) => {
                     onBlur={()=> setFieldTouched('password')}
                 />
                 <TouchableOpacity
-                    onPress = {()=>setShowPass(!showPass)}
+                    onPress = {()=>setShowPass((prevState)=> !prevState)}
                     style ={{
                         position:'absolute',
                         right:12
@@ -270,9 +295,11 @@ const SignUp:React.FC<Props> = ({navigation}) => {
                 </Pressable>
             </View>
         </View>
+          )}
     </View>
     )}
     </Formik>
+   
   )
 }
 
