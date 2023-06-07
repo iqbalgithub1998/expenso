@@ -12,6 +12,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 import CustomButton from '../components/CustomButton';
+import { useNavigation } from '@react-navigation/native';
 
 type datatype = {
   key: string;
@@ -19,7 +20,6 @@ type datatype = {
   description: string;
   image: any;
 };
-
 const bgs = ['#A5BBFF', '#DDBEFE', '#B98EFF'];
 
 const DATA: datatype[] = [
@@ -45,6 +45,10 @@ const DATA: datatype[] = [
 ];
 
 const Indicator: React.FC<any> = ({scrollX}) => {
+
+
+
+
   return (
     <View style={{position: 'absolute', bottom: 170, flexDirection: 'row'}}>
       {DATA.map((item: datatype, i: number) => {
@@ -111,7 +115,10 @@ const Square: React.FC<any> = ({scrollX}) => {
   );
 };
 
-const Introduction = () => {
+const Introduction:React.FC = () => {
+
+  const navigation = useNavigation();
+
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef<FlatList<datatype>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -129,11 +136,12 @@ const Introduction = () => {
   }, [currentIndex]);
 
   const onSignUpPress = () => {
-    console.log('sign up press');
+    // console.log('sign up press');
+    navigation.navigate('SignUp')
   };
 
   const onLoginPress = () => {
-    console.log('login Press');
+    navigation.navigate('Login')
   };
 
   const renderItem: ListRenderItem<datatype> = ({item}) => {
