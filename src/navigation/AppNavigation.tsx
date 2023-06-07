@@ -12,6 +12,7 @@ import Home from '../screens/Home';
 
 import { AuthContext, AuthProvider } from './AuthStackProvider';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import Expense from '../screens/Expense';
 
 
 export
@@ -23,6 +24,7 @@ type AppNavigationParams = {
 "ForgotPassword": any
 "Confirmation": any
 "Home": any
+"Expense" : any
 }
 
 type AppNavigationProps = {};
@@ -50,7 +52,7 @@ const [initializing, setInitializing] = useState(true);
     return (
         <AuthProvider>
         <NavigationContainer>
-          {user ? <Home />
+          {user ? <Home/>
             :  <Stack.Navigator  screenOptions={{headerShown:false}}>
             <Stack.Screen name="Initial" component={Introduction} />
             <Stack.Screen name="Welcome" component={Welcome} />
@@ -59,6 +61,7 @@ const [initializing, setInitializing] = useState(true);
             <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
             <Stack.Screen name="Confirmation" component={Confirmation} />
             <Stack.Screen name = "Home" component={Home} />
+            <Stack.Screen name = "Expense" component={Expense} />
           </Stack.Navigator>}
           
         </NavigationContainer>

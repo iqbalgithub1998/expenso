@@ -39,6 +39,10 @@ const Home: React.FC<Props> = ({navigation}) => {
       });
     }
 
+    const pressHandler = () => {
+      navigation.navigate("Expense")
+    }
+
   return (
     <View style = {{flex:1, backgroundColor:COLORS.white}}>
         <View style = {{flex:1, marginHorizontal:20, justifyContent:'flex-end'}}>
@@ -52,6 +56,13 @@ const Home: React.FC<Props> = ({navigation}) => {
             <CustomButton
                 title="Log Out"
                 onPress={handleSubmit}
+                Style={styles.button}
+                titleStyle={styles.ButtonText}
+                
+        />
+        <CustomButton
+                title="Expense"
+                onPress={pressHandler}
                 Style={styles.button}
                 titleStyle={styles.ButtonText}
                 
