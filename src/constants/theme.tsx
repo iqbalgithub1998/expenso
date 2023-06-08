@@ -9,7 +9,12 @@ export const COLORS = {
     white:"#FFFFFF",
     grey: 'grey',
     red: '#ED213A',
-    lightgrey: '#c0c0c0'
+    lightgrey: '#c0c0c0',
+    green: '#0f9b0f',
+    light: '#FFF6E5',
+    orange:'#f12711',
+    citrus: '#F7971E',
+    sulphur : '#ffff99'
 }
 
 export const SIZES = {

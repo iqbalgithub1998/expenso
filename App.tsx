@@ -26,7 +26,7 @@ const App = () => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-    <AppNavigation Initial={undefined} Login={undefined} SignUp={undefined} Welcome={undefined} ForgotPassword={undefined} Confirmation={undefined} Home={undefined} Expense={undefined}/>
+    <AppNavigation Initial={undefined} Login={undefined} SignUp={undefined} Welcome={undefined} ForgotPassword={undefined} Confirmation={undefined} Home={undefined} Expense={undefined} Income={undefined}/>
     
     </>
     

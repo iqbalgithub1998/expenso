@@ -44,7 +44,7 @@ const Expense:React.FC<Props>  = ({navigation}) => {
             >
             <Ionicons name="ios-arrow-back-outline" size={45} color={COLORS.white} />
             </TouchableOpacity>
-            <Text style={styles.expense}>Expenses</Text>
+            <Text style={styles.expense}>Income</Text>
           </View>
            <View style = {{marginTop:"10%", paddingLeft:10}}>
            <Text style = {{color:COLORS.white, fontWeight:"600", fontSize:16}}>How Much ?</Text>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: 'column',
-      backgroundColor: COLORS.red,
+      backgroundColor: COLORS.green,
     },
     topSection: {
       flex: 3,

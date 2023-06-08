@@ -9,10 +9,12 @@ import Welcome from '../screens/Welcome';
 import ForgotPassword from '../screens/ForgotPassword';
 import Confirmation from '../screens/Confirmation';
 import Home from '../screens/Home';
+import Income from '../screens/Income'
 
 import { AuthContext, AuthProvider } from './AuthStackProvider';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import Expense from '../screens/Expense';
+import Hometest from '../screens/Hometest';
 
 
 export
@@ -25,6 +27,8 @@ type AppNavigationParams = {
 "Confirmation": any
 "Home": any
 "Expense" : any
+"Income": any
+
 }
 
 type AppNavigationProps = {};
@@ -62,6 +66,7 @@ const [initializing, setInitializing] = useState(true);
             <Stack.Screen name="Confirmation" component={Confirmation} />
             <Stack.Screen name = "Home" component={Home} />
             <Stack.Screen name = "Expense" component={Expense} />
+            <Stack.Screen name = "Income" component={Income} />
           </Stack.Navigator>}
           
         </NavigationContainer>

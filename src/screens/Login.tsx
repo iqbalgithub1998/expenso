@@ -5,6 +5,7 @@ import { useContext, useState, useEffect } from 'react';
 //import CheckBox from '@react-native-community/checkbox';
 import CustomButton from '../components/CustomButton';
 
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppNavigationParams } from '../navigation/AppNavigation';
@@ -37,6 +38,33 @@ const Login: React.FC<Props> = ({navigation}) => {
   const forgotPress = () =>{
     navigation.navigate('ForgotPassword')
   }
+
+  useEffect(() =>{
+    GoogleSignin.configure();
+  },[]);
+
+   const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.signOut();
+      const userInfo = await GoogleSignin.signIn();
+      console.log("USER INFORMATION",userInfo)
+      navigation.navigate('Home')
+    } catch (error: any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("user cancelled the login flow")
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log("operation (e.g. sign in) is in progress already")
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log("play services not available or outdated")
+      } else {
+        // some other error happened
+        console.log(error)
+      }
+    }
+  };
 
   const [showPass, setShowPass] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -159,7 +187,7 @@ const Login: React.FC<Props> = ({navigation}) => {
                 elevation:8
             }}>
                 <TouchableOpacity 
-                onPress={()=>console.log("Google LOGIN Pressed")}
+                onPress={signIn}
                 style = {styles.googleLogin}>
                     <Image
                         source = {require("../assets/images/google.png")}
@@ -174,7 +202,7 @@ const Login: React.FC<Props> = ({navigation}) => {
                         fontSize:15,
                         fontWeight:'800',
                         color:COLORS.grey
-                    }}> Sign Up with Google</Text>
+                    }}> Sign in with Google</Text>
                 </TouchableOpacity>
             </View>
         <View style={{ alignItems: 'center', padding: 20 }}>
