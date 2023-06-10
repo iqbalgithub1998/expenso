@@ -12,7 +12,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 import CustomButton from '../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 type datatype = {
   key: string;
@@ -45,10 +45,6 @@ const DATA: datatype[] = [
 ];
 
 const Indicator: React.FC<any> = ({scrollX}) => {
-
-
-
-
   return (
     <View style={{position: 'absolute', bottom: 170, flexDirection: 'row'}}>
       {DATA.map((item: datatype, i: number) => {
@@ -115,8 +111,7 @@ const Square: React.FC<any> = ({scrollX}) => {
   );
 };
 
-const Introduction:React.FC = () => {
-
+const Introduction: React.FC = () => {
   const navigation = useNavigation();
 
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -127,7 +122,7 @@ const Introduction:React.FC = () => {
     const interval = setInterval(() => {
       if (flatListRef.current) {
         const nextIndex = (currentIndex + 1) % DATA.length;
-        flatListRef.current.scrollToIndex({ index: nextIndex, animated: true });
+        flatListRef.current.scrollToIndex({index: nextIndex, animated: true});
         setCurrentIndex(nextIndex);
       }
     }, 4000); // Change the interval duration as needed
@@ -137,16 +132,21 @@ const Introduction:React.FC = () => {
 
   const onSignUpPress = () => {
     // console.log('sign up press');
-    navigation.navigate('SignUp')
+    navigation.navigate('SignUp');
   };
 
   const onLoginPress = () => {
-    navigation.navigate('Login')
+    navigation.navigate('Login');
   };
 
   const renderItem: ListRenderItem<datatype> = ({item}) => {
     return (
-      <View style={{width: SIZES.width, alignItems: 'center', padding: 20}}>
+      <View
+        style={{
+          width: SIZES.width,
+          alignItems: 'center',
+          padding: 20,
+        }}>
         <View style={{flex: 0.6, justifyContent: 'center'}}>
           <Image
             source={item.image}
@@ -186,7 +186,7 @@ const Introduction:React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden />
+      <StatusBar backgroundColor={COLORS.white} />
       <Backdrop scrollX={scrollX} />
       <Square scrollX={scrollX} />
       <Animated.FlatList
