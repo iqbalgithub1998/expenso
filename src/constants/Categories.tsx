@@ -26,3 +26,27 @@ export const Categories = [
       "Stocks",
       "Real Estate"
     ];
+
+
+    export const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+
+    export const timeFrame = [
+      'Today',
+      'Week',
+      'Month',
+      'Year'
+    ] 

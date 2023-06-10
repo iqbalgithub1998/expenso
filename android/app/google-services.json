@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "765373708472-9iurfa3j2f058ci3ri6g793bjvj7oqkf.apps.googleusercontent.com",
+          "client_id": "765373708472-hvddgq84fjenleeb1568qg678caa6hgq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.expenso",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "765373708472-0uk72bf4p198anb0b8ruspovlei6lte7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "765373708472-9iurfa3j2f058ci3ri6g793bjvj7oqkf.apps.googleusercontent.com",
+              "client_id": "765373708472-0uk72bf4p198anb0b8ruspovlei6lte7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

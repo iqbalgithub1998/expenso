@@ -9,10 +9,16 @@ import Welcome from '../screens/Welcome';
 import ForgotPassword from '../screens/ForgotPassword';
 import Confirmation from '../screens/Confirmation';
 import Home from '../screens/Home';
+import Income from '../screens/Income'
 
 import { AuthContext, AuthProvider } from './AuthStackProvider';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import Expense from '../screens/Expense';
+import Hometest from '../screens/Hometest';
+import TabsNavigator from './TabsNavigator';
+
+import { TabContextProvider } from '../context/TabContext';
+import Transfer from '../screens/Transfer';
 
 
 export
@@ -23,8 +29,11 @@ type AppNavigationParams = {
 "Welcome": any
 "ForgotPassword": any
 "Confirmation": any
-"Home": any
+"HomeTab": any
 "Expense" : any
+"Income": any
+"Transfer": any
+
 }
 
 type AppNavigationProps = {};
@@ -51,6 +60,7 @@ const [initializing, setInitializing] = useState(true);
   if (initializing) return null;
     return (
         <AuthProvider>
+          <TabContextProvider>
         <NavigationContainer>
           {user ? <Home/>
             :  <Stack.Navigator  screenOptions={{headerShown:false}}>
@@ -60,11 +70,14 @@ const [initializing, setInitializing] = useState(true);
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
             <Stack.Screen name="Confirmation" component={Confirmation} />
-            <Stack.Screen name = "Home" component={Home} />
-            <Stack.Screen name = "Expense" component={Expense} />
+            <Stack.Screen name = "HomeTab" component={TabsNavigator} />
+             <Stack.Screen name = "Expense" component={Expense} />
+            <Stack.Screen name = "Income" component={Income} />
+            <Stack.Screen name = "Transfer" component={Transfer} /> 
           </Stack.Navigator>}
           
         </NavigationContainer>
+        </TabContextProvider>
         </AuthProvider>
       );
     };
