@@ -16,14 +16,14 @@ import RepeatTransaction from '../components/RepeatTransaction';
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
 
-const Expense:React.FC<Props>  = ({navigation}) => {
+const Income:React.FC<Props>  = ({navigation}) => {
 
     const handlePress = () =>{
         navigation.goBack();
     }
 
     const handleSubmit = () => {
-        navigation.navigate("Home");
+        navigation.navigate("HomeTab");
     }
 
     const handleAttachment = () => {
@@ -46,7 +46,7 @@ const Expense:React.FC<Props>  = ({navigation}) => {
             </TouchableOpacity>
             <Text style={styles.expense}>Income</Text>
           </View>
-           <View style = {{marginTop:"10%", paddingLeft:10}}>
+           <View style = {{marginTop:"5%", paddingLeft:10}}>
            <Text style = {{color:COLORS.white, fontWeight:"600", fontSize:16}}>How Much ?</Text>
            <View style = {styles.textInput}>
             <Text style= {{fontSize:75, color:COLORS.white, fontWeight:'bold'}}>₹ </Text>
@@ -101,7 +101,7 @@ const Expense:React.FC<Props>  = ({navigation}) => {
       );
     };
 
-export default Expense
+export default Income
 
 const styles = StyleSheet.create({
     container: {

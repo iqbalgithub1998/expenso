@@ -9,8 +9,9 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Formik, useFormikContext } from 'formik';
  import * as Yup from 'yup';
  import { AuthContext } from '../navigation/AuthStackProvider';
+import { signIn } from '../utils/GoogleSignIn'
 
-type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
+type Props = NativeStackScreenProps<AppNavigationParams,'HomeTab'>
 
 const SignupSchema = Yup.object().shape({
     name: Yup.string()
@@ -33,6 +34,13 @@ const SignupSchema = Yup.object().shape({
   });
 
 const SignUp:React.FC<Props> = ({navigation}) => {
+
+
+    const handleGoogleSignIn = async () => {
+        //await signIn(navigation);
+        const userInfo = await signIn(navigation);
+        navigation.navigate('HomeTab', { userInfo });
+      };
     
     //const navigation = useNavigation();
     const [showPass, setShowPass] = useState(true);
@@ -66,7 +74,7 @@ const SignUp:React.FC<Props> = ({navigation}) => {
   
             await register(values.name,values.email, values.password);
             resetForm({values: initialValues})
-            navigation.navigate("Login");
+            navigation.navigate("HomeTab");
           } catch (error) {
             console.log("SignUp error:", error);
           }finally {
@@ -250,7 +258,7 @@ const SignUp:React.FC<Props> = ({navigation}) => {
                 elevation:8
             }}>
                 <TouchableOpacity 
-                onPress={()=>console.log("Google SIGNUP Pressed")}
+                onPress={handleGoogleSignIn}
                 style = {styles.googleLogin}>
                     <Image
                         source = {require("../assets/images/google.png")}

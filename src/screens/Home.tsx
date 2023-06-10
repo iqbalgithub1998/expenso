@@ -1,21 +1,27 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, FlatList, ViewStyle,TextStyle, StyleProp, ScrollView } from 'react-native'
-import React , {useContext, useState}from 'react'
+import React , {useContext, useEffect, useState}from 'react'
 import { COLORS, SIZES } from '../constants/theme'
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import CustomDropDown from '../components/CustomDropDown'
 import { monthNames, timeFrame } from '../constants/Categories'
-import MonthSelector from '../components/MonthPicker';
 import { AuthContext } from '../navigation/AuthStackProvider';
+import auth from '@react-native-firebase/auth'
+//import { AuthContext } from '../navigation/AuthStackProvider';
 
 import { AppNavigationParams } from '../navigation/AppNavigation';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Cards from '../components/Cards'
 import CustomButton from '../components/CustomButton'
+import LineChart from '../components/LineChart'
+import TabContainer from '../components/TabContainer';
 
 
 
-type Props = NativeStackScreenProps<AppNavigationParams,'Home'>
+
+
+
+type Props = NativeStackScreenProps<AppNavigationParams,'HomeTab'>
 
 
 const tab = (activePeriod: string, item: string): ViewStyle => ({
@@ -38,13 +44,26 @@ const tabText = (activeJobType:string, item: string): StyleProp<TextStyle> => ({
 
 
 
-const Home: React.FC<Props> = ({navigation}) => {
+const Home: React.FC<Props> = ({navigation, route}) => {
 
+  const {userInfo} = route.params ?? {};
+  const [userName, setUserName] = useState('');
   const {logout} = useContext(AuthContext);
 
   const [activePeriod, setActivePeriod] = useState('Today');
 
   const period =  timeFrame;
+
+
+  //////For Name input from User database////////////
+  useEffect(() => {
+    if (userInfo) {
+      const { user } = userInfo;
+      const displayName = user?.givenName || '';
+      setUserName(displayName);
+    }
+  }, [userInfo]);
+  //////For Name input////////////
 
   const handleSubmit = () =>{
     logout().then(() => {
@@ -62,6 +81,7 @@ const Home: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+       <TabContainer>
       <View style={styles.topSection}>
         <View style = {styles.topbar}>
         <View style={styles.outerCircle}>
@@ -80,7 +100,7 @@ const Home: React.FC<Props> = ({navigation}) => {
         </View>
         <Text style = {{color:COLORS.grey, fontWeight:'600', fontSize:15,textAlign:'center'}}>Account Balance</Text>
         <Text style = {styles.MoneyText}>₹ 10000</Text>
-        <View style = {{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+        <View style = {{flexDirection:'row', alignItems:'center', justifyContent:'space-between', marginBottom:10}}>
           <Cards
             title = 'Income'
             subtitle = '₹ 5000'
@@ -95,11 +115,14 @@ const Home: React.FC<Props> = ({navigation}) => {
         </View>
         
        </View>
+       
       <View style={styles.bottomSection}>
-        <ScrollView>
+     
+      <ScrollView>
         <Text style={styles.bottomtext}>Spend Frequency</Text>
        <View>
-        <Text style = {{textAlign:'center'}}>Graph/Chart</Text>
+        {/* <Text style = {{textAlign:'center'}}>Graph/Chart</Text> */}
+        <LineChart/>
        </View>
             <View style = {styles.tabsContainer}>
             <FlatList
@@ -128,10 +151,28 @@ const Home: React.FC<Props> = ({navigation}) => {
               titleStyle={{color:COLORS.primary,justifyContent:'center', alignSelf:'center', fontSize:14, fontWeight:'bold'}}
             />
             </View>
+
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+             <Text style = {{padding:10, fontSize:16}}>Test</Text>
+
+             
                
             </ScrollView>
+            
          </View>
-        
+         </TabContainer>
     </View>
 
   );
@@ -163,7 +204,8 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: COLORS.black,
     minHeight: 50,
-    margin: 10,
+    margin: 3,
+    //marginBottom:3,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

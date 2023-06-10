@@ -14,9 +14,9 @@ import { Formik, useFormikContext } from 'formik';
 import * as Yup from 'yup';
 
 import { AuthContext } from '../navigation/AuthStackProvider';
+import { signIn } from '../utils/GoogleSignIn'
 
-
-type Props = NativeStackScreenProps<AppNavigationParams,'Home'>
+type Props = NativeStackScreenProps<AppNavigationParams,'HomeTab'>
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -27,9 +27,6 @@ const Login: React.FC<Props> = ({navigation}) => {
 
   //const navigation = useNavigation();
 
-  const onLoginPress = () => {
-    navigation.navigate("Home")
-  };
 
   const pressHandler = () => {
     navigation.navigate('SignUp');
@@ -43,27 +40,32 @@ const Login: React.FC<Props> = ({navigation}) => {
     GoogleSignin.configure();
   },[]);
 
-   const signIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      await GoogleSignin.signOut();
-      const userInfo = await GoogleSignin.signIn();
-      console.log("USER INFORMATION",userInfo)
-      navigation.navigate('Home')
-    } catch (error: any) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log("user cancelled the login flow")
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-        console.log("operation (e.g. sign in) is in progress already")
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-        console.log("play services not available or outdated")
-      } else {
-        // some other error happened
-        console.log(error)
-      }
-    }
+  //  const signIn = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     await GoogleSignin.signOut();
+  //     const userInfo = await GoogleSignin.signIn();
+  //     console.log("USER INFORMATION",userInfo)
+  //     navigation.navigate('HomeTab', {userInfo})
+  //   } catch (error: any) {
+  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+  //       console.log("user cancelled the login flow")
+  //     } else if (error.code === statusCodes.IN_PROGRESS) {
+  //       // operation (e.g. sign in) is in progress already
+  //       console.log("operation (e.g. sign in) is in progress already")
+  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+  //       // play services not available or outdated
+  //       console.log("play services not available or outdated")
+  //     } else {
+  //       // some other error happened
+  //       console.log(error)
+  //     }
+  //   }
+  // };
+  const handleGoogleSignIn = async () => {
+    //await signIn(navigation);
+    const userInfo = await signIn(navigation);
+    navigation.navigate('HomeTab', { userInfo });
   };
 
   const [showPass, setShowPass] = useState(true);
@@ -90,7 +92,7 @@ const Login: React.FC<Props> = ({navigation}) => {
           setIsLoading(true);
           await login(values.email, values.password);
           resetForm({values: initialValues})
-          navigation.navigate("Home");
+          navigation.navigate("HomeTab");
         } catch (error) {
           console.log("Login error:", error);
         }finally {
@@ -187,7 +189,7 @@ const Login: React.FC<Props> = ({navigation}) => {
                 elevation:8
             }}>
                 <TouchableOpacity 
-                onPress={signIn}
+                onPress={handleGoogleSignIn}
                 style = {styles.googleLogin}>
                     <Image
                         source = {require("../assets/images/google.png")}
