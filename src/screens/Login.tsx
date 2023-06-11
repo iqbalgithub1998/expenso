@@ -48,14 +48,12 @@ const Login: React.FC<Props> = ({navigation}) => {
     const userInfo = await signIn(navigation);
     navigation.navigate('HomeTab', {userInfo});
   };
-
   const [showPass, setShowPass] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
   const {login} = useContext(AuthContext);
   const initialValues = {
-    email: 'test5@gmail.com',
-    password: 'Iqbal@123',
+    email: '',
+    password: '',
   };
 
   return (
@@ -65,22 +63,18 @@ const Login: React.FC<Props> = ({navigation}) => {
       validationSchema={loginSchema}
       onSubmit={async (values, {resetForm, setSubmitting}) => {
         {
-          // setSubmitting(true);
-          // console.log('hello world');
-          // setTimeout(() => {
-          //   setSubmitting(false);
-          //   console.log('form submitted');
-          // }, 5000);
           try {
             setSubmitting(true);
             setIsLoading(true);
-            await login(values.email, values.password);
+            const user = await login(values.email, values.password);
+            console.log('user from login', user);
             resetForm({values: initialValues});
 
             navigation.navigate('HomeTab');
           } catch (error) {
             console.log('Login error:', error);
           } finally {
+            setShowPass(false);
             setSubmitting(false);
             setIsLoading(false); // Set loading state back to false
           }
@@ -114,7 +108,7 @@ const Login: React.FC<Props> = ({navigation}) => {
                   }}>
                   <Ionicons
                     name="ios-arrow-back-outline"
-                    size={45}
+                    size={35}
                     color={COLORS.black}
                   />
                 </TouchableOpacity>
@@ -176,6 +170,25 @@ const Login: React.FC<Props> = ({navigation}) => {
               disabled={!isValid || isSubmitting}
               backgroundColor={COLORS.primary}
             />
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: 20,
+              }}>
+              <View style={styles.line} />
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: COLORS.grey,
+                  fontWeight: '600',
+                  marginHorizontal: 10,
+                }}>
+                Or with
+              </Text>
+              <View style={styles.line} />
+            </View>
 
             <View
               style={{
@@ -306,5 +319,11 @@ const styles = StyleSheet.create({
     color: 'red',
     paddingLeft: 10,
     paddingTop: 2,
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: COLORS.lightgrey,
+    marginHorizontal: 5,
   },
 });

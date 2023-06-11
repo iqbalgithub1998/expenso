@@ -28,7 +28,6 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   disabled,
   backgroundColor,
 }) => {
-  console.log('custom button');
   return (
     <TouchableOpacity
       activeOpacity={disabled ? 1 : 0.7}
@@ -42,7 +41,12 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         },
         styles.default,
       ]}
-      onPress={onPress}>
+      onPress={() => {
+        if (disabled) {
+          return;
+        }
+        onPress();
+      }}>
       {isLoading ? <ActivityIndicator size={30} color="green" /> : null}
       <Text style={[titleStyle, isLoading ? {marginLeft: 5} : {}]}>
         {title}
