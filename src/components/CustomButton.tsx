@@ -28,6 +28,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   disabled,
   backgroundColor,
 }) => {
+  console.log('custom button');
   return (
     <TouchableOpacity
       activeOpacity={disabled ? 1 : 0.7}
