@@ -8,11 +8,13 @@ import {
   FlatList,
   ListRenderItem,
   Button,
+  useColorScheme,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 import CustomButton from '../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 type datatype = {
   key: string;
@@ -45,10 +47,6 @@ const DATA: datatype[] = [
 ];
 
 const Indicator: React.FC<any> = ({scrollX}) => {
-
-
-
-
   return (
     <View style={{position: 'absolute', bottom: 170, flexDirection: 'row'}}>
       {DATA.map((item: datatype, i: number) => {
@@ -115,33 +113,36 @@ const Square: React.FC<any> = ({scrollX}) => {
   );
 };
 
-const Introduction:React.FC = () => {
+const Introduction: React.FC<any> = ({navigation}) => {
+  const isDarkMode = useColorScheme() === 'dark';
 
-  const navigation = useNavigation();
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? COLORS.white : COLORS.white,
+  };
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef<FlatList<datatype>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (flatListRef.current) {
-        const nextIndex = (currentIndex + 1) % DATA.length;
-        flatListRef.current.scrollToIndex({ index: nextIndex, animated: true });
-        setCurrentIndex(nextIndex);
-      }
-    }, 4000); // Change the interval duration as needed
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (flatListRef.current) {
+  //       const nextIndex = (currentIndex + 1) % DATA.length;
+  //       flatListRef.current.scrollToIndex({index: nextIndex, animated: true});
+  //       setCurrentIndex(nextIndex);
+  //     }
+  //   }, 4000); // Change the interval duration as needed
 
-    return () => clearInterval(interval);
-  }, [currentIndex]);
+  //   return () => clearInterval(interval);
+  // }, [currentIndex]);
 
   const onSignUpPress = () => {
     // console.log('sign up press');
-    navigation.navigate('SignUp')
+    navigation.navigate('SignUp');
   };
 
   const onLoginPress = () => {
-    navigation.navigate('Login')
+    navigation.navigate('Login');
   };
 
   const renderItem: ListRenderItem<datatype> = ({item}) => {
@@ -186,7 +187,10 @@ const Introduction:React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden />
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
       <Backdrop scrollX={scrollX} />
       <Square scrollX={scrollX} />
       <Animated.FlatList
@@ -211,12 +215,14 @@ const Introduction:React.FC = () => {
           onPress={onSignUpPress}
           Style={styles.button}
           titleStyle={styles.ButtonText}
+          backgroundColor={COLORS.primary}
         />
         <CustomButton
           title="Login"
           onPress={onLoginPress}
           Style={[styles.button, styles.loginButton]}
           titleStyle={[styles.ButtonText, styles.loginText]}
+          backgroundColor={COLORS.secondary}
         />
       </View>
     </View>
@@ -229,7 +235,6 @@ const styles = StyleSheet.create({
   button: {
     width: SIZES.width - 30,
     minHeight: 60,
-    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 5,
