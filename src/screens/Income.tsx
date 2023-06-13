@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert} from 'react-native'
+import React, { useState } from 'react'
 import { COLORS, SIZES } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AppNavigationParams } from '../navigation/AppNavigation';
@@ -12,19 +12,45 @@ import { savingsTypes } from '../constants/Categories';
 import CustomTextInput from '../components/CustomTextInput';
 import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
+import DateSelect from '../components/Date';
 
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
 
 const Income:React.FC<Props>  = ({navigation}) => {
 
+
+  const [expenseValue, setExpenseValue] = useState('');
+const [categoryValue, setCategoryValue] = useState('');
+const [transactionTypeValue, setTransactionTypeValue] = useState('');
+const [descriptionValue, setDescriptionValue] = useState('');
+const [dateValue, setDateValue] = useState('');
+
     const handlePress = () =>{
         navigation.goBack();
     }
 
     const handleSubmit = () => {
-        navigation.navigate("HomeTab");
-    }
+      if(
+        expenseValue &&
+    categoryValue &&
+    transactionTypeValue &&
+    // descriptionValue &&  -----Add this when We need description to be there
+    dateValue
+      ){
+        console.log('Expense:', expenseValue);
+        console.log('Category:', categoryValue);
+        console.log('Transaction Type:', transactionTypeValue);
+        console.log('Description:', descriptionValue);
+        console.log('Date:', dateValue);
+        navigation.navigate('HomeTab');
+      }else{
+        Alert.alert("Fill the fields")
+      }
+     
+    };
+
+
 
     const handleAttachment = () => {
       console.log("Will add attachment");
@@ -54,6 +80,7 @@ const Income:React.FC<Props>  = ({navigation}) => {
             Style={styles.input}
             placeholder= "0"
             placeholderTextColor="white"
+            onChangeText={(value) => setExpenseValue(value)}
           />
            </View>
            
@@ -62,21 +89,28 @@ const Income:React.FC<Props>  = ({navigation}) => {
           <View style={styles.bottomSection}>
           <View style = {{flex:1, marginHorizontal:20,marginVertical:20}}>
           <View style={{ flex: 1,  justifyContent:'space-evenly' }}> 
-                   <CustomDropDown 
-                    options={Categories}
-                    placeholder='Category'
-                   />
-                   <CustomDropDown 
-                    options={savingsTypes}
-                    placeholder='Transaction Type'
-                   />        
-                   <CustomTextInput
-                   placeholder='Description'
-                   placeholderTextColor = 'grey'
-                  />
-              <AddAttachment
-                title="Add Attachment"
-                onPress={handleAttachment}
+              <CustomDropDown
+                options={Categories}
+                placeholder='Category'
+                onSelectValue={(value) => setCategoryValue(value)}
+              />
+              <CustomDropDown
+                options={savingsTypes}
+                placeholder='Transaction Type'
+                onSelectValue={(value) => setTransactionTypeValue(value)}
+
+              />
+              <CustomTextInput
+                placeholder='Description'
+                placeholderTextColor='grey'
+                onChangeText={(value) => setDescriptionValue(value)}
+              />
+              {/* <AddAttachment
+                      title="Add Attachment"
+                      onPress={handleAttachment}
+                    />  */}
+              <DateSelect placeholder='Select date'
+                onSelectDate={(value) => setDateValue(value)}
               />
               <RepeatTransaction
               title='Repeat'

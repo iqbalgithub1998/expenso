@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native'
-import React from 'react'
+
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert} from 'react-native'
+import React, { useState } from 'react'
 import { COLORS, SIZES } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AppNavigationParams } from '../navigation/AppNavigation';
@@ -12,23 +13,64 @@ import { savingsTypes } from '../constants/Categories';
 import CustomTextInput from '../components/CustomTextInput';
 import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
-
+import DateSelect from '../components/Date';
+import {uploadExpenseData} from '../Api/GoogleExpense';
+import firebase from '@react-native-firebase/app'
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
 
 const Expense:React.FC<Props>  = ({navigation}) => {
 
+const [expenseValue, setExpenseValue] = useState('');
+const [categoryValue, setCategoryValue] = useState('');
+const [transactionTypeValue, setTransactionTypeValue] = useState('');
+const [descriptionValue, setDescriptionValue] = useState('');
+const [dateValue, setDateValue] = useState('');
+
     const handlePress = () =>{
         navigation.goBack();
     }
 
-    const handleSubmit = () => {
-        navigation.navigate("Home");
-    }
+    // const handleSubmit = () => {
+    //     navigation.navigate("HomeTab");
+    // }
 
     const handleAttachment = () => {
       console.log("Will add attachment");
     }
+
+    const handleSubmit = async () => {
+      if(
+        expenseValue &&
+    categoryValue &&
+    transactionTypeValue &&
+    // descriptionValue &&  -----Add this when We need description to be there
+    dateValue
+      ){
+        console.log('Expense:', expenseValue);
+        console.log('Category:', categoryValue);
+        console.log('Transaction Type:', transactionTypeValue);
+        console.log('Description:', descriptionValue);
+        console.log('Date:', dateValue);
+
+        // const expenseData = {
+        //   expense: expenseValue,
+        //   category: categoryValue,
+        //   transactionType: transactionTypeValue,
+        //   description: descriptionValue,
+        //   deadline: dateValue,
+        //   createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        // };
+  
+        //rawait uploadExpenseData(expenseData);
+  
+        console.log('Expense data uploaded successfully');
+        navigation.navigate('HomeTab');
+      }else{
+        Alert.alert("Fill the fields")
+      }
+     
+    };
 
 
     return (
@@ -54,6 +96,7 @@ const Expense:React.FC<Props>  = ({navigation}) => {
             Style={styles.input}
             placeholder= "0"
             placeholderTextColor="white"
+            onChangeText={(value) => setExpenseValue(value)}
           />
            </View>
            
@@ -65,19 +108,27 @@ const Expense:React.FC<Props>  = ({navigation}) => {
                    <CustomDropDown 
                     options={Categories}
                     placeholder='Category'
+                    onSelectValue={(value) => setCategoryValue(value)}
                    />
                    <CustomDropDown 
                     options={savingsTypes}
                     placeholder='Transaction Type'
+                    onSelectValue={(value) => setTransactionTypeValue(value)}
+                    
                    />        
                    <CustomTextInput
                    placeholder='Description'
                    placeholderTextColor = 'grey'
+                   onChangeText={(value) => setDescriptionValue(value)}
                   />
-              <AddAttachment
+               {/* <AddAttachment
                 title="Add Attachment"
                 onPress={handleAttachment}
+              />  */}
+              <DateSelect placeholder='Select date'
+                onSelectDate={(value) => setDateValue(value)}
               />
+              {/* <DatePick/> */}
               <RepeatTransaction
               title='Repeat'
               subTitle='Repeat Transaction'
