@@ -5,7 +5,7 @@ import { COLORS } from '../constants/theme';
 
 interface CardProps {
 title: string;
-  subtitle: string;
+subtitle: React.ReactNode;
   containerStyle?: ViewStyle;
   titleStyle?: TextStyle;
   subtitleStyle?: TextStyle;

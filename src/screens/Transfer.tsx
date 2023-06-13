@@ -8,7 +8,8 @@ import CustomButton from '../components/CustomButton';
 import CustomNumberInput from '../components/CustomNumberInput';
 import CustomTextInput from '../components/CustomTextInput';
 import DateSelect from '../components/Date';
-//import DatePicker from '../components/DatePicker';
+import firestore from '@react-native-firebase/firestore'
+import { uploadTransferData } from '../Api/FireBaseInsertion';
 
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
@@ -22,7 +23,7 @@ const Transfer:React.FC<Props>  = ({navigation}) => {
       const [fromValue, setFromValue] = useState('');
       const [toValue, setToValue] = useState('');
       
-      const [expenseValue, setExpenseValue] = useState('');
+      const [expenseValue, setExpenseValue] = useState<number | undefined>(undefined);
       const [senderValue, setSenderValue] = useState('');
       const [receiverValue, setReceiverValue] = useState('');
       //const [transactionTypeValue, setTransactionTypeValue] = useState('');
@@ -35,7 +36,7 @@ const Transfer:React.FC<Props>  = ({navigation}) => {
         setToValue(tempValue);
       };
 
-      const handleSubmit = () => {
+      const handleSubmit = async () => {
         if(
           expenseValue &&
           senderValue &&
@@ -48,6 +49,27 @@ const Transfer:React.FC<Props>  = ({navigation}) => {
           console.log('To:', receiverValue);
           console.log('Description:', descriptionValue);
           console.log('Date:', dateValue);
+
+          // const transferData = {
+          //   expense: expenseValue,
+          //   sender: senderValue,
+          //   receiver:  receiverValue,
+          //   description: descriptionValue,
+          //   deadline: dateValue,
+          //   createdAt: firestore.FieldValue.serverTimestamp(),
+          // };
+    
+           await uploadTransferData(
+          expenseValue,
+          senderValue,
+          receiverValue,
+          descriptionValue,
+          dateValue,
+           );
+    
+          console.log('Expense data uploaded successfully');
+
+
           navigation.navigate('HomeTab');
         }else{
           Alert.alert("Fill the fields")
@@ -94,7 +116,10 @@ const Transfer:React.FC<Props>  = ({navigation}) => {
             Style={styles.input}
             placeholder= "0"
             placeholderTextColor="white"
-            onChangeText={(value) => setExpenseValue(value)}
+            onChangeText={(value) => {
+              const parsedValue = parseFloat(value);
+              setExpenseValue(isNaN(parsedValue) ? undefined : parsedValue);
+            }}
           />
            </View>
            
@@ -147,13 +172,21 @@ const Transfer:React.FC<Props>  = ({navigation}) => {
              </View>
 
              
-            <CustomButton
+            {/* <CustomButton
               title="Continue"
               onPress={handleSubmit}
               Style={styles.button}
               titleStyle={styles.ButtonText}
 
-            />
+            /> */}
+              <CustomButton
+              title="Continue"
+              onPress={handleSubmit}
+              // Style={styles.button}
+              // titleStyle={styles.ButtonText}
+              Style={[styles.button]}
+              titleStyle={[styles.ButtonText]}
+              backgroundColor={COLORS.primary} />
 
         </View>
           </View>
@@ -202,23 +235,23 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent: 'flex-start'
     },
-    button: {
-        width:'100%',
-        minHeight: 60,
-        backgroundColor: COLORS.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 5,
-        borderRadius: 15,
-        elevation:8,
-        marginTop:6,
-        zIndex:0
-      },
-      ButtonText: {
-        fontWeight: '500',
-        fontSize: 22,
-        color: COLORS.white,
-      },
+    // button: {
+    //     width:'100%',
+    //     minHeight: 60,
+    //     backgroundColor: COLORS.primary,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     marginBottom: 5,
+    //     borderRadius: 15,
+    //     elevation:8,
+    //     marginTop:6,
+    //     zIndex:0
+    //   },
+      // ButtonText: {
+      //   fontWeight: '500',
+      //   fontSize: 22,
+      //   color: COLORS.white,
+      // },
       toFrom: {
         flex: 1,
         borderRadius: 15,
@@ -226,17 +259,17 @@ const styles = StyleSheet.create({
         fontSize: 19,
         textAlign:'center'
       },
-      buttonContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'blue',
-        paddingHorizontal: 10,
-        borderRadius: 5,
-      },
-      buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-      },
+      // buttonContainer: {
+      //   justifyContent: 'center',
+      //   alignItems: 'center',
+      //   backgroundColor: 'blue',
+      //   paddingHorizontal: 10,
+      //   borderRadius: 5,
+      // },
+      // buttonText: {
+      //   color: 'white',
+      //   fontWeight: 'bold',
+      // },
       imageContainer: {
         position: 'absolute',
         top: 5,
@@ -253,5 +286,34 @@ const styles = StyleSheet.create({
        borderWidth:2,
        borderColor:COLORS.primary
       },
+      button: {
+        width:'100%',
+       // minHeight: 60,
+       // backgroundColor: COLORS.primary,
+       // justifyContent: 'center',
+       // alignItems: 'center',
+       // marginBottom: 5,
+       // borderRadius: 15,
+       elevation:8,
+       // marginTop:6,
+       // zIndex:0
+      // width: SIZES.width - 30,
+       minHeight: 60,
+       justifyContent: 'center',
+       alignItems: 'center',
+       marginBottom: 5,
+       borderRadius: 15,
+     },
+     ButtonText: {
+      fontWeight: '500',
+      fontSize: 22,
+      color: COLORS.white,
+    },
+     loginButton: {
+       backgroundColor: COLORS.primary,
+     },
+     loginText: {
+       color: COLORS.secondary,
+     },
       
   });

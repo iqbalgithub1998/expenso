@@ -13,6 +13,8 @@ import CustomTextInput from '../components/CustomTextInput';
 import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
 import DateSelect from '../components/Date';
+import firestore  from '@react-native-firebase/firestore';
+import { uploadIncomeData } from '../Api/FireBaseInsertion';
 
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
@@ -20,7 +22,7 @@ type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
 const Income:React.FC<Props>  = ({navigation}) => {
 
 
-  const [expenseValue, setExpenseValue] = useState('');
+const [expenseValue, setExpenseValue] = useState<number | undefined>(undefined);
 const [categoryValue, setCategoryValue] = useState('');
 const [transactionTypeValue, setTransactionTypeValue] = useState('');
 const [descriptionValue, setDescriptionValue] = useState('');
@@ -30,7 +32,7 @@ const [dateValue, setDateValue] = useState('');
         navigation.goBack();
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
       if(
         expenseValue &&
     categoryValue &&
@@ -43,6 +45,25 @@ const [dateValue, setDateValue] = useState('');
         console.log('Transaction Type:', transactionTypeValue);
         console.log('Description:', descriptionValue);
         console.log('Date:', dateValue);
+
+        // const incomeData = {
+        //   expense: expenseValue,
+        //   category: categoryValue,
+        //   transactionType: transactionTypeValue,
+        //   description: descriptionValue,
+        //   deadline: dateValue,
+        //   createdAt: firestore.FieldValue.serverTimestamp(),
+        // };
+
+        await uploadIncomeData(
+          expenseValue,
+          categoryValue,
+          transactionTypeValue,
+          descriptionValue,
+          dateValue
+        );
+
+
         navigation.navigate('HomeTab');
       }else{
         Alert.alert("Fill the fields")
@@ -52,9 +73,9 @@ const [dateValue, setDateValue] = useState('');
 
 
 
-    const handleAttachment = () => {
-      console.log("Will add attachment");
-    }
+    // const handleAttachment = () => {
+    //   console.log("Will add attachment");
+    // }
 
 
     return (
@@ -80,7 +101,10 @@ const [dateValue, setDateValue] = useState('');
             Style={styles.input}
             placeholder= "0"
             placeholderTextColor="white"
-            onChangeText={(value) => setExpenseValue(value)}
+            onChangeText={(value) => {
+              const parsedValue = parseFloat(value);
+              setExpenseValue(isNaN(parsedValue) ? undefined : parsedValue);
+            }}
           />
            </View>
            
@@ -119,13 +143,14 @@ const [dateValue, setDateValue] = useState('');
              </View>
 
              
-            <CustomButton
+             <CustomButton
               title="Continue"
               onPress={handleSubmit}
-              Style={styles.button}
-              titleStyle={styles.ButtonText}
-
-            />
+              // Style={styles.button}
+              // titleStyle={styles.ButtonText}
+              Style={[styles.button]}
+              titleStyle={[styles.ButtonText]}
+              backgroundColor={COLORS.primary} />
 
             
             
@@ -177,21 +202,27 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start'
     },
     button: {
-        width:'100%',
-        minHeight: 60,
-        backgroundColor: COLORS.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 5,
-        borderRadius: 15,
-        elevation:8,
-        marginTop:6,
-        zIndex:0
-      },
-      ButtonText: {
-        fontWeight: '500',
-        fontSize: 22,
-        color: COLORS.white,
-      },
+      width:'100%',
+     // minHeight: 60,
+     // backgroundColor: COLORS.primary,
+     // justifyContent: 'center',
+     // alignItems: 'center',
+     // marginBottom: 5,
+     // borderRadius: 15,
+     elevation:8,
+     // marginTop:6,
+     // zIndex:0
+    // width: SIZES.width - 30,
+     minHeight: 60,
+     justifyContent: 'center',
+     alignItems: 'center',
+     marginBottom: 5,
+     borderRadius: 15,
+   },
+   ButtonText: {
+     fontWeight: '500',
+     fontSize: 22,
+     color: COLORS.white,
+   },
       
   });

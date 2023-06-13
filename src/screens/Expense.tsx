@@ -14,14 +14,15 @@ import CustomTextInput from '../components/CustomTextInput';
 import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
 import DateSelect from '../components/Date';
-import {uploadExpenseData} from '../Api/GoogleExpense';
+import {uploadExpenseData} from '../Api/FireBaseInsertion';
 import firebase from '@react-native-firebase/app'
+import firestore from '@react-native-firebase/firestore'
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
 
 const Expense:React.FC<Props>  = ({navigation}) => {
 
-const [expenseValue, setExpenseValue] = useState('');
+  const [expenseValue, setExpenseValue] = useState<number | undefined>(undefined);
 const [categoryValue, setCategoryValue] = useState('');
 const [transactionTypeValue, setTransactionTypeValue] = useState('');
 const [descriptionValue, setDescriptionValue] = useState('');
@@ -53,16 +54,13 @@ const [dateValue, setDateValue] = useState('');
         console.log('Description:', descriptionValue);
         console.log('Date:', dateValue);
 
-        // const expenseData = {
-        //   expense: expenseValue,
-        //   category: categoryValue,
-        //   transactionType: transactionTypeValue,
-        //   description: descriptionValue,
-        //   deadline: dateValue,
-        //   createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        // };
-  
-        //rawait uploadExpenseData(expenseData);
+         await uploadExpenseData(
+          expenseValue,
+          categoryValue,
+          transactionTypeValue,
+          descriptionValue,
+          dateValue
+         );
   
         console.log('Expense data uploaded successfully');
         navigation.navigate('HomeTab');
@@ -96,7 +94,10 @@ const [dateValue, setDateValue] = useState('');
             Style={styles.input}
             placeholder= "0"
             placeholderTextColor="white"
-            onChangeText={(value) => setExpenseValue(value)}
+            onChangeText={(value) => {
+              const parsedValue = parseFloat(value);
+              setExpenseValue(isNaN(parsedValue) ? undefined : parsedValue);
+            }}
           />
            </View>
            
@@ -139,8 +140,11 @@ const [dateValue, setDateValue] = useState('');
             <CustomButton
               title="Continue"
               onPress={handleSubmit}
-              Style={styles.button}
-              titleStyle={styles.ButtonText}
+              // Style={styles.button}
+              // titleStyle={styles.ButtonText}
+              Style={[styles.button]}
+              titleStyle={[styles.ButtonText]}
+              backgroundColor={COLORS.primary}
 
             />
 
@@ -194,16 +198,22 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start'
     },
     button: {
-        width:'100%',
+         width:'100%',
+        // minHeight: 60,
+        // backgroundColor: COLORS.primary,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // marginBottom: 5,
+        // borderRadius: 15,
+        elevation:8,
+        // marginTop:6,
+        // zIndex:0
+       // width: SIZES.width - 30,
         minHeight: 60,
-        backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 5,
         borderRadius: 15,
-        elevation:8,
-        marginTop:6,
-        zIndex:0
       },
       ButtonText: {
         fontWeight: '500',
