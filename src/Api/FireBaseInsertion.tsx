@@ -3,51 +3,53 @@ import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firest
 
 
 
-export const uploadExpenseData = async (
+export const uploadCustomData = async (
   expense: number,
   category: string,
   transactionType: string,
   description: string,
-  deadline: string
+  deadline: string,
+  type : string
 ) => {
   firestore()
-  .collection('Borrowed')
+  .collection('Transaction')
   .add({
     expense,
     category,
     transactionType,
     description,
     deadline,
+    type,
     createdAt: firestore.FieldValue.serverTimestamp(),
   })
   .then(() => {
-    console.log('Borrowed info added!');
+    console.log('Info added!');
   });
 };
 
 
 
-export const uploadIncomeData = async (
-  expense: number,
-  category: string,
-  transactionType: string,
-  description: string,
-  deadline: string
-) => {
-  firestore()
-  .collection('Lent')
-  .add({
-    expense,
-    category,
-    transactionType,
-    description,
-    deadline,
-    createdAt: firestore.FieldValue.serverTimestamp(),
-  })
-  .then(() => {
-    console.log('Lent info  added!');
-  });
-};
+// export const uploadIncomeData = async (
+//   expense: number,
+//   category: string,
+//   transactionType: string,
+//   description: string,
+//   deadline: string
+// ) => {
+//   firestore()
+//   .collection('Lent')
+//   .add({
+//     expense,
+//     category,
+//     transactionType,
+//     description,
+//     deadline,
+//     createdAt: firestore.FieldValue.serverTimestamp(),
+//   })
+//   .then(() => {
+//     console.log('Lent info  added!');
+//   });
+// };
 
 export const uploadTransferData = async (
   expenseValue:number,

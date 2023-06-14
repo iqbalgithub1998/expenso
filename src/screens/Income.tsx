@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, StatusBar} from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, SIZES } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,7 +14,7 @@ import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
 import DateSelect from '../components/Date';
 import firestore  from '@react-native-firebase/firestore';
-import { uploadIncomeData } from '../Api/FireBaseInsertion';
+import { uploadCustomData } from '../Api/FireBaseInsertion';
 
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
@@ -54,13 +54,15 @@ const [dateValue, setDateValue] = useState('');
         //   deadline: dateValue,
         //   createdAt: firestore.FieldValue.serverTimestamp(),
         // };
+        const typeValue = 'Lent'
 
-        await uploadIncomeData(
+        await uploadCustomData(
           expenseValue,
           categoryValue,
           transactionTypeValue,
           descriptionValue,
-          dateValue
+          dateValue,
+          typeValue
         );
 
 
@@ -80,6 +82,10 @@ const [dateValue, setDateValue] = useState('');
 
     return (
         <View style={styles.container}>
+          <StatusBar
+                    backgroundColor={COLORS.green}
+                    barStyle= 'light-content'
+                  />
           <View style={styles.topSection}>
           <View style={{flexDirection:'row',alignItems:'center', justifyContent:"space-evenly", marginBottom:15}}>
             <TouchableOpacity
@@ -167,6 +173,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       backgroundColor: COLORS.green,
+      flexBasis: '100%'
     },
     topSection: {
       flex: 3,

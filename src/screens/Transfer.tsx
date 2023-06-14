@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView, Image, Alert, Platform, StatusBar} from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, SIZES } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -95,6 +95,10 @@ const Transfer:React.FC<Props>  = ({navigation}) => {
 
     return (
         <View style={styles.container}>
+                <StatusBar
+                    backgroundColor={COLORS.blue}
+                    barStyle= 'light-content'
+                  />
           <View style={styles.topSection}>
           <View style={{flexDirection:'row',alignItems:'center', justifyContent:"space-evenly", marginBottom:15}}>
             <TouchableOpacity
@@ -125,7 +129,7 @@ const Transfer:React.FC<Props>  = ({navigation}) => {
            
            </View>
           </View>
-          <View style={styles.bottomSection}>
+          < View style={styles.bottomSection}>
           <View style = {{flex:1, marginHorizontal:20,marginVertical:20}}>
           <View style={{ flex: 1,  justifyContent:'space-evenly' }}> 
 
@@ -201,11 +205,12 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       backgroundColor: COLORS.blue,
+      //flexBasis:'100%'
     },
     topSection: {
       flex: 5,
       marginVertical:22,
-      marginHorizontal: 20
+      marginHorizontal: 20,
  // Replace with your desired styles
     },
     bottomSection: {
@@ -235,23 +240,23 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent: 'flex-start'
     },
-    // button: {
-    //     width:'100%',
-    //     minHeight: 60,
-    //     backgroundColor: COLORS.primary,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     marginBottom: 5,
-    //     borderRadius: 15,
-    //     elevation:8,
-    //     marginTop:6,
-    //     zIndex:0
-    //   },
-      // ButtonText: {
-      //   fontWeight: '500',
-      //   fontSize: 22,
-      //   color: COLORS.white,
-      // },
+    button: {
+        width:'100%',
+        minHeight: 60,
+        backgroundColor: COLORS.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 5,
+        borderRadius: 15,
+        elevation:8,
+        marginTop:6,
+        zIndex:0
+      },
+      ButtonText: {
+        fontWeight: '500',
+        fontSize: 22,
+        color: COLORS.white,
+      },
       toFrom: {
         flex: 1,
         borderRadius: 15,
@@ -286,29 +291,29 @@ const styles = StyleSheet.create({
        borderWidth:2,
        borderColor:COLORS.primary
       },
-      button: {
-        width:'100%',
-       // minHeight: 60,
-       // backgroundColor: COLORS.primary,
-       // justifyContent: 'center',
-       // alignItems: 'center',
-       // marginBottom: 5,
-       // borderRadius: 15,
-       elevation:8,
-       // marginTop:6,
-       // zIndex:0
-      // width: SIZES.width - 30,
-       minHeight: 60,
-       justifyContent: 'center',
-       alignItems: 'center',
-       marginBottom: 5,
-       borderRadius: 15,
-     },
-     ButtonText: {
-      fontWeight: '500',
-      fontSize: 22,
-      color: COLORS.white,
-    },
+    //   button: {
+    //     width:'100%',
+    //    // minHeight: 60,
+    //    // backgroundColor: COLORS.primary,
+    //    // justifyContent: 'center',
+    //    // alignItems: 'center',
+    //    // marginBottom: 5,
+    //    // borderRadius: 15,
+    //    elevation:8,
+    //    // marginTop:6,
+    //    // zIndex:0
+    //   // width: SIZES.width - 30,
+    //    minHeight: 60,
+    //    justifyContent: 'center',
+    //    alignItems: 'center',
+    //    marginBottom: 5,
+    //    borderRadius: 15,
+    //  },
+    //  ButtonText: {
+    //   fontWeight: '500',
+    //   fontSize: 22,
+    //   color: COLORS.white,
+    // },
      loginButton: {
        backgroundColor: COLORS.primary,
      },

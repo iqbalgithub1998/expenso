@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, FlatList, ViewStyle,TextStyle, StyleProp, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, FlatList, ViewStyle,TextStyle, StyleProp, ScrollView, StatusBar } from 'react-native'
 import React , {useContext, useEffect, useState}from 'react'
 import { COLORS, SIZES } from '../constants/theme'
 
@@ -138,6 +138,9 @@ const Home: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        backgroundColor={COLORS.light}
+      />
        <TabContainer>
       <View style={styles.topSection}>
         <View style = {styles.topbar}>
@@ -160,13 +163,13 @@ const Home: React.FC<Props> = ({navigation, route}) => {
         <Text style = {styles.MoneyText}>₹ 10000</Text>
         <View style = {{flexDirection:'row', alignItems:'center', justifyContent:'space-between', marginBottom:10}}>
           <Cards
-            title = 'Income'
+            title = 'Lent'
             subtitle = <LentValue/>
             imageSource = {require('../assets/images/Income.jpg')}
             containerStyle={{backgroundColor:COLORS.green}}
           />
            <Cards
-            title = 'Expenses'
+            title = 'Borrowed'
             subtitle = <ExpenseValue/>
             imageSource = {require('../assets/images/Expense.jpg')}
           />
@@ -243,6 +246,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: COLORS.white,
+    height: '100%'
   },
   topSection: {
     flex: 4,

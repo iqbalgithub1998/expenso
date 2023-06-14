@@ -1,5 +1,5 @@
 
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, StatusBar} from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, SIZES } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,7 +14,7 @@ import CustomTextInput from '../components/CustomTextInput';
 import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
 import DateSelect from '../components/Date';
-import {uploadExpenseData} from '../Api/FireBaseInsertion';
+import {uploadCustomData} from '../Api/FireBaseInsertion';
 import firebase from '@react-native-firebase/app'
 import firestore from '@react-native-firebase/firestore'
 
@@ -54,12 +54,15 @@ const [dateValue, setDateValue] = useState('');
         console.log('Description:', descriptionValue);
         console.log('Date:', dateValue);
 
-         await uploadExpenseData(
+        const typeValue = 'Borrowed';
+
+         await uploadCustomData(
           expenseValue,
           categoryValue,
           transactionTypeValue,
           descriptionValue,
-          dateValue
+          dateValue,
+          typeValue
          );
   
         console.log('Expense data uploaded successfully');
@@ -73,6 +76,10 @@ const [dateValue, setDateValue] = useState('');
 
     return (
         <View style={styles.container}>
+          <StatusBar
+                    backgroundColor={COLORS.red}
+                    barStyle= 'light-content'
+                  />
           <View style={styles.topSection}>
           <View style={{flexDirection:'row',alignItems:'center', justifyContent:"space-evenly", marginBottom:15}}>
             <TouchableOpacity
@@ -163,6 +170,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       backgroundColor: COLORS.red,
+      flexBasis : '100%'
     },
     topSection: {
       flex: 3,

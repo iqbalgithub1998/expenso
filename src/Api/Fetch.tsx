@@ -9,7 +9,7 @@ export const ExpenseValue: React.FC = () => {
     useEffect(() => {
       const fetchExpenseSum = async () => {
         try {
-          const snapshot = await firestore().collection('Borrowed').get();
+          const snapshot = await firestore().collection('Transaction').where('type', '==', 'Borrowed').get();
   
           let sum = 0;
           snapshot.forEach((doc) => {
@@ -42,7 +42,7 @@ export const LentValue: React.FC = () => {
     useEffect(() => {
         const fetchLentSum = async () => {
           try {
-            const snapshot = await firestore().collection('Lent').get();
+            const snapshot = await firestore().collection('Transaction').where('type', '==', 'Lent').get();
     
             let sum = 0;
             snapshot.forEach((doc) => {
@@ -67,4 +67,3 @@ export const LentValue: React.FC = () => {
       <Text>₹ {lentSum}</Text>
     );
   };
-
