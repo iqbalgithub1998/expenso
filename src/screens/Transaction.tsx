@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react'
 import {
   View,
   Text,
@@ -7,34 +7,34 @@ import {
   Image,
   StatusBar,
   TouchableOpacity,
-} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
+} from 'react-native'
+import firestore from '@react-native-firebase/firestore'
 //import firebase  from '@react-native-firebase/app';
-import TabContainer from '../components/TabContainer';
-import DateSelect from '../components/Date';
-import {COLORS} from '../constants/theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {monthNames} from '../constants/Categories';
-import CustomDropDown from '../components/CustomDropDown';
-import CustomButton from '../components/CustomButton';
-import {useFocusEffect} from '@react-navigation/native';
+import TabContainer from '../components/TabContainer'
+import DateSelect from '../components/Date'
+import {COLORS} from '../constants/theme'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore'
+import {monthNames} from '../constants/Categories'
+import CustomDropDown from '../components/CustomDropDown'
+import CustomButton from '../components/CustomButton'
+import {useFocusEffect} from '@react-navigation/native'
 
 interface TransactionItemProps {
-  id: string;
-  expense: number;
-  description: string;
-  deadline: string;
-  type: string;
-  category: string;
-  createdAt: FirebaseFirestoreTypes.Timestamp;
+  id: string
+  expense: number
+  description: string
+  deadline: string
+  type: string
+  category: string
+  createdAt: FirebaseFirestoreTypes.Timestamp
 }
 
 const Transaction = () => {
-  const [transaction, setTransaction] = useState<TransactionItemProps[]>([]);
+  const [transaction, setTransaction] = useState<TransactionItemProps[]>([])
 
   // useEffect(() => {
   //   console.log('transaction run');
@@ -43,18 +43,20 @@ const Transaction = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log('transaction run');
-      fetchTransactions();
+      console.log('transaction run')
+      fetchTransactions()
     }, []),
-  );
+  )
 
   const fetchTransactions = async () => {
     const snapshot = await firestore()
       .collection('Transaction')
       .orderBy('createdAt', 'desc')
-      .get();
+      .get()
     const data = snapshot.docs.map(doc => ({
+
       id: doc.id,
+      
       expense: doc.data().expense,
       description: doc.data().description,
       deadline: doc.data().deadline,
@@ -64,65 +66,79 @@ const Transaction = () => {
         doc.data().createdAt.seconds * 1000 +
           doc.data().createdAt.nanoseconds / 1000000,
       ),
-    }));
-    setTransaction(data);
-  };
+    }))
+    setTransaction(data)
+  }
 
   const renderTransactionItem = ({item}: {item: TransactionItemProps}) => {
-    let iconComponent = null;
-    let expenseColor = COLORS.black;
-    let expenseSign = '';
+    let iconComponent = null
+    let expenseColor = COLORS.black
+    let expenseSign = ''
 
     if (item.category === 'Food') {
       iconComponent = (
-        <Ionicons name="md-fast-food-sharp" size={40} color={COLORS.primary} />
-      );
+        <Ionicons name='md-fast-food-sharp' size={40} color={COLORS.Food} />
+      )
     } else if (item.category === 'Travel') {
       iconComponent = (
-        <Ionicons name="md-car-sport-sharp" size={40} color={COLORS.primary} />
-      );
+        <Ionicons name='md-car-sport-sharp' size={40} color={COLORS.Travel} />
+      )
     } else if (item.category === 'Housing') {
-      iconComponent = <Ionicons name="home" size={40} color={COLORS.primary} />;
+      iconComponent = (
+        <Ionicons name='md-business' size={40} color={COLORS.Housing} />
+      )
     } else if (item.category === 'Transportation') {
       iconComponent = (
-        <FontAwesome5 name="truck-loading" size={40} color={COLORS.primary} />
-      );
+        <FontAwesome5
+          name='truck-loading'
+          size={35}
+          color={COLORS.Transportation}
+        />
+      )
     } else if (item.category === 'Entertainment') {
       iconComponent = (
-        <MaterialIcons name="sports-esports" size={40} color={COLORS.primary} />
-      );
+        <MaterialIcons
+          name='sports-esports'
+          size={40}
+          color={COLORS.Entertainment}
+        />
+      )
     } else if (item.category === 'Utilities') {
       iconComponent = (
-        <Ionicons name="build" size={40} color={COLORS.primary} />
-      );
+        <Ionicons name='build' size={40} color={COLORS.Utilities} />
+      )
     } else if (item.category === 'Healthcare') {
       iconComponent = (
-        <FontAwesome5 name="hospital-user" size={40} color={COLORS.primary} />
-      );
+        <FontAwesome5
+          name='hospital-user'
+          size={40}
+          color={COLORS.Healthcare}
+        />
+      )
     } else if (item.category === 'Education') {
       iconComponent = (
-        <Ionicons name="md-school-sharp" size={40} color={COLORS.primary} />
-      );
+        <Ionicons name='md-school-sharp' size={40} color={COLORS.Education} />
+      )
     } else if (item.category === 'Personal Care') {
       iconComponent = (
         <MaterialCommunityIcons
-          name="lotion"
+          name='lotion'
           size={40}
-          color={COLORS.primary}
+          color={COLORS.PersonalCare}
         />
-      );
+      )
     } else if (item.category === 'Miscellaneous') {
       iconComponent = (
-        <FontAwesome5 name="random" size={40} color={COLORS.primary} />
-      );
+        <FontAwesome5 name='random' size={40} color={COLORS.Miscellaneous} />
+      )
     }
 
     if (item.type === 'Lent') {
-      expenseColor = COLORS.green;
-      expenseSign = '+';
+      expenseColor = COLORS.green
+      expenseSign = '+'
     } else if (item.type === 'Borrowed') {
-      expenseColor = COLORS.red;
-      expenseSign = '-';
+      expenseColor = COLORS.red
+      expenseSign = '-'
     }
 
     return (
@@ -162,9 +178,10 @@ const Transaction = () => {
             </Text>
             <Text style={{fontSize: 15, fontWeight: '700'}}>
               {item.createdAt
-                ? item.createdAt.toDate().toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
+                ? item.createdAt.toDate().toLocaleDateString([], {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
                   })
                 : ''}
             </Text>
@@ -172,8 +189,8 @@ const Transaction = () => {
           {/* Render other transaction details */}
         </View>
       </TouchableOpacity>
-    );
-  };
+    )
+  }
 
   return (
     <TabContainer>
@@ -181,7 +198,7 @@ const Transaction = () => {
         <View style={styles.topbar}>
           <CustomDropDown
             options={monthNames}
-            placeholder="Month"
+            placeholder='Month'
             Style={styles.dropdownSelectorStyle}
             onSelectValue={() => console.log('month selected')}
           />
@@ -189,12 +206,12 @@ const Transaction = () => {
           <TouchableOpacity
             style={styles.filter}
             onPress={() => console.log('Will open Filter')}>
-            <Ionicons name="md-filter-sharp" size={30} />
+            <Ionicons name='md-filter-sharp' size={30} />
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
           <CustomButton
-            title="See your Financial report"
+            title='See your Financial report'
             onPress={() => console.log('Report !1')}
             Style={styles.button}
             titleStyle={styles.ButtonText}
@@ -202,19 +219,18 @@ const Transaction = () => {
           />
         </View>
 
-        <Text style={styles.Heading}>Today</Text>
-
         <FlatList
+        ListHeaderComponent={<Text style={styles.Heading}>Your Transactions</Text>}
           data={transaction}
           keyExtractor={item => item.id}
           renderItem={renderTransactionItem}
         />
       </View>
     </TabContainer>
-  );
-};
+  )
+}
 
-export default Transaction;
+export default Transaction
 
 const styles = StyleSheet.create({
   container: {
@@ -237,7 +253,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 12,
     backgroundColor: COLORS.white,
-    //opacity:0.8
+    //elevation:3
   },
   image: {
     height: 60,
@@ -317,8 +333,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontSize: 30,
     textAlign: 'left',
-    fontWeight: 'bold',
+    fontWeight: '800',
     color: COLORS.black,
     marginLeft: 15,
   },
-});
+})

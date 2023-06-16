@@ -22,6 +22,7 @@ import TabsNavigator from './TabsNavigator';
 
 import {TabContextProvider} from '../context/TabContext';
 import Transfer from '../screens/Transfer';
+import Transaction from '../screens/Transaction';
 
 export type AppNavigationParams = {
   Initial: any;
@@ -34,6 +35,7 @@ export type AppNavigationParams = {
   Expense: any;
   Income: any;
   Transfer: any;
+  Transaction: any;
 };
 
 type AppNavigationProps = {};
@@ -75,6 +77,7 @@ const AppNavigation: React.FC<AppNavigationParams> = ({}) => {
               <Stack.Screen name="Expense" component={Expense} />
               <Stack.Screen name="Income" component={Income} />
               <Stack.Screen name="Transfer" component={Transfer} />
+              <Stack.Screen name="Transaction" component={Transaction} />
             </Stack.Navigator>
           )}
         </NavigationContainer>

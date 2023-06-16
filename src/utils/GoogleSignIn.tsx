@@ -1,5 +1,6 @@
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { NavigationProp } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
 
 export const signIn = async (navigation: NavigationProp<any>) => {
   try {
@@ -7,6 +8,16 @@ export const signIn = async (navigation: NavigationProp<any>) => {
     await GoogleSignin.signOut();
     const userInfo = await GoogleSignin.signIn();
     console.log("USER INFORMATION", userInfo);
+    const { givenName, email, id } = userInfo.user;
+    console.log(givenName,email,id)
+    const userData = {
+      userId: id,
+      name: givenName,
+      email: email,
+    };
+
+    await firestore().collection('Users').add(userData);
+    console.log("Data added to user collection")
     //navigation.navigate('HomeTab',{ userInfo: userInfo });
     return userInfo;
   } catch (error: any) {

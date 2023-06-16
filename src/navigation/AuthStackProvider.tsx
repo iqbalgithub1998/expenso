@@ -4,6 +4,8 @@ import { Alert } from 'react-native';
 //import { AppNavigationParams } from './AppNavigation';
 //import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+
 interface AuthContextProps {
     user: FirebaseAuthTypes.User | null;
     setUser: (user: FirebaseAuthTypes.User | null) => void;
@@ -70,6 +72,16 @@ const login = async (email: string, password: string) => {
       await user.updateProfile({
         displayName: name,
       });
+      await user.reload(); // Refresh the user data
+      const userData = {
+        userId: user.uid,
+        name: user.displayName || name,
+        email: user.email,
+      };
+
+      await firestore().collection('Users').add(userData);
+      console.log("Data added to user collection")
+
     }
     Alert.alert('Success', 'Account created successfully', [
       {

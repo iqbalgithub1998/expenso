@@ -9,7 +9,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AppNavigationParams} from '../navigation/AppNavigation';
@@ -24,8 +24,7 @@ import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
 import DateSelect from '../components/Date';
 import {uploadCustomData} from '../Api/FireBaseInsertion';
-import firebase from '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 type Props = NativeStackScreenProps<AppNavigationParams, 'Login'>;
 
@@ -39,6 +38,9 @@ const Expense: React.FC<Props> = ({navigation}) => {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [dateValue, setDateValue] = useState('');
 
+  
+  
+
   const handlePress = () => {
     navigation.goBack();
   };
@@ -50,8 +52,9 @@ const Expense: React.FC<Props> = ({navigation}) => {
   const handleAttachment = () => {
     console.log('Will add attachment');
   };
-
+  //const userId = auth().currentUser?.uid??'';
   const handleSubmit = async () => {
+    
     if (
       expenseValue &&
       categoryValue &&

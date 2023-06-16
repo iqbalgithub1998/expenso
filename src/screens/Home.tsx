@@ -137,7 +137,8 @@ const Home: React.FC<Props> = ({navigation, route}) => {
   };
 
   const pressHandler = () => {
-    console.log('Pressed See all');
+    // console.log('Pressed See all');
+    navigation.navigate("Transaction");
   };
 
   return (
