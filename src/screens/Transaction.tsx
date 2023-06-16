@@ -22,7 +22,7 @@ interface TransactionItemProps {
   deadline: string;
   type: string;
   category: string;
-  createdAt: FirebaseFirestoreTypes.Timestamp;
+  //createdAt: FirebaseFirestoreTypes.Timestamp;
 }
 
 const Transaction = () => {
@@ -39,7 +39,7 @@ const Transaction = () => {
           deadline: doc.data().deadline,
           type: doc.data().type,
           category: doc.data().category,
-          createdAt: firestore.Timestamp.fromMillis(doc.data().createdAt.seconds * 1000 + doc.data().createdAt.nanoseconds / 1000000), 
+          //createdAt: firestore.Timestamp.fromMillis(doc.data().createdAt.seconds * 1000 + doc.data().createdAt.nanoseconds / 1000000), 
         }));
         setTransaction(data)
       }
@@ -53,27 +53,27 @@ const Transaction = () => {
     let expenseColor = COLORS.black;
     let expenseSign = '';
 
-  if (item.category === 'Food') {
-    iconComponent = <Ionicons name="md-fast-food-sharp" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Travel') {
-    iconComponent = <Ionicons name="md-car-sport-sharp" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Housing') {
-    iconComponent = <Ionicons name="home" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Transportation') {
-    iconComponent = <FontAwesome5 name="truck-loading" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Entertainment') {
-    iconComponent = <MaterialIcons name="sports-esports" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Utilities') {
-    iconComponent = <Ionicons name="build" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Healthcare') {
-    iconComponent = <FontAwesome5 name="hospital-user" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Education') {
-    iconComponent = <Ionicons name="md-school-sharp" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Personal Care') {
-    iconComponent = <MaterialCommunityIcons name="lotion" size={40} color={COLORS.primary} />;
-  } else if (item.category === 'Miscellaneous') {
-    iconComponent = <FontAwesome5 name="random" size={40} color={COLORS.primary} />;
-  }
+    if (item.category === 'Food') {
+      iconComponent = <Ionicons name="md-fast-food-sharp" size={40} color={COLORS.Food} />;
+    } else if (item.category === 'Travel') {
+      iconComponent = <Ionicons name="md-car-sport-sharp" size={40} color={COLORS.Travel} />;
+    } else if (item.category === 'Housing') {
+      iconComponent = <Ionicons name="md-business" size={40} color={COLORS.Housing} />;
+    } else if (item.category === 'Transportation') {
+      iconComponent = <FontAwesome5 name="truck-loading" size={35} color={COLORS.Transportation} />;
+    } else if (item.category === 'Entertainment') {
+      iconComponent = <MaterialIcons name="sports-esports" size={40} color={COLORS.Entertainment} />;
+    } else if (item.category === 'Utilities') {
+      iconComponent = <Ionicons name="build" size={40} color={COLORS.Utilities} />;
+    } else if (item.category === 'Healthcare') {
+      iconComponent = <FontAwesome5 name="hospital-user" size={40} color={COLORS.Healthcare} />;
+    } else if (item.category === 'Education') {
+      iconComponent = <Ionicons name="md-school-sharp" size={40} color={COLORS.Education} />;
+    } else if (item.category === 'Personal Care') {
+      iconComponent = <MaterialCommunityIcons name="lotion" size={40} color={COLORS.PersonalCare} />;
+    } else if (item.category === 'Miscellaneous') {
+      iconComponent = <FontAwesome5 name="random" size={40} color={COLORS.Miscellaneous} />;
+    }
 
   if (item.type === 'Lent'){
       expenseColor = COLORS.green;
@@ -102,7 +102,7 @@ const Transaction = () => {
         <View style = {{flexDirection:'column', justifyContent:'space-evenly', alignItems:'center'}}>
         
         <Text style = {[styles.expense,{color: expenseColor}]}> {expenseSign} ₹{item.expense}</Text>
-        <Text style={{ fontSize: 15, fontWeight: '700' }}>{item.createdAt ? item.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</Text>
+        {/* <Text style={{ fontSize: 15, fontWeight: '700' }}>{item.createdAt ? item.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</Text> */}
         </View>
         {/* Render other transaction details */}
       </View>
@@ -137,10 +137,11 @@ const Transaction = () => {
         />
           </View>
 
-          <Text style = {styles.Heading}>Today</Text>
+          
       
     
-      <FlatList 
+      <FlatList
+        ListHeaderComponent={<Text style = {styles.Heading}>Today</Text>}
         data={transaction}
         keyExtractor={(item) => item.id}
         renderItem={renderTransactionItem}
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
    },
     Heading:{
      marginVertical: 10,
-     fontSize:30,
+     fontSize:20,
      textAlign:'left',
      fontWeight: 'bold',
      color:COLORS.black,

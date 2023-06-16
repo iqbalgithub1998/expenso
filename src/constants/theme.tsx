@@ -17,7 +17,17 @@ export const COLORS = {
     sulphur : '#ffff99',
     blue: '#0083B0',
     lightgreen : '#7befb2',
-    lightred: '#ff5e62'
+    lightred: '#ff5e62',
+    Food:'#E44D26',
+    Travel:'#1565C0',
+    Housing:'#434343',
+    Transportation:'#605C3C',
+    Entertainment:'#fdbb2d',
+    Utilities:'#EB5757',
+    Healthcare:'#44A08D',
+    Education:'#333399',
+    PersonalCare:'#F29492',
+    Miscellaneous:'#3C3B3F'
 }
 
 export const SIZES = {
