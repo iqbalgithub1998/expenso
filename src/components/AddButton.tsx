@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from 'react';
 import {
   TouchableWithoutFeedback,
   View,
@@ -6,26 +6,27 @@ import {
   Image,
   Animated,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 
-import { TabParamList } from '../navigation/TabsNavigator';
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { COLORS } from "../constants/theme";
-import { NavigationProp } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AppNavigationParams } from "../navigation/AppNavigation";
-
+import {TabParamList} from '../navigation/TabsNavigator';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {COLORS} from '../constants/theme';
+import {NavigationProp} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AppNavigationParams} from '../navigation/AppNavigation';
 
 interface AddButtonProps {
   opened: boolean;
   toggleOpened: () => void;
   navigation: any;
-  
 }
 
-const AddButton: React.FC<AddButtonProps> = ({ opened, toggleOpened ,navigation}) => {
+const AddButton: React.FC<AddButtonProps> = ({
+  opened,
+  toggleOpened,
+  navigation,
+}) => {
   const animation = useRef(new Animated.Value(0)).current;
-
 
   useEffect(() => {
     Animated.spring(animation, {
@@ -66,20 +67,18 @@ const AddButton: React.FC<AddButtonProps> = ({ opened, toggleOpened ,navigation}
                   },
                 ],
               },
-            ]}
-          >
-             <TouchableOpacity
-             onPress={() =>{
-              navigation.navigate("Income");
-              toggleOpened();
-            }}
-            activeOpacity={0.7}
-            >
-            <Image
-              source={require("../assets/images/IncomeButton.jpg")}
-              resizeMode="cover"
-              style={styles.itemIcon}
-            />
+            ]}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Income');
+                toggleOpened();
+              }}
+              activeOpacity={0.7}>
+              <Image
+                source={require('../assets/images/IncomeButton.jpg')}
+                resizeMode="cover"
+                style={styles.itemIcon}
+              />
             </TouchableOpacity>
           </Animated.View>
         </TouchableWithoutFeedback>
@@ -98,19 +97,18 @@ const AddButton: React.FC<AddButtonProps> = ({ opened, toggleOpened ,navigation}
                   },
                 ],
               },
-            ]}
-          >
+            ]}>
             <TouchableOpacity
-            onPress={() =>{ 
-              navigation.navigate("Transfer");
-              toggleOpened()}}
-              activeOpacity={0.7}
-            >
-            <Image
-              source={require("../assets/images/TransactionButton.jpg")}
-              resizeMode="contain"
-              style={styles.itemIcon}
-            />
+              onPress={() => {
+                navigation.navigate('Transfer');
+                toggleOpened();
+              }}
+              activeOpacity={0.7}>
+              <Image
+                source={require('../assets/images/TransactionButton.jpg')}
+                resizeMode="contain"
+                style={styles.itemIcon}
+              />
             </TouchableOpacity>
           </Animated.View>
         </TouchableWithoutFeedback>
@@ -135,23 +133,24 @@ const AddButton: React.FC<AddButtonProps> = ({ opened, toggleOpened ,navigation}
                   },
                 ],
               },
-            ]}
-          >
-             <TouchableOpacity
-           onPress={() => {
-           navigation.navigate("Expense") ;
-           toggleOpened()}}
-           activeOpacity={0.7}
-            >
-            <Image
-              source={require("../assets/images/ExpenseButton.jpg")}
-              resizeMode="contain"
-              style={styles.itemIcon}
-            />
+            ]}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Expense');
+                toggleOpened();
+              }}
+              activeOpacity={0.7}>
+              <Image
+                source={require('../assets/images/ExpenseButton.jpg')}
+                resizeMode="contain"
+                style={styles.itemIcon}
+              />
             </TouchableOpacity>
           </Animated.View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={toggleOpened} style={styles.addButton}>
+        <TouchableWithoutFeedback
+          onPress={toggleOpened}
+          style={styles.addButton}>
           <Animated.View
             style={[
               styles.addButtonInner,
@@ -160,13 +159,12 @@ const AddButton: React.FC<AddButtonProps> = ({ opened, toggleOpened ,navigation}
                   {
                     rotate: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: ["0deg", "45deg"],
+                      outputRange: ['0deg', '45deg'],
                     }),
                   },
                 ],
               },
-            ]}
-          >
+            ]}>
             <AntDesign name="pluscircle" size={60} color={COLORS.primary} />
           </Animated.View>
         </TouchableWithoutFeedback>
@@ -177,12 +175,12 @@ const AddButton: React.FC<AddButtonProps> = ({ opened, toggleOpened ,navigation}
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    alignItems: 'center',
     flex: 1,
     height: 0,
   },
   box: {
-    position: "relative",
+    position: 'relative',
     width: 60,
     height: 60,
     marginTop: -30,
@@ -196,8 +194,8 @@ const styles = StyleSheet.create({
     },
   },
   addButtonInner: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'transparent',
     width: 60,
     height: 60,
@@ -209,11 +207,11 @@ const styles = StyleSheet.create({
     tintColor: COLORS.white,
   },
   item: {
-    position: "absolute",
+    position: 'absolute',
     top: 5,
     left: 5,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'transparent',
     width: 50,
     height: 50,
@@ -222,9 +220,8 @@ const styles = StyleSheet.create({
   itemIcon: {
     width: 60,
     height: 60,
-    borderRadius:30,
-   // tintColor: COLORS.white,
-    
+    borderRadius: 30,
+    // tintColor: COLORS.white,
   },
 });
 

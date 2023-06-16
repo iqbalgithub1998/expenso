@@ -1,7 +1,7 @@
 import firebase from '@react-native-firebase/app';
-import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-
-
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 
 export const uploadCustomData = async (
   expense: number,
@@ -9,25 +9,23 @@ export const uploadCustomData = async (
   transactionType: string,
   description: string,
   deadline: string,
-  type : string
+  type: string,
 ) => {
   firestore()
-  .collection('Transaction')
-  .add({
-    expense,
-    category,
-    transactionType,
-    description,
-    deadline,
-    type,
-    createdAt: firestore.FieldValue.serverTimestamp(),
-  })
-  .then(() => {
-    console.log('Info added!');
-  });
+    .collection('Transaction')
+    .add({
+      expense,
+      category,
+      transactionType,
+      description,
+      deadline,
+      type,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    })
+    .then(() => {
+      console.log('Info added!');
+    });
 };
-
-
 
 // export const uploadIncomeData = async (
 //   expense: number,
@@ -52,23 +50,23 @@ export const uploadCustomData = async (
 // };
 
 export const uploadTransferData = async (
-  expenseValue:number,
-  senderValue:string,
-  receiverValue:string,
-  descriptionValue:string,
-  dateValue:string,
+  expenseValue: number,
+  senderValue: string,
+  receiverValue: string,
+  descriptionValue: string,
+  dateValue: string,
 ) => {
   firestore()
-  .collection('Transfer')
-  .add({
-    expenseValue,
-    senderValue,
-    receiverValue,
-    descriptionValue,
-    dateValue,
-    createdAt: firestore.FieldValue.serverTimestamp(),
-  })
-  .then(() => {
-    console.log('Transfer info added!');
-  });
+    .collection('Transfer')
+    .add({
+      expenseValue,
+      senderValue,
+      receiverValue,
+      descriptionValue,
+      dateValue,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    })
+    .then(() => {
+      console.log('Transfer info added!');
+    });
 };
