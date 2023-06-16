@@ -5,13 +5,14 @@ interface CustomNumberInputProps {
   placeholder?: string;
   placeholderTextColor?: string;
   Style?: TextStyle | TextStyle[];
+  onChangeText?: (text: string) => void;
 }
 
 const CustomNumberInput: React.FC<CustomNumberInputProps> = ({
   placeholder,
   placeholderTextColor,
   Style,
-  // Additional props as needed
+  onChangeText,
 }) => {
   return (
     <TextInput
@@ -22,6 +23,8 @@ const CustomNumberInput: React.FC<CustomNumberInputProps> = ({
       underlineColorAndroid="transparent"
       cursorColor="transparent"
       keyboardType="numeric"
+      onChangeText={onChangeText}
+      
     />
   );
 };

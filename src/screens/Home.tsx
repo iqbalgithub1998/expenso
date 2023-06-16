@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, FlatList, ViewStyle,TextStyle, StyleProp, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, FlatList, ViewStyle,TextStyle, StyleProp, ScrollView, StatusBar } from 'react-native'
 import React , {useContext, useEffect, useState}from 'react'
 import { COLORS, SIZES } from '../constants/theme'
 
@@ -15,6 +15,8 @@ import Cards from '../components/Cards'
 import CustomButton from '../components/CustomButton'
 import LineChart from '../components/LineChart'
 import TabContainer from '../components/TabContainer';
+import { ExpenseValue, LentValue } from '../Api/Fetch'
+import firestore from '@react-native-firebase/firestore';
 
 
 
@@ -65,6 +67,61 @@ const Home: React.FC<Props> = ({navigation, route}) => {
   }, [userInfo]);
   //////For Name input////////////
 
+
+
+//////////////////////For Cards Update will be later moved to redux////////////////////////////////////////////////////////
+
+// const [expenseSum, setExpenseSum] = useState<number>(0);
+// const [lentSum, setLentSum] = useState<number>(0);
+
+// useEffect(() => {
+//   const fetchExpenseSum = async () => {
+//     try {
+//       const snapshot = await firestore().collection('Borrowed').get();
+
+//       let sum = 0;
+//       snapshot.forEach((doc) => {
+//         const data = doc.data();
+//         const expense = data?.expense;
+//         if (typeof expense === 'number') {
+//           sum += expense;
+//         }
+//       });
+
+//       setExpenseSum(sum);
+//     } catch (error) {
+//       console.log('Error fetching expense sum:', error);
+//     }
+//   };
+
+//   fetchExpenseSum();
+// }, [expenseSum] );
+
+// useEffect(() => {
+//   const fetchLentSum = async () => {
+//     try {
+//       const snapshot = await firestore().collection('Lent').get();
+
+//       let sum = 0;
+//       snapshot.forEach((doc) => {
+//         const data = doc.data();
+//         const expense = data?.expense;
+//         if (typeof expense === 'number') {
+//           sum += expense;
+//         }
+//       });
+
+//       setLentSum(sum);
+//     } catch (error) {
+//       console.log('Error fetching lent sum:', error);
+//     }
+//   };
+
+//   fetchLentSum();
+// },[firestore().collection('Lent')]);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   const handleSubmit = () =>{
     logout().then(() => {
       Alert.alert('Logout','Successfully Logged Out')
@@ -81,6 +138,9 @@ const Home: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        backgroundColor={COLORS.light}
+      />
        <TabContainer>
       <View style={styles.topSection}>
         <View style = {styles.topbar}>
@@ -93,6 +153,7 @@ const Home: React.FC<Props> = ({navigation, route}) => {
           options = {monthNames}
           placeholder='Month'
           Style={styles.dropdownSelectorStyle}
+          onSelectValue={() => console.log('month selected')}
         />
         <TouchableOpacity style = {{}} >
         <FontAwesome name="bell" size={30} color={COLORS.primary} />
@@ -102,14 +163,14 @@ const Home: React.FC<Props> = ({navigation, route}) => {
         <Text style = {styles.MoneyText}>₹ 10000</Text>
         <View style = {{flexDirection:'row', alignItems:'center', justifyContent:'space-between', marginBottom:10}}>
           <Cards
-            title = 'Income'
-            subtitle = '₹ 5000'
+            title = 'Lent'
+            subtitle = <LentValue/>
             imageSource = {require('../assets/images/Income.jpg')}
             containerStyle={{backgroundColor:COLORS.green}}
           />
            <Cards
-            title = 'Expenses'
-            subtitle = '₹ 3000'
+            title = 'Borrowed'
+            subtitle = <ExpenseValue/>
             imageSource = {require('../assets/images/Expense.jpg')}
           />
         </View>
@@ -185,6 +246,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: COLORS.white,
+    height: '100%'
   },
   topSection: {
     flex: 4,

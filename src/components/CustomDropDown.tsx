@@ -8,9 +8,10 @@ interface CustomDropdownProps {
     options: string[];
     placeholder: string;
     Style?:ViewStyle | TextStyle[],
+    onSelectValue: (value: string) => void;
 }
 
-const CustomDropDown:React.FC<CustomDropdownProps> = ({options,placeholder, Style}) => {
+const CustomDropDown:React.FC<CustomDropdownProps> = ({options,placeholder, Style, onSelectValue}) => {
 
     const [selectedCategory, setSelectedCategory] = useState(placeholder);
     //const [isClicked, setIsCLicked] = useState(false);
@@ -31,6 +32,7 @@ const CustomDropDown:React.FC<CustomDropdownProps> = ({options,placeholder, Styl
         }
     } 
 
+
   return (
     <View style={{marginTop:10}}>
         <View style = {[styles.dropdownselector,Style]}>
@@ -39,12 +41,6 @@ const CustomDropDown:React.FC<CustomDropdownProps> = ({options,placeholder, Styl
         onPress = {()=>{setIsModalVisible(!isModalVisible);}}
         //style = {styles.dropdownselector}
         >
-        {/* {isModalVisible ?(
-            <Ionicons name="chevron-down-outline" size ={30} color={COLORS.grey}/>
-            ):
-            (
-            <Ionicons name="chevron-up-outline" size ={30} color={COLORS.grey}/>
-            )} */}
              <Ionicons
         name={isModalVisible ? 'chevron-up-outline' : 'chevron-down-outline'}
         size={30}
@@ -74,6 +70,7 @@ const CustomDropDown:React.FC<CustomDropdownProps> = ({options,placeholder, Styl
                   setSelectedCategory(item);
                   onSearch('');
                   setIsModalVisible(false);
+                  onSelectValue(item)
                 }}
               >
                 <Text style={styles.dropdownText}>{item}</Text>

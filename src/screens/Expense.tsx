@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native'
-import React from 'react'
+
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, StatusBar} from 'react-native'
+import React, { useState } from 'react'
 import { COLORS, SIZES } from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AppNavigationParams } from '../navigation/AppNavigation';
@@ -12,27 +13,73 @@ import { savingsTypes } from '../constants/Categories';
 import CustomTextInput from '../components/CustomTextInput';
 import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
-
+import DateSelect from '../components/Date';
+import {uploadCustomData} from '../Api/FireBaseInsertion';
+import firebase from '@react-native-firebase/app'
+import firestore from '@react-native-firebase/firestore'
 
 type Props = NativeStackScreenProps<AppNavigationParams,'Login'>
 
 const Expense:React.FC<Props>  = ({navigation}) => {
 
+  const [expenseValue, setExpenseValue] = useState<number | undefined>(undefined);
+const [categoryValue, setCategoryValue] = useState('');
+const [transactionTypeValue, setTransactionTypeValue] = useState('');
+const [descriptionValue, setDescriptionValue] = useState('');
+const [dateValue, setDateValue] = useState('');
+
     const handlePress = () =>{
         navigation.goBack();
     }
 
-    const handleSubmit = () => {
-        navigation.navigate("Home");
-    }
+    // const handleSubmit = () => {
+    //     navigation.navigate("HomeTab");
+    // }
 
     const handleAttachment = () => {
       console.log("Will add attachment");
     }
 
+    const handleSubmit = async () => {
+      if(
+        expenseValue &&
+    categoryValue &&
+    transactionTypeValue &&
+    // descriptionValue &&  -----Add this when We need description to be there
+    dateValue
+      ){
+        console.log('Expense:', expenseValue);
+        console.log('Category:', categoryValue);
+        console.log('Transaction Type:', transactionTypeValue);
+        console.log('Description:', descriptionValue);
+        console.log('Date:', dateValue);
+
+        const typeValue = 'Borrowed';
+
+         await uploadCustomData(
+          expenseValue,
+          categoryValue,
+          transactionTypeValue,
+          descriptionValue,
+          dateValue,
+          typeValue
+         );
+  
+        console.log('Expense data uploaded successfully');
+        navigation.navigate('HomeTab');
+      }else{
+        Alert.alert("Fill the fields")
+      }
+     
+    };
+
 
     return (
         <View style={styles.container}>
+          <StatusBar
+                    backgroundColor={COLORS.red}
+                    barStyle= 'light-content'
+                  />
           <View style={styles.topSection}>
           <View style={{flexDirection:'row',alignItems:'center', justifyContent:"space-evenly", marginBottom:15}}>
             <TouchableOpacity
@@ -54,6 +101,10 @@ const Expense:React.FC<Props>  = ({navigation}) => {
             Style={styles.input}
             placeholder= "0"
             placeholderTextColor="white"
+            onChangeText={(value) => {
+              const parsedValue = parseFloat(value);
+              setExpenseValue(isNaN(parsedValue) ? undefined : parsedValue);
+            }}
           />
            </View>
            
@@ -65,19 +116,27 @@ const Expense:React.FC<Props>  = ({navigation}) => {
                    <CustomDropDown 
                     options={Categories}
                     placeholder='Category'
+                    onSelectValue={(value) => setCategoryValue(value)}
                    />
                    <CustomDropDown 
                     options={savingsTypes}
                     placeholder='Transaction Type'
+                    onSelectValue={(value) => setTransactionTypeValue(value)}
+                    
                    />        
                    <CustomTextInput
                    placeholder='Description'
                    placeholderTextColor = 'grey'
+                   onChangeText={(value) => setDescriptionValue(value)}
                   />
-              <AddAttachment
+               {/* <AddAttachment
                 title="Add Attachment"
                 onPress={handleAttachment}
+              />  */}
+              <DateSelect placeholder='Select date'
+                onSelectDate={(value) => setDateValue(value)}
               />
+              {/* <DatePick/> */}
               <RepeatTransaction
               title='Repeat'
               subTitle='Repeat Transaction'
@@ -88,8 +147,11 @@ const Expense:React.FC<Props>  = ({navigation}) => {
             <CustomButton
               title="Continue"
               onPress={handleSubmit}
-              Style={styles.button}
-              titleStyle={styles.ButtonText}
+              // Style={styles.button}
+              // titleStyle={styles.ButtonText}
+              Style={[styles.button]}
+              titleStyle={[styles.ButtonText]}
+              backgroundColor={COLORS.primary}
 
             />
 
@@ -108,6 +170,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       backgroundColor: COLORS.red,
+      flexBasis : '100%'
     },
     topSection: {
       flex: 3,
@@ -143,16 +206,22 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start'
     },
     button: {
-        width:'100%',
+         width:'100%',
+        // minHeight: 60,
+        // backgroundColor: COLORS.primary,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // marginBottom: 5,
+        // borderRadius: 15,
+        elevation:8,
+        // marginTop:6,
+        // zIndex:0
+       // width: SIZES.width - 30,
         minHeight: 60,
-        backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 5,
         borderRadius: 15,
-        elevation:8,
-        marginTop:6,
-        zIndex:0
       },
       ButtonText: {
         fontWeight: '500',

@@ -14,7 +14,10 @@ export const COLORS = {
     light: '#FFF6E5',
     orange:'#f12711',
     citrus: '#F7971E',
-    sulphur : '#ffff99'
+    sulphur : '#ffff99',
+    blue: '#0083B0',
+    lightgreen : '#7befb2',
+    lightred: '#ff5e62'
 }
 
 export const SIZES = {
