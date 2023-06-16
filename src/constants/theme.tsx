@@ -1,33 +1,37 @@
-import { Dimensions } from "react-native";
+import {Dimensions, Platform} from 'react-native';
 
-const {width,height} = Dimensions.get('screen');
+const {width, height} = Dimensions.get('screen');
+import {NativeModules} from 'react-native';
+const {StatusBarManager} = NativeModules;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT;
 
 export const COLORS = {
-    primary:"#7F3DFF",
-    secondary:"#EEE5FF",
-    black:"#212325",
-    white:"#FFFFFF",
-    grey: 'grey',
-    red: '#ED213A',
-    lightgrey: '#c0c0c0',
-    green: '#0f9b0f',
-    light: '#FFF6E5',
-    orange:'#f12711',
-    citrus: '#F7971E',
-    sulphur : '#ffff99',
-    blue: '#0083B0',
-    lightgreen : '#7befb2',
-    lightred: '#ff5e62'
-}
+  primary: '#7F3DFF',
+  secondary: '#EEE5FF',
+  black: '#212325',
+  white: '#FFFFFF',
+  grey: 'grey',
+  red: '#ED213A',
+  lightgrey: '#c0c0c0',
+  green: '#0f9b0f',
+  light: '#FFF6E5',
+  orange: '#f12711',
+  citrus: '#F7971E',
+  sulphur: '#ffff99',
+  blue: '#0083B0',
+  lightgreen: '#7befb2',
+  lightred: '#ff5e62',
+};
 
 export const SIZES = {
-    h1:22,
-    h2:20,
-    h3:18,
-    h4:16,
-    h5:14,
-    h6:12,
+  h1: 22,
+  h2: 20,
+  h3: 18,
+  h4: 16,
+  h5: 14,
+  h6: 12,
 
-    width,
-    height
-}
+  width,
+  height,
+  STATUSBAR_HEIGHT,
+};
