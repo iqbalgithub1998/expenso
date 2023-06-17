@@ -14,7 +14,7 @@ import {useTabMenu} from '../context/TabContext';
 import Profile from '../screens/Profile';
 import Budget from '../screens/Budget';
 
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 export type TabParamList = {
   Home: undefined;
@@ -40,6 +40,7 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = () => {
   const navigation = useNavigation();
 
   const {opened, toggleOpened} = useTabMenu();
+  const route = useRoute();
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -97,6 +98,7 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = () => {
                 opened={opened}
                 toggleOpened={toggleOpened}
                 navigation={navigation}
+                currentRoute={route.name}
               />
             );
           },

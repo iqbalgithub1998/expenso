@@ -25,6 +25,7 @@ import RepeatTransaction from '../components/RepeatTransaction';
 import DateSelect from '../components/Date';
 import {uploadCustomData} from '../Api/FireBaseInsertion';
 import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 type Props = NativeStackScreenProps<AppNavigationParams, 'Login'>;
 
@@ -38,9 +39,6 @@ const Expense: React.FC<Props> = ({navigation}) => {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [dateValue, setDateValue] = useState('');
 
-  
-  
-
   const handlePress = () => {
     navigation.goBack();
   };
@@ -49,12 +47,11 @@ const Expense: React.FC<Props> = ({navigation}) => {
   //     navigation.navigate("HomeTab");
   // }
 
-  const handleAttachment = () => {
-    console.log('Will add attachment');
-  };
+  // const handleAttachment = () => {
+  //   console.log('Will add attachment');
+  // };
   //const userId = auth().currentUser?.uid??'';
   const handleSubmit = async () => {
-    
     if (
       expenseValue &&
       categoryValue &&
@@ -70,7 +67,24 @@ const Expense: React.FC<Props> = ({navigation}) => {
 
       const typeValue = 'Borrowed';
 
+      const currentUser = auth().currentUser;
+      let userId = '';
+
+      if (currentUser) {
+        userId = currentUser.uid || '';
+      } else {
+        try {
+          await GoogleSignin.hasPlayServices();
+          const currentUser = await GoogleSignin.getCurrentUser();
+          //console.log(currentUser);
+          userId = currentUser?.user.id || '';
+        } catch (error) {
+          console.log('Google Sign-In error:', error);
+        }
+      }
+
       await uploadCustomData(
+        userId,
         expenseValue,
         categoryValue,
         transactionTypeValue,

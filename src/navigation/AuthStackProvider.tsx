@@ -67,6 +67,16 @@ const login = async (email: string, password: string) => {
     console.log('Email:', email);
     console.log('Password:', password);
     try {
+      const userSnapshot = await firestore()
+        .collection('Users')
+        .where('email', '==', email)
+        .get();
+
+      if (!userSnapshot.empty) {
+        // Email is already registered, display an error message
+        Alert.alert('Error', 'Email is already registered. Please use a different email.');
+        resolve();
+      } else {
       const { user } = await auth().createUserWithEmailAndPassword(email, password);
     if (user) {
       await user.updateProfile({
@@ -89,6 +99,7 @@ const login = async (email: string, password: string) => {
       },
     ]);
     resolve();
+  }
     } catch (error:any) {
       console.log(error);
       Alert.alert('Registration Error', 'User already Registered');

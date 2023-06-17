@@ -19,12 +19,14 @@ interface AddButtonProps {
   opened: boolean;
   toggleOpened: () => void;
   navigation: any;
+  currentRoute?: any;
 }
 
 const AddButton: React.FC<AddButtonProps> = ({
   opened,
   toggleOpened,
   navigation,
+  currentRoute,
 }) => {
   const animation = useRef(new Animated.Value(0)).current;
 
