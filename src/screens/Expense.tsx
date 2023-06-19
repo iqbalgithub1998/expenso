@@ -9,7 +9,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AppNavigationParams} from '../navigation/AppNavigation';
@@ -24,8 +24,8 @@ import AddAttachment from '../components/AddAttachment';
 import RepeatTransaction from '../components/RepeatTransaction';
 import DateSelect from '../components/Date';
 import {uploadCustomData} from '../Api/FireBaseInsertion';
-import firebase from '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 type Props = NativeStackScreenProps<AppNavigationParams, 'Login'>;
 
@@ -47,10 +47,10 @@ const Expense: React.FC<Props> = ({navigation}) => {
   //     navigation.navigate("HomeTab");
   // }
 
-  const handleAttachment = () => {
-    console.log('Will add attachment');
-  };
-
+  // const handleAttachment = () => {
+  //   console.log('Will add attachment');
+  // };
+  //const userId = auth().currentUser?.uid??'';
   const handleSubmit = async () => {
     if (
       expenseValue &&
@@ -67,7 +67,24 @@ const Expense: React.FC<Props> = ({navigation}) => {
 
       const typeValue = 'Borrowed';
 
+      const currentUser = auth().currentUser;
+      let userId = '';
+
+      if (currentUser) {
+        userId = currentUser.uid || '';
+      } else {
+        try {
+          await GoogleSignin.hasPlayServices();
+          const currentUser = await GoogleSignin.getCurrentUser();
+          //console.log(currentUser);
+          userId = currentUser?.user.id || '';
+        } catch (error) {
+          console.log('Google Sign-In error:', error);
+        }
+      }
+
       await uploadCustomData(
+        userId,
         expenseValue,
         categoryValue,
         transactionTypeValue,

@@ -19,12 +19,14 @@ interface AddButtonProps {
   opened: boolean;
   toggleOpened: () => void;
   navigation: any;
+  currentRoute?: any;
 }
 
 const AddButton: React.FC<AddButtonProps> = ({
   opened,
   toggleOpened,
   navigation,
+  currentRoute,
 }) => {
   const animation = useRef(new Animated.Value(0)).current;
 
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
   addButtonInner: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: COLORS.white,
     width: 60,
     height: 60,
     borderRadius: 30,

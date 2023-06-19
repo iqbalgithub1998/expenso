@@ -4,6 +4,7 @@ import firestore, {
 } from '@react-native-firebase/firestore';
 
 export const uploadCustomData = async (
+  userId: string,
   expense: number,
   category: string,
   transactionType: string,
@@ -14,6 +15,7 @@ export const uploadCustomData = async (
   firestore()
     .collection('Transaction')
     .add({
+      userId,
       expense,
       category,
       transactionType,
@@ -50,6 +52,7 @@ export const uploadCustomData = async (
 // };
 
 export const uploadTransferData = async (
+  userId: string,
   expenseValue: number,
   senderValue: string,
   receiverValue: string,
@@ -59,6 +62,7 @@ export const uploadTransferData = async (
   firestore()
     .collection('Transfer')
     .add({
+      userId,
       expenseValue,
       senderValue,
       receiverValue,

@@ -22,6 +22,11 @@ import {monthNames} from '../constants/Categories';
 import CustomDropDown from '../components/CustomDropDown';
 import CustomButton from '../components/CustomButton';
 import {useFocusEffect} from '@react-navigation/native';
+import {getUserId} from '../utils/UserID';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AppNavigationParams} from '../navigation/AppNavigation';
+// import auth from '@react-native-firebase/auth';
+// import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 interface TransactionItemProps {
   id: string;
@@ -33,7 +38,27 @@ interface TransactionItemProps {
   createdAt: FirebaseFirestoreTypes.Timestamp;
 }
 
-const Transaction = () => {
+type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
+
+// const getUserId = async () => {
+//   const currentUser = auth().currentUser;
+//   let userId = '';
+//   if (currentUser) {
+//     userId = currentUser.uid || '';
+//   } else {
+//     try {
+//       await GoogleSignin.hasPlayServices();
+//       const currentUser = await GoogleSignin.getCurrentUser();
+//       userId = currentUser?.user.id || '';
+//       console.log(userId);
+//     } catch (error) {
+//       console.log('Google Sign-In error:', error);
+//     }
+//   }
+//   return userId;
+// };
+
+const Transaction: React.FC<Props> = ({navigation}) => {
   const [transaction, setTransaction] = useState<TransactionItemProps[]>([]);
 
   // useEffect(() => {
@@ -43,14 +68,16 @@ const Transaction = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log('transaction run');
+      //console.log('transaction run');
       fetchTransactions();
     }, []),
   );
 
   const fetchTransactions = async () => {
+    const userId = await getUserId();
     const snapshot = await firestore()
       .collection('Transaction')
+      .where('userId', '==', userId)
       .orderBy('createdAt', 'desc')
       .get();
     const data = snapshot.docs.map(doc => ({
@@ -61,11 +88,16 @@ const Transaction = () => {
       type: doc.data().type,
       category: doc.data().category,
       createdAt: firestore.Timestamp.fromMillis(
-        doc.data().createdAt.seconds * 1000 +
-          doc.data().createdAt.nanoseconds / 1000000,
+        Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
       ),
     }));
     setTransaction(data);
+  };
+
+  const presstoDetail = (item: TransactionItemProps) => {
+    return () => {
+      navigation.navigate('Details', {item});
+    };
   };
 
   const renderTransactionItem = ({item}: {item: TransactionItemProps}) => {
@@ -75,45 +107,59 @@ const Transaction = () => {
 
     if (item.category === 'Food') {
       iconComponent = (
-        <Ionicons name="md-fast-food-sharp" size={40} color={COLORS.primary} />
+        <Ionicons name="md-fast-food-sharp" size={40} color={COLORS.Food} />
       );
     } else if (item.category === 'Travel') {
       iconComponent = (
-        <Ionicons name="md-car-sport-sharp" size={40} color={COLORS.primary} />
+        <Ionicons name="md-car-sport-sharp" size={40} color={COLORS.Travel} />
       );
     } else if (item.category === 'Housing') {
-      iconComponent = <Ionicons name="home" size={40} color={COLORS.primary} />;
+      iconComponent = (
+        <Ionicons name="md-business" size={40} color={COLORS.Housing} />
+      );
     } else if (item.category === 'Transportation') {
       iconComponent = (
-        <FontAwesome5 name="truck-loading" size={40} color={COLORS.primary} />
+        <FontAwesome5
+          name="truck-loading"
+          size={35}
+          color={COLORS.Transportation}
+        />
       );
     } else if (item.category === 'Entertainment') {
       iconComponent = (
-        <MaterialIcons name="sports-esports" size={40} color={COLORS.primary} />
+        <MaterialIcons
+          name="sports-esports"
+          size={40}
+          color={COLORS.Entertainment}
+        />
       );
     } else if (item.category === 'Utilities') {
       iconComponent = (
-        <Ionicons name="build" size={40} color={COLORS.primary} />
+        <Ionicons name="build" size={40} color={COLORS.Utilities} />
       );
     } else if (item.category === 'Healthcare') {
       iconComponent = (
-        <FontAwesome5 name="hospital-user" size={40} color={COLORS.primary} />
+        <FontAwesome5
+          name="hospital-user"
+          size={40}
+          color={COLORS.Healthcare}
+        />
       );
     } else if (item.category === 'Education') {
       iconComponent = (
-        <Ionicons name="md-school-sharp" size={40} color={COLORS.primary} />
+        <Ionicons name="md-school-sharp" size={40} color={COLORS.Education} />
       );
     } else if (item.category === 'Personal Care') {
       iconComponent = (
         <MaterialCommunityIcons
           name="lotion"
           size={40}
-          color={COLORS.primary}
+          color={COLORS.PersonalCare}
         />
       );
     } else if (item.category === 'Miscellaneous') {
       iconComponent = (
-        <FontAwesome5 name="random" size={40} color={COLORS.primary} />
+        <FontAwesome5 name="random" size={40} color={COLORS.Miscellaneous} />
       );
     }
 
@@ -126,7 +172,7 @@ const Transaction = () => {
     }
 
     return (
-      <TouchableOpacity onPress={() => console.log('Will navigate to details')}>
+      <TouchableOpacity onPress={presstoDetail(item)}>
         <View style={styles.list}>
           <StatusBar
             backgroundColor={COLORS.white}
@@ -162,9 +208,10 @@ const Transaction = () => {
             </Text>
             <Text style={{fontSize: 15, fontWeight: '700'}}>
               {item.createdAt
-                ? item.createdAt.toDate().toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
+                ? item.createdAt.toDate().toLocaleDateString([], {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
                   })
                 : ''}
             </Text>
@@ -202,9 +249,10 @@ const Transaction = () => {
           />
         </View>
 
-        <Text style={styles.Heading}>Today</Text>
-
         <FlatList
+          ListHeaderComponent={
+            <Text style={styles.Heading}>Your Transactions</Text>
+          }
           data={transaction}
           keyExtractor={item => item.id}
           renderItem={renderTransactionItem}
@@ -237,7 +285,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 12,
     backgroundColor: COLORS.white,
-    //opacity:0.8
+    //elevation:3
   },
   image: {
     height: 60,
@@ -317,7 +365,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontSize: 30,
     textAlign: 'left',
-    fontWeight: 'bold',
+    fontWeight: '800',
     color: COLORS.black,
     marginLeft: 15,
   },

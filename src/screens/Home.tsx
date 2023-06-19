@@ -20,7 +20,12 @@ import CustomDropDown from '../components/CustomDropDown';
 import {monthNames, timeFrame} from '../constants/Categories';
 import {AuthContext} from '../navigation/AuthStackProvider';
 import auth from '@react-native-firebase/auth';
-//import { AuthContext } from '../navigation/AuthStackProvider';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 
 import {AppNavigationParams} from '../navigation/AppNavigation';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -29,6 +34,9 @@ import CustomButton from '../components/CustomButton';
 import LineChart from '../components/LineChart';
 import TabContainer from '../components/TabContainer';
 import {ExpenseValue, LentValue} from '../Api/Fetch';
+import {TransactionItemProps} from '../interface/User.interface';
+import {useFocusEffect} from '@react-navigation/native';
+import {getUserId} from '../utils/UserID';
 
 type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
 
@@ -54,75 +62,45 @@ const tabText = (
 });
 
 const Home: React.FC<Props> = ({navigation, route}) => {
-  const {userInfo} = route.params ?? {};
-  const [userName, setUserName] = useState('');
+  // const {userInfo} = route.params ?? {};
+  // const [userName, setUserName] = useState('');
   const {logout} = useContext(AuthContext);
 
-  const [activePeriod, setActivePeriod] = useState('Today');
+  // const [activePeriod, setActivePeriod] = useState('Today');
 
-  const period = timeFrame;
+  // const period = timeFrame;
 
-  //////For Name input from User database////////////
-  useEffect(() => {
-    if (userInfo) {
-      const {user} = userInfo;
-      const displayName = user?.givenName || '';
-      setUserName(displayName);
-    }
-  }, [userInfo]);
-  //////For Name input////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const [transaction, setTransaction] = useState<TransactionItemProps[]>([]);
 
-  //////////////////////For Cards Update will be later moved to redux////////////////////////////////////////////////////////
+  useFocusEffect(
+    React.useCallback(() => {
+      //console.log('transaction run');
+      fetchTransactions();
+    }, []),
+  );
 
-  // const [expenseSum, setExpenseSum] = useState<number>(0);
-  // const [lentSum, setLentSum] = useState<number>(0);
-
-  // useEffect(() => {
-  //   const fetchExpenseSum = async () => {
-  //     try {
-  //       const snapshot = await firestore().collection('Borrowed').get();
-
-  //       let sum = 0;
-  //       snapshot.forEach((doc) => {
-  //         const data = doc.data();
-  //         const expense = data?.expense;
-  //         if (typeof expense === 'number') {
-  //           sum += expense;
-  //         }
-  //       });
-
-  //       setExpenseSum(sum);
-  //     } catch (error) {
-  //       console.log('Error fetching expense sum:', error);
-  //     }
-  //   };
-
-  //   fetchExpenseSum();
-  // }, [expenseSum] );
-
-  // useEffect(() => {
-  //   const fetchLentSum = async () => {
-  //     try {
-  //       const snapshot = await firestore().collection('Lent').get();
-
-  //       let sum = 0;
-  //       snapshot.forEach((doc) => {
-  //         const data = doc.data();
-  //         const expense = data?.expense;
-  //         if (typeof expense === 'number') {
-  //           sum += expense;
-  //         }
-  //       });
-
-  //       setLentSum(sum);
-  //     } catch (error) {
-  //       console.log('Error fetching lent sum:', error);
-  //     }
-  //   };
-
-  //   fetchLentSum();
-  // },[firestore().collection('Lent')]);
-
+  const fetchTransactions = async () => {
+    const userId = await getUserId();
+    const snapshot = await firestore()
+      .collection('Transaction')
+      .where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .limit(5)
+      .get();
+    const data = snapshot.docs.map(doc => ({
+      id: doc.id,
+      expense: doc.data().expense,
+      description: doc.data().description,
+      deadline: doc.data().deadline,
+      type: doc.data().type,
+      category: doc.data().category,
+      createdAt: firestore.Timestamp.fromMillis(
+        Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
+      ),
+    }));
+    setTransaction(data);
+  };
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const handleSubmit = () => {
@@ -137,7 +115,136 @@ const Home: React.FC<Props> = ({navigation, route}) => {
   };
 
   const pressHandler = () => {
-    console.log('Pressed See all');
+    // console.log('Pressed See all');
+    navigation.navigate('Transaction');
+  };
+
+  const presstoDetail = (item: TransactionItemProps) => {
+    return () => {
+      navigation.navigate('Details', {item});
+    };
+  };
+
+  const renderTransactionItem = ({item}: {item: TransactionItemProps}) => {
+    let iconComponent = null;
+    let expenseColor = COLORS.black;
+    let expenseSign = '';
+
+    if (item.category === 'Food') {
+      iconComponent = (
+        <Ionicons name="md-fast-food-sharp" size={40} color={COLORS.Food} />
+      );
+    } else if (item.category === 'Travel') {
+      iconComponent = (
+        <Ionicons name="md-car-sport-sharp" size={40} color={COLORS.Travel} />
+      );
+    } else if (item.category === 'Housing') {
+      iconComponent = (
+        <Ionicons name="md-business" size={40} color={COLORS.Housing} />
+      );
+    } else if (item.category === 'Transportation') {
+      iconComponent = (
+        <FontAwesome5
+          name="truck-loading"
+          size={35}
+          color={COLORS.Transportation}
+        />
+      );
+    } else if (item.category === 'Entertainment') {
+      iconComponent = (
+        <MaterialIcons
+          name="sports-esports"
+          size={40}
+          color={COLORS.Entertainment}
+        />
+      );
+    } else if (item.category === 'Utilities') {
+      iconComponent = (
+        <Ionicons name="build" size={40} color={COLORS.Utilities} />
+      );
+    } else if (item.category === 'Healthcare') {
+      iconComponent = (
+        <FontAwesome5
+          name="hospital-user"
+          size={40}
+          color={COLORS.Healthcare}
+        />
+      );
+    } else if (item.category === 'Education') {
+      iconComponent = (
+        <Ionicons name="md-school-sharp" size={40} color={COLORS.Education} />
+      );
+    } else if (item.category === 'Personal Care') {
+      iconComponent = (
+        <MaterialCommunityIcons
+          name="lotion"
+          size={40}
+          color={COLORS.PersonalCare}
+        />
+      );
+    } else if (item.category === 'Miscellaneous') {
+      iconComponent = (
+        <FontAwesome5 name="random" size={40} color={COLORS.Miscellaneous} />
+      );
+    }
+
+    if (item.type === 'Lent') {
+      expenseColor = COLORS.green;
+      expenseSign = '+';
+    } else if (item.type === 'Borrowed') {
+      expenseColor = COLORS.red;
+      expenseSign = '-';
+    }
+
+    return (
+      <TouchableOpacity onPress={presstoDetail(item)}>
+        <View style={styles.list}>
+          <StatusBar
+            backgroundColor={COLORS.white}
+            // barStyle= 'light-content'
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {iconComponent}
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                paddingLeft: 10,
+              }}>
+              <Text style={styles.title}>{item.category}</Text>
+              <Text>{item.description}</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+            }}>
+            <Text style={[styles.expense, {color: expenseColor}]}>
+              {' '}
+              {expenseSign} ₹{item.expense}
+            </Text>
+            <Text style={{fontSize: 15, fontWeight: '700'}}>
+              {item.createdAt
+                ? item.createdAt.toDate().toLocaleDateString([], {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })
+                : ''}
+            </Text>
+          </View>
+          {/* Render other transaction details */}
+        </View>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -198,43 +305,43 @@ const Home: React.FC<Props> = ({navigation, route}) => {
         </View>
 
         <View style={styles.bottomSection}>
-          <ScrollView>
-            <Text style={styles.bottomtext}>Spend Frequency</Text>
-            <View>
-              {/* <Text style = {{textAlign:'center'}}>Graph/Chart</Text> */}
-              <LineChart />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 5,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                margin: 5,
-              }}>
-              <Text style={[styles.bottomtext, {fontSize: 18}]}>
-                Recent Transactions
-              </Text>
-              <CustomButton
-                title="See All"
-                onPress={pressHandler}
-                Style={styles.button}
-                titleStyle={{
-                  color: COLORS.primary,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                  fontSize: 14,
-                  fontWeight: 'bold',
-                }}
-              />
-            </View>
+          <Text style={styles.bottomtext}>Spend Frequency</Text>
+          <View>
+            {/* <Text style = {{textAlign:'center'}}>Graph/Chart</Text> */}
+            <LineChart />
+          </View>
 
-            <Text style={{padding: 10, fontSize: 16}}>Test</Text>
-            <Text style={{padding: 10, fontSize: 16}}>Test</Text>
-            <Text style={{padding: 10, fontSize: 16}}>Test</Text>
-            <Text style={{padding: 10, fontSize: 16}}>Test</Text>
-            <Text style={{padding: 10, fontSize: 16}}>Test</Text>
-          </ScrollView>
+          <FlatList
+            ListHeaderComponent={
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 5,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  margin: 5,
+                }}>
+                <Text style={[styles.bottomtext, {fontSize: 18}]}>
+                  Recent Transactions
+                </Text>
+                <CustomButton
+                  title="See All"
+                  onPress={pressHandler}
+                  Style={styles.button}
+                  titleStyle={{
+                    color: COLORS.primary,
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                  }}
+                />
+              </View>
+            }
+            data={transaction}
+            keyExtractor={item => item.id}
+            renderItem={renderTransactionItem}
+          />
         </View>
       </TabContainer>
     </View>
@@ -334,5 +441,30 @@ const styles = StyleSheet.create({
     marginRight: 15,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  list: {
+    minHeight: 70,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.lightgrey,
+    paddingVertical: 10,
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    marginHorizontal: 15,
+    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    //elevation:3
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: COLORS.black,
+  },
+  expense: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    right: 5,
   },
 });

@@ -36,6 +36,10 @@ const Login: React.FC<Props> = ({navigation}) => {
   const pressHandler = () => {
     navigation.goBack();
   };
+
+  const pressSignUp = () => {
+    navigation.navigate('SignUp');
+  };
   const forgotPress = () => {
     navigation.navigate('ForgotPassword');
   };
@@ -241,7 +245,7 @@ const Login: React.FC<Props> = ({navigation}) => {
                 {' '}
                 Do not have an account yet ?
               </Text>
-              <Pressable onPress={pressHandler}>
+              <Pressable onPress={pressSignUp}>
                 <Text
                   style={{
                     fontSize: 14,
