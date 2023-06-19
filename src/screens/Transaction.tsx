@@ -36,6 +36,7 @@ interface TransactionItemProps {
   type: string;
   category: string;
   createdAt: FirebaseFirestoreTypes.Timestamp;
+  method: string;
 }
 
 type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
@@ -87,6 +88,7 @@ const Transaction: React.FC<Props> = ({navigation}) => {
       deadline: doc.data().deadline,
       type: doc.data().type,
       category: doc.data().category,
+      method: doc.data().transactionType,
       createdAt: firestore.Timestamp.fromMillis(
         Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
       ),
@@ -296,7 +298,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   title: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
     color: COLORS.black,
   },
@@ -363,7 +365,7 @@ const styles = StyleSheet.create({
   },
   Heading: {
     marginVertical: 10,
-    fontSize: 30,
+    fontSize: 20,
     textAlign: 'left',
     fontWeight: '800',
     color: COLORS.black,

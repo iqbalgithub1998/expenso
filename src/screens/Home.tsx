@@ -95,6 +95,7 @@ const Home: React.FC<Props> = ({navigation, route}) => {
       deadline: doc.data().deadline,
       type: doc.data().type,
       category: doc.data().category,
+      method: doc.data().transactionType,
       createdAt: firestore.Timestamp.fromMillis(
         Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
       ),
@@ -219,6 +220,7 @@ const Home: React.FC<Props> = ({navigation, route}) => {
               }}>
               <Text style={styles.title}>{item.category}</Text>
               <Text>{item.description}</Text>
+              {/* <Text>{item.method}</Text> */}
             </View>
           </View>
           <View
@@ -306,10 +308,11 @@ const Home: React.FC<Props> = ({navigation, route}) => {
 
         <View style={styles.bottomSection}>
           <Text style={styles.bottomtext}>Spend Frequency</Text>
-          <View>
-            {/* <Text style = {{textAlign:'center'}}>Graph/Chart</Text> */}
+          {/* <View>
+            {/* <Text style = {{textAlign:'center'}}>Graph/Chart</Text> 
             <LineChart />
           </View>
+           */}
 
           <FlatList
             ListHeaderComponent={
@@ -458,7 +461,7 @@ const styles = StyleSheet.create({
     //elevation:3
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
     color: COLORS.black,
   },

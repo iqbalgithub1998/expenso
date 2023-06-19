@@ -43,14 +43,6 @@ const Expense: React.FC<Props> = ({navigation}) => {
     navigation.goBack();
   };
 
-  // const handleSubmit = () => {
-  //     navigation.navigate("HomeTab");
-  // }
-
-  // const handleAttachment = () => {
-  //   console.log('Will add attachment');
-  // };
-  //const userId = auth().currentUser?.uid??'';
   const handleSubmit = async () => {
     if (
       expenseValue &&
@@ -94,6 +86,7 @@ const Expense: React.FC<Props> = ({navigation}) => {
       );
 
       console.log('Expense data uploaded successfully');
+      Alert.alert('Data uploaded succesfuly');
       navigation.navigate('HomeTab');
     } else {
       Alert.alert('Fill the fields');
