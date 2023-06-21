@@ -4,6 +4,9 @@ import firestore from '@react-native-firebase/firestore';
 import {useFocusEffect} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {useDispatch, useSelector} from 'react-redux';
+import {setExpenseSum, setLentSum} from '../Store/Slice/TransactionSlice';
+import {RootState} from '../Store/rootReducer';
 
 const getUserId = async () => {
   const currentUser = auth().currentUser;
@@ -23,8 +26,7 @@ const getUserId = async () => {
 };
 
 export const ExpenseValue: React.FC = () => {
-  const [expenseSum, setExpenseSum] = useState<number>(0);
-
+  const dispatch = useDispatch();
   const fetchExpenseSum = async () => {
     try {
       const userId = await getUserId();
@@ -43,24 +45,28 @@ export const ExpenseValue: React.FC = () => {
         }
       });
 
-      setExpenseSum(sum);
+      //setExpenseSum(sum);
+      dispatch(setExpenseSum(sum));
     } catch (error) {
       console.log('Error fetching expense sum:', error);
     }
   };
+
+  const expenseSum = useSelector(
+    (state: RootState) => state.transaction.expenseSum,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
       fetchExpenseSum();
     }, []),
   );
-
   return <Text>₹ {expenseSum}</Text>;
 };
 
 export const LentValue: React.FC = () => {
-  const [lentSum, setLentSum] = useState<number>(0);
-
+  //const [lentSum, setLentSum] = useState<number>(0);
+  const dispatch = useDispatch();
   const fetchLentSum = async () => {
     try {
       const userId = await getUserId();
@@ -78,12 +84,14 @@ export const LentValue: React.FC = () => {
           sum += expense;
         }
       });
-
-      setLentSum(sum);
+      dispatch(setLentSum(sum));
+      //setLentSum(sum);
     } catch (error) {
       console.log('Error fetching expense sum:', error);
     }
   };
+
+  const lentSum = useSelector((state: RootState) => state.transaction.lentSum);
 
   useFocusEffect(
     React.useCallback(() => {

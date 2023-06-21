@@ -65,7 +65,7 @@ const Details: React.FC<Props> = ({navigation, route}) => {
           <Text
             style={[
               styles.transactiontext,
-              {fontSize: 25, paddingVertical: 10},
+              {fontSize: 15, paddingVertical: 10},
             ]}>
             {item.createdAt
               ? item.createdAt.toDate().toLocaleString([], {

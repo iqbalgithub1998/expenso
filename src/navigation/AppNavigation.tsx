@@ -24,6 +24,8 @@ import {TabContextProvider} from '../context/TabContext';
 import Transfer from '../screens/Transfer';
 import Transaction from '../screens/Transaction';
 import Details from '../screens/Details';
+import {Provider} from 'react-redux';
+import store from '../Store/Store';
 
 export type AppNavigationParams = {
   Initial: any;
@@ -62,30 +64,35 @@ const AppNavigation: React.FC<AppNavigationParams> = ({}) => {
 
   if (initializing) return null;
   return (
-    <AuthProvider>
-      <TabContextProvider>
-        <NavigationContainer>
-          {user ? (
-            <Home />
-          ) : (
-            <Stack.Navigator screenOptions={{headerShown: false}}>
-              <Stack.Screen name="Initial" component={Introduction} />
-              <Stack.Screen name="Welcome" component={Welcome} />
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="SignUp" component={SignUp} />
-              <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-              <Stack.Screen name="Confirmation" component={Confirmation} />
-              <Stack.Screen name="HomeTab" component={TabsNavigator} />
-              <Stack.Screen name="Expense" component={Expense} />
-              <Stack.Screen name="Income" component={Income} />
-              <Stack.Screen name="Transfer" component={Transfer} />
-              <Stack.Screen name="Transaction" component={Transaction} />
-              <Stack.Screen name="Details" component={Details} />
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
-      </TabContextProvider>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <TabContextProvider>
+          <NavigationContainer>
+            {user ? (
+              <Home />
+            ) : (
+              <Stack.Navigator screenOptions={{headerShown: false}}>
+                <Stack.Screen name="Initial" component={Introduction} />
+                <Stack.Screen name="Welcome" component={Welcome} />
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="SignUp" component={SignUp} />
+                <Stack.Screen
+                  name="ForgotPassword"
+                  component={ForgotPassword}
+                />
+                <Stack.Screen name="Confirmation" component={Confirmation} />
+                <Stack.Screen name="HomeTab" component={TabsNavigator} />
+                <Stack.Screen name="Expense" component={Expense} />
+                <Stack.Screen name="Income" component={Income} />
+                <Stack.Screen name="Transfer" component={Transfer} />
+                <Stack.Screen name="Transaction" component={Transaction} />
+                <Stack.Screen name="Details" component={Details} />
+              </Stack.Navigator>
+            )}
+          </NavigationContainer>
+        </TabContextProvider>
+      </AuthProvider>
+    </Provider>
   );
 };
 
