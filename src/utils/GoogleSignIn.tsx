@@ -4,12 +4,17 @@ import {
 } from '@react-native-google-signin/google-signin';
 import {NavigationProp} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 export const signIn = async (navigation: NavigationProp<any>) => {
   try {
     await GoogleSignin.hasPlayServices();
     await GoogleSignin.signOut();
     const userInfo = await GoogleSignin.signIn();
+    const userToken = uuid.v4().toString();
+    console.log(userToken);
+    AsyncStorage.setItem('userToken', userToken);
     //console.log('USER INFORMATION', userInfo);
     const {givenName, email, id} = userInfo.user;
     console.log(givenName, email, id);

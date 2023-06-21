@@ -26,6 +26,7 @@ import Transaction from '../screens/Transaction';
 import Details from '../screens/Details';
 import {Provider} from 'react-redux';
 import store from '../Store/Store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type AppNavigationParams = {
   Initial: any;
@@ -40,6 +41,7 @@ export type AppNavigationParams = {
   Transfer: any;
   Transaction: any;
   Details: any;
+  Home: any;
 };
 
 type AppNavigationProps = {};
@@ -50,45 +52,48 @@ const AppNavigation: React.FC<AppNavigationParams> = ({}) => {
   //const navigation = useNavigation();
 
   const {user, setUser} = useContext(AuthContext);
-  const [initializing, setInitializing] = useState(true);
+  const [isLogged, setIsLogged] = useState(true);
 
-  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
-    setUser(user);
-    if (initializing) setInitializing(false);
+  const checkUserToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      setIsLogged(token !== null);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
+    checkUserToken();
   }, []);
 
-  if (initializing) return null;
   return (
     <Provider store={store}>
       <AuthProvider>
         <TabContextProvider>
           <NavigationContainer>
-            {user ? (
-              <Home />
-            ) : (
+            {/* {user ? (
+              // <Stack.Screen name="HomeTab" component={Home} />
+            ) : ( */}
+            {/* {isLogged ? (
               <Stack.Navigator screenOptions={{headerShown: false}}>
-                <Stack.Screen name="Initial" component={Introduction} />
-                <Stack.Screen name="Welcome" component={Welcome} />
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="SignUp" component={SignUp} />
-                <Stack.Screen
-                  name="ForgotPassword"
-                  component={ForgotPassword}
-                />
-                <Stack.Screen name="Confirmation" component={Confirmation} />
-                <Stack.Screen name="HomeTab" component={TabsNavigator} />
-                <Stack.Screen name="Expense" component={Expense} />
-                <Stack.Screen name="Income" component={Income} />
-                <Stack.Screen name="Transfer" component={Transfer} />
-                <Stack.Screen name="Transaction" component={Transaction} />
-                <Stack.Screen name="Details" component={Details} />
+                <Stack.Screen name="Home" component={Home} />
               </Stack.Navigator>
-            )}
+            ) : ( */}
+            <Stack.Navigator screenOptions={{headerShown: false}}>
+              <Stack.Screen name="Initial" component={Introduction} />
+              <Stack.Screen name="Welcome" component={Welcome} />
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="SignUp" component={SignUp} />
+              <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+              <Stack.Screen name="Confirmation" component={Confirmation} />
+              <Stack.Screen name="HomeTab" component={TabsNavigator} />
+              <Stack.Screen name="Expense" component={Expense} />
+              <Stack.Screen name="Income" component={Income} />
+              <Stack.Screen name="Transfer" component={Transfer} />
+              <Stack.Screen name="Transaction" component={Transaction} />
+              <Stack.Screen name="Details" component={Details} />
+            </Stack.Navigator>
+            {/* )} */}
           </NavigationContainer>
         </TabContextProvider>
       </AuthProvider>

@@ -37,6 +37,7 @@ import {ExpenseValue, LentValue} from '../Api/Fetch';
 import {TransactionItemProps} from '../interface/User.interface';
 import {useFocusEffect} from '@react-navigation/native';
 import {getUserId} from '../utils/UserID';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
 
@@ -108,6 +109,7 @@ const Home: React.FC<Props> = ({navigation, route}) => {
     logout()
       .then(() => {
         Alert.alert('Logout', 'Successfully Logged Out');
+        //AsyncStorage.removeItem('userToken');
         navigation.navigate('Login');
       })
       .catch(error => {
