@@ -36,6 +36,7 @@ interface TransactionItemProps {
   type: string;
   category: string;
   createdAt: FirebaseFirestoreTypes.Timestamp;
+  method: string;
 }
 
 type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
@@ -87,6 +88,7 @@ const Transaction: React.FC<Props> = ({navigation}) => {
       deadline: doc.data().deadline,
       type: doc.data().type,
       category: doc.data().category,
+      method: doc.data().transactionType,
       createdAt: firestore.Timestamp.fromMillis(
         Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
       ),
@@ -105,23 +107,33 @@ const Transaction: React.FC<Props> = ({navigation}) => {
     let expenseColor = COLORS.black;
     let expenseSign = '';
 
+    const IconSize = 35;
+
     if (item.category === 'Food') {
       iconComponent = (
-        <Ionicons name="md-fast-food-sharp" size={40} color={COLORS.Food} />
+        <Ionicons
+          name="md-fast-food-sharp"
+          size={IconSize}
+          color={COLORS.Food}
+        />
       );
     } else if (item.category === 'Travel') {
       iconComponent = (
-        <Ionicons name="md-car-sport-sharp" size={40} color={COLORS.Travel} />
+        <Ionicons
+          name="md-car-sport-sharp"
+          size={IconSize}
+          color={COLORS.Travel}
+        />
       );
     } else if (item.category === 'Housing') {
       iconComponent = (
-        <Ionicons name="md-business" size={40} color={COLORS.Housing} />
+        <Ionicons name="md-business" size={IconSize} color={COLORS.Housing} />
       );
     } else if (item.category === 'Transportation') {
       iconComponent = (
         <FontAwesome5
           name="truck-loading"
-          size={35}
+          size={IconSize}
           color={COLORS.Transportation}
         />
       );
@@ -129,37 +141,45 @@ const Transaction: React.FC<Props> = ({navigation}) => {
       iconComponent = (
         <MaterialIcons
           name="sports-esports"
-          size={40}
+          size={IconSize}
           color={COLORS.Entertainment}
         />
       );
     } else if (item.category === 'Utilities') {
       iconComponent = (
-        <Ionicons name="build" size={40} color={COLORS.Utilities} />
+        <Ionicons name="build" size={IconSize} color={COLORS.Utilities} />
       );
     } else if (item.category === 'Healthcare') {
       iconComponent = (
         <FontAwesome5
           name="hospital-user"
-          size={40}
+          size={IconSize}
           color={COLORS.Healthcare}
         />
       );
     } else if (item.category === 'Education') {
       iconComponent = (
-        <Ionicons name="md-school-sharp" size={40} color={COLORS.Education} />
+        <Ionicons
+          name="md-school-sharp"
+          size={IconSize}
+          color={COLORS.Education}
+        />
       );
     } else if (item.category === 'Personal Care') {
       iconComponent = (
         <MaterialCommunityIcons
           name="lotion"
-          size={40}
+          size={IconSize}
           color={COLORS.PersonalCare}
         />
       );
     } else if (item.category === 'Miscellaneous') {
       iconComponent = (
-        <FontAwesome5 name="random" size={40} color={COLORS.Miscellaneous} />
+        <FontAwesome5
+          name="random"
+          size={IconSize}
+          color={COLORS.Miscellaneous}
+        />
       );
     }
 
@@ -206,7 +226,7 @@ const Transaction: React.FC<Props> = ({navigation}) => {
               {' '}
               {expenseSign} ₹{item.expense}
             </Text>
-            <Text style={{fontSize: 15, fontWeight: '700'}}>
+            <Text style={{fontSize: 10, fontWeight: '700'}}>
               {item.createdAt
                 ? item.createdAt.toDate().toLocaleDateString([], {
                     year: 'numeric',
@@ -296,7 +316,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   title: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
     color: COLORS.black,
   },
@@ -363,7 +383,7 @@ const styles = StyleSheet.create({
   },
   Heading: {
     marginVertical: 10,
-    fontSize: 30,
+    fontSize: 20,
     textAlign: 'left',
     fontWeight: '800',
     color: COLORS.black,

@@ -10,4 +10,5 @@ export interface TransactionItemProps {
   type: string;
   category: string;
   createdAt: FirebaseFirestoreTypes.Timestamp;
+  method: string;
 }

@@ -26,6 +26,7 @@ import DateSelect from '../components/Date';
 import {uploadCustomData} from '../Api/FireBaseInsertion';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import SuccessModal from '../components/SuccessModal';
 
 type Props = NativeStackScreenProps<AppNavigationParams, 'Login'>;
 
@@ -38,19 +39,12 @@ const Expense: React.FC<Props> = ({navigation}) => {
   const [transactionTypeValue, setTransactionTypeValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
   const [dateValue, setDateValue] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handlePress = () => {
     navigation.goBack();
   };
 
-  // const handleSubmit = () => {
-  //     navigation.navigate("HomeTab");
-  // }
-
-  // const handleAttachment = () => {
-  //   console.log('Will add attachment');
-  // };
-  //const userId = auth().currentUser?.uid??'';
   const handleSubmit = async () => {
     if (
       expenseValue &&
@@ -94,10 +88,16 @@ const Expense: React.FC<Props> = ({navigation}) => {
       );
 
       console.log('Expense data uploaded successfully');
+      //Alert.alert('Data uploaded succesfuly');
+      setShowModal(true);
       navigation.navigate('HomeTab');
     } else {
       Alert.alert('Fill the fields');
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   return (

@@ -91,6 +91,7 @@ const Income: React.FC<Props> = ({navigation}) => {
         typeValue,
       );
 
+      Alert.alert('Data uploaded succesfuly');
       navigation.navigate('HomeTab');
     } else {
       Alert.alert('Fill the fields');
