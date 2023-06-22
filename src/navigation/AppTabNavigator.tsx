@@ -1,31 +1,16 @@
-import {StyleSheet, View} from 'react-native';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home';
+import {StyleSheet, View} from 'react-native';
 import {COLORS} from '../constants/theme';
-import Transaction from '../screens/Transaction';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Transaction from '../screens/Transaction';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-import Profile from '../screens/Profile';
 import Budget from '../screens/Budget';
+import Profile from '../screens/Profile';
 
-import {useNavigation, useRoute} from '@react-navigation/native';
-
-export type TabParamList = {
-  Home: undefined;
-  Transaction: undefined;
-  Add: undefined;
-  Budget: undefined;
-  Profile: undefined;
-};
-
-const Tab = createBottomTabNavigator<TabParamList>();
-
-const TabsNavigator: React.FC<any> = () => {
-  const navigation = useNavigation();
-
-  // const {opened, toggleOpened} = useTabMenu();
-  const route = useRoute();
+const AppTabNavigator = () => {
+  const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -64,25 +49,6 @@ const TabsNavigator: React.FC<any> = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="Add"
-        component={Home}
-        options={{
-          tabBarItemStyle: {
-            height: 0,
-          },
-          tabBarButton: () => {
-            return (
-              <AddButton
-                opened={opened}
-                toggleOpened={toggleOpened}
-                navigation={navigation}
-                currentRoute={route.name}
-              />
-            );
-          },
-        }}
-      /> */}
 
       <Tab.Screen
         name="Budget"
@@ -118,14 +84,13 @@ const TabsNavigator: React.FC<any> = () => {
   );
 };
 
-export default TabsNavigator;
+export default AppTabNavigator;
 
 const styles = StyleSheet.create({
   tabBar: {
     padding: 0,
     height: 60,
-    borderRadius: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.secondary,
     borderTopColor: 'transparent',
     shadowColor: COLORS.black,
     shadowOffset: {

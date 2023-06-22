@@ -7,8 +7,10 @@ import {
   Image,
   Pressable,
   ActivityIndicator,
+  Platform,
+  StatusBar,
 } from 'react-native';
-import {COLORS} from '../constants/theme';
+import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useContext, useState} from 'react';
 import {Checkbox} from 'react-native-paper';
@@ -19,8 +21,6 @@ import {Formik, useFormikContext} from 'formik';
 import * as Yup from 'yup';
 import {AuthContext} from '../navigation/AuthStackProvider';
 import {signIn} from '../utils/GoogleSignIn';
-
-type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -43,7 +43,7 @@ const SignupSchema = Yup.object().shape({
     .required('Confirm your Password'),
 });
 
-const SignUp: React.FC<Props> = ({navigation}) => {
+const SignUp: React.FC<any> = ({navigation}) => {
   const handleGoogleSignIn = async () => {
     //await signIn(navigation);
     const userInfo = await signIn(navigation);
@@ -70,6 +70,11 @@ const SignUp: React.FC<Props> = ({navigation}) => {
   const gotoLogin = () => {
     navigation.navigate('Login');
   };
+
+  if (Platform.OS === 'android') {
+    StatusBar.setTranslucent(true);
+    StatusBar.setBackgroundColor('transparent');
+  }
 
   return (
     <Formik
@@ -101,7 +106,12 @@ const SignUp: React.FC<Props> = ({navigation}) => {
         handleSubmit,
         isSubmitting,
       }) => (
-        <View style={{flex: 1, backgroundColor: COLORS.white}}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: COLORS.white,
+            paddingTop: SIZES.STATUSBAR_HEIGHT,
+          }}>
           <View style={{flex: 1, marginHorizontal: 10}}>
             <View style={{marginBottom: 40}}>
               <View

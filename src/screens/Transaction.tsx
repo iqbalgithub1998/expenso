@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 //import firebase  from '@react-native-firebase/app';
-import TabContainer from '../components/TabContainer';
+
 import DateSelect from '../components/Date';
 import {COLORS} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -59,7 +59,7 @@ type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
 //   return userId;
 // };
 
-const Transaction: React.FC<Props> = ({navigation}) => {
+const Transaction: React.FC<any> = ({navigation}) => {
   const [transaction, setTransaction] = useState<TransactionItemProps[]>([]);
 
   // useEffect(() => {
@@ -243,42 +243,40 @@ const Transaction: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <TabContainer>
-      <View style={styles.container}>
-        <View style={styles.topbar}>
-          <CustomDropDown
-            options={monthNames}
-            placeholder="Month"
-            Style={styles.dropdownSelectorStyle}
-            onSelectValue={() => console.log('month selected')}
-          />
+    <View style={styles.container}>
+      <View style={styles.topbar}>
+        <CustomDropDown
+          options={monthNames}
+          placeholder="Month"
+          Style={styles.dropdownSelectorStyle}
+          onSelectValue={() => console.log('month selected')}
+        />
 
-          <TouchableOpacity
-            style={styles.filter}
-            onPress={() => console.log('Will open Filter')}>
-            <Ionicons name="md-filter-sharp" size={30} />
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <CustomButton
-            title="See your Financial report"
-            onPress={() => console.log('Report !1')}
-            Style={styles.button}
-            titleStyle={styles.ButtonText}
-            backgroundColor={COLORS.secondary}
-          />
-        </View>
-
-        <FlatList
-          ListHeaderComponent={
-            <Text style={styles.Heading}>Your Transactions</Text>
-          }
-          data={transaction}
-          keyExtractor={item => item.id}
-          renderItem={renderTransactionItem}
+        <TouchableOpacity
+          style={styles.filter}
+          onPress={() => console.log('Will open Filter')}>
+          <Ionicons name="md-filter-sharp" size={30} />
+        </TouchableOpacity>
+      </View>
+      <View style={{flexDirection: 'row'}}>
+        <CustomButton
+          title="See your Financial report"
+          onPress={() => console.log('Report !1')}
+          Style={styles.button}
+          titleStyle={styles.ButtonText}
+          backgroundColor={COLORS.secondary}
         />
       </View>
-    </TabContainer>
+
+      <FlatList
+        ListHeaderComponent={
+          <Text style={styles.Heading}>Your Transactions</Text>
+        }
+        data={transaction}
+        keyExtractor={item => item.id}
+        renderItem={renderTransactionItem}
+      />
+    </View>
   );
 };
 

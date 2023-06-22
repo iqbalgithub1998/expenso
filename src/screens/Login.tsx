@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
-  ActivityIndicator,
+  Platform,
+  StatusBar,
 } from 'react-native';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,14 +25,12 @@ import * as Yup from 'yup';
 import {AuthContext} from '../navigation/AuthStackProvider';
 import {signIn} from '../utils/GoogleSignIn';
 
-type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
-
 const loginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
   password: Yup.string().required('Password is required'),
 });
 
-const Login: React.FC<Props> = ({navigation}) => {
+const Login: React.FC<any> = ({navigation}) => {
   const formRef = useRef<FormikValues>() as any;
   const pressHandler = () => {
     navigation.goBack();
@@ -59,6 +58,11 @@ const Login: React.FC<Props> = ({navigation}) => {
     email: '',
     password: '',
   };
+
+  if (Platform.OS === 'android') {
+    StatusBar.setTranslucent(true);
+    StatusBar.setBackgroundColor('transparent');
+  }
 
   return (
     <Formik
@@ -94,7 +98,12 @@ const Login: React.FC<Props> = ({navigation}) => {
         handleSubmit,
         isSubmitting,
       }) => (
-        <View style={{flex: 1, backgroundColor: COLORS.white, height: '100%'}}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: COLORS.white,
+            paddingTop: SIZES.STATUSBAR_HEIGHT,
+          }}>
           <View style={{flex: 1, marginHorizontal: 10}}>
             <View style={{marginBottom: 60}}>
               <View

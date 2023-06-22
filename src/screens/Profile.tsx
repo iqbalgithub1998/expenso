@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import TabContainer from '../components/TabContainer';
+
 import {getUserId} from '../utils/UserID';
 import firestore from '@react-native-firebase/firestore';
 import {COLORS} from '../constants/theme';
@@ -26,13 +26,10 @@ const Profile = () => {
   };
 
   return (
-    <TabContainer>
-      <View
-        style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start'}}>
-        <Text style={styles.heading}>Hello !!</Text>
-        <Text style={styles.name}>{loggedInUserName}</Text>
-      </View>
-    </TabContainer>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start'}}>
+      <Text style={styles.heading}>Hello !!</Text>
+      <Text style={styles.name}>{loggedInUserName}</Text>
+    </View>
   );
 };
 
