@@ -13,6 +13,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state: RootState) => state.user);
+  console.log('user in app.tsx', user);
 
   useEffect(() => {
     CheckForLoggedInUser();
@@ -38,20 +39,8 @@ const App = () => {
         <StatusBar barStyle="default" />
       )}
       <NavigationContainer>
-        {user ? <AppTabNavigator /> : <AuthStack />}
+        {user.userId != null ? <AppTabNavigator /> : <AuthStack />}
       </NavigationContainer>
-      {/* <AppNavigation
-        Initial={undefined}
-        Login={undefined}
-        SignUp={undefined}
-        Welcome={undefined}
-        ForgotPassword={undefined}
-        Confirmation={undefined}
-        HomeTab={undefined}
-        Expense={undefined}
-        Income={undefined}
-        Transfer={undefined}
-      /> */}
     </View>
   );
 };

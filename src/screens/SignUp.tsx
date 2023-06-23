@@ -6,21 +6,26 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
-  ActivityIndicator,
   Platform,
   StatusBar,
+  Alert,
 } from 'react-native';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {Checkbox} from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
-import {AppNavigationParams} from '../navigation/AppNavigation';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Formik, useFormikContext} from 'formik';
+
+import {Formik, FormikState} from 'formik';
 import * as Yup from 'yup';
 import {AuthContext} from '../navigation/AuthStackProvider';
 import {signIn} from '../utils/GoogleSignIn';
+import firestore from '@react-native-firebase/firestore';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {setDataToAsyncStorage} from '../utils/AuthChecker';
+import {useDispatch} from 'react-redux';
+import {updateUser} from '../Store/Slice/UserSlice';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -44,18 +49,22 @@ const SignupSchema = Yup.object().shape({
 });
 
 const SignUp: React.FC<any> = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    GoogleSignin.configure();
+  }, []);
+
   const handleGoogleSignIn = async () => {
-    //await signIn(navigation);
     const userInfo = await signIn(navigation);
-    navigation.navigate('HomeTab', {userInfo});
+    await setDataToAsyncStorage(userInfo, 'ExpensoUserData');
+    dispatch(updateUser(userInfo));
   };
 
   //const navigation = useNavigation();
   const [showPass, setShowPass] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const {register} = useContext(AuthContext);
 
   const initialValues = {
     name: '',
@@ -76,25 +85,79 @@ const SignUp: React.FC<any> = ({navigation}) => {
     StatusBar.setBackgroundColor('transparent');
   }
 
+  const onSignUpWithEmailAndPassword = async (
+    data: any,
+    resetForm: {
+      (
+        nextState?:
+          | Partial<
+              FormikState<{
+                name: string;
+                email: string;
+                password: string;
+                confirmPassword: string;
+              }>
+            >
+          | undefined,
+      ): void;
+      (arg0: {
+        values: {
+          name: string;
+          email: string;
+          password: string;
+          confirmPassword: string;
+        };
+      }): void;
+    },
+  ) => {
+    const {email, name, password} = data;
+    try {
+      const userSnapshot = await firestore()
+        .collection('Users')
+        .where('email', '==', email)
+        .get();
+
+      if (!userSnapshot.empty) {
+        // Email is already registered, display an error message
+        Alert.alert('Error', 'Email is already registered.');
+      } else {
+        const {user} = await auth().createUserWithEmailAndPassword(
+          email,
+          password,
+        );
+        if (user) {
+          user.updateProfile({
+            displayName: name,
+          });
+          // const updatedUser = await user.reload(); // Refresh the user data
+          // console.log('updatedUser', updatedUser);
+          const userData = {
+            userId: user.uid,
+            name: name,
+            email: user.email,
+          };
+          await firestore().collection('Users').add(userData);
+          await setDataToAsyncStorage(userData, 'ExpensoUserData');
+          dispatch(updateUser(userData));
+        }
+      }
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert('Registration Error', 'User already Registered');
+    } finally {
+      setShowPass(false);
+      resetForm({values: initialValues});
+      // setSubmitting(false);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={SignupSchema}
-      onSubmit={async (values, {resetForm, setSubmitting}) => {
-        {
-          try {
-            setIsLoading(true);
-            await register(values.name, values.email, values.password);
-            navigation.navigate('HomeTab');
-          } catch (error) {
-            console.log('SignUp error:', error);
-          } finally {
-            setShowPass(false);
-            resetForm({values: initialValues});
-            setSubmitting(false);
-            setIsLoading(false);
-          }
-        }
+      onSubmit={(values, {resetForm}) => {
+        onSignUpWithEmailAndPassword(values, resetForm);
       }}>
       {({
         values,

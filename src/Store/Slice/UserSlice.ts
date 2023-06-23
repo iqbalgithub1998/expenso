@@ -3,9 +3,9 @@ import type {PayloadAction} from '@reduxjs/toolkit';
 import type {RootState} from '../rootReducer';
 import {UserInterface as User} from '../../interface/User.interface';
 const initialState: User = {
-  id:null,
-  name:null,
-  token:null,
+  userId: null,
+  name: null,
+  email: null,
 };
 
 export const UserSlice = createSlice({
@@ -14,14 +14,19 @@ export const UserSlice = createSlice({
   initialState,
   reducers: {
     updateUser: (state, action: PayloadAction<Partial<User>>) => {
-        if (action.payload.id) state.id = action.payload.id;
-        if (action.payload.name) state.name = action.payload.name;
-        if (action.payload.token) state.token = action.payload.token;
+      if (action.payload.userId) state.userId = action.payload.userId;
+      if (action.payload.name) state.name = action.payload.name;
+      if (action.payload.email) state.email = action.payload.email;
+    },
+    removeUser: state => {
+      state.userId = null;
+      state.name = null;
+      state.email = null;
     },
   },
 });
 
-export const {updateUser} = UserSlice.actions;
+export const {updateUser, removeUser} = UserSlice.actions;
 
 export const currentUser = (state: RootState) => state.user;
 

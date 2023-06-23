@@ -4,19 +4,20 @@ import {
 } from '@react-native-google-signin/google-signin';
 import {NavigationProp} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import {setDataToAsyncStorage} from './AuthChecker';
+import {useDispatch} from 'react-redux';
+import {updateUser} from '../Store/Slice/UserSlice';
 
 export const signIn = async (navigation: NavigationProp<any>) => {
   try {
     await GoogleSignin.hasPlayServices();
     await GoogleSignin.signOut();
     const userInfo = await GoogleSignin.signIn();
-    //console.log('USER INFORMATION', userInfo);
     const {givenName, email, id} = userInfo.user;
-    console.log(givenName, email, id);
 
     const userSnapshot = await firestore()
       .collection('Users')
-      .where('userId', '==', id)
+      .where('email', '==', email)
       .get();
 
     if (userSnapshot.empty) {
@@ -27,10 +28,18 @@ export const signIn = async (navigation: NavigationProp<any>) => {
       };
 
       await firestore().collection('Users').add(userData);
-      console.log('Data added to user collection');
+      return userData;
+    } else {
+      const userData: any[] = [];
+
+      userSnapshot.forEach(doc => {
+        const user = doc.data();
+        userData.push(user);
+      });
+
+      return userData[0];
+      // return userSnapshot;
     }
-    //navigation.navigate('HomeTab',{ userInfo: userInfo });
-    return userInfo;
   } catch (error: any) {
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       console.log('user cancelled the login flow');

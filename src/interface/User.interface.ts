@@ -1,9 +1,9 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 
 export interface UserInterface {
-  id:string | null,
-  name:string | null,
-  token:string | null
+  userId: string | null;
+  name: string | null;
+  email: string | null;
 }
 
 export interface TransactionItemProps {

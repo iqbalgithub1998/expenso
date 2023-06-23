@@ -8,6 +8,7 @@ import {
   Pressable,
   Platform,
   StatusBar,
+  Alert,
 } from 'react-native';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,15 +16,15 @@ import {useContext, useState, useEffect, useRef} from 'react';
 import CustomButton from '../components/CustomButton';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AppNavigationParams} from '../navigation/AppNavigation';
-
-import {Formik, FormikValues} from 'formik';
+import {Formik, FormikState, FormikValues} from 'formik';
 import * as Yup from 'yup';
 
 import {AuthContext} from '../navigation/AuthStackProvider';
 import {signIn} from '../utils/GoogleSignIn';
+import auth from '@react-native-firebase/auth';
+import {setDataToAsyncStorage} from '../utils/AuthChecker';
+import {useDispatch} from 'react-redux';
+import {updateUser} from '../Store/Slice/UserSlice';
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -31,6 +32,7 @@ const loginSchema = Yup.object().shape({
 });
 
 const Login: React.FC<any> = ({navigation}) => {
+  const dispatch = useDispatch();
   const formRef = useRef<FormikValues>() as any;
   const pressHandler = () => {
     navigation.goBack();
@@ -49,8 +51,10 @@ const Login: React.FC<any> = ({navigation}) => {
 
   const handleGoogleSignIn = async () => {
     const userInfo = await signIn(navigation);
-    navigation.navigate('HomeTab', {userInfo});
+    await setDataToAsyncStorage(userInfo, 'ExpensoUserData');
+    dispatch(updateUser(userInfo));
   };
+
   const [showPass, setShowPass] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const {login} = useContext(AuthContext);
@@ -64,29 +68,55 @@ const Login: React.FC<any> = ({navigation}) => {
     StatusBar.setBackgroundColor('transparent');
   }
 
+  const loginWithEmailAndPassword = async (
+    values: any,
+    resetForm: {
+      (
+        nextState?:
+          | Partial<
+              FormikState<{
+                email: string;
+                password: string;
+              }>
+            >
+          | undefined,
+      ): void;
+      (arg0: {
+        values: {
+          email: string;
+          password: string;
+        };
+      }): void;
+    },
+    setSubmitting: (isSubmitting: boolean) => void,
+  ) => {
+    const {email, password} = values;
+    try {
+      const user = await auth().signInWithEmailAndPassword(email, password);
+      console.log('user in login file', user);
+      const userData = {
+        userId: user.user.uid,
+        name: user.user.displayName,
+        email: user.user.email,
+      };
+      await setDataToAsyncStorage(userData, 'ExpensoUserData');
+      dispatch(updateUser(userData));
+    } catch (error: any) {
+      if (error.code === 'auth/wrong-password') {
+        Alert.alert('Login Error', 'Invalid email or password');
+      } else {
+        Alert.alert('Login Error', 'An error occurred during login');
+      }
+    }
+  };
+
   return (
     <Formik
       innerRef={formRef}
       initialValues={initialValues}
       validationSchema={loginSchema}
-      onSubmit={async (values, {resetForm, setSubmitting}) => {
-        {
-          try {
-            setSubmitting(true);
-            setIsLoading(true);
-            const user = await login(values.email, values.password);
-            console.log('user from login', user);
-            resetForm({values: initialValues});
-
-            navigation.navigate('HomeTab');
-          } catch (error) {
-            console.log('Login error:', error);
-          } finally {
-            setShowPass(false);
-            setSubmitting(false);
-            setIsLoading(false); // Set loading state back to false
-          }
-        }
+      onSubmit={(values, {resetForm, setSubmitting}) => {
+        loginWithEmailAndPassword(values, resetForm, setSubmitting);
       }}>
       {({
         values,
