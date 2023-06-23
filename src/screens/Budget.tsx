@@ -7,6 +7,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 const Budget = () => {
   const [viewMode, setViewMode] = useState('Chart');
+  const [switchMode, setSwitchMode] = useState('Expense');
   return (
     <TabContainer>
       <View style={styles.container}>
@@ -39,7 +40,7 @@ const Budget = () => {
             <Text> 10 Total</Text>
           </View>
 
-          <View style={styles.graphs}>
+          <View style={[styles.graphs]}>
             <TouchableOpacity
               style={[
                 styles.outergraph,
@@ -76,7 +77,48 @@ const Budget = () => {
             </TouchableOpacity>
           </View>
         </View>
-
+        <View style={styles.switch}>
+          <TouchableOpacity
+            style={[
+              styles.switchbutton,
+              {
+                backgroundColor:
+                  switchMode == 'Expense' ? COLORS.primary : COLORS.switchColor,
+              },
+            ]}
+            onPress={() => setSwitchMode('Expense')}>
+            <Text
+              style={[
+                styles.switchText,
+                {
+                  color: switchMode == 'Expense' ? COLORS.white : COLORS.black,
+                  borderBottomRightRadius: 12,
+                  borderTopRightRadius: 12,
+                },
+              ]}>
+              Expense
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.switchbutton,
+              {
+                backgroundColor:
+                  switchMode == 'Income' ? COLORS.primary : COLORS.switchColor,
+              },
+            ]}
+            onPress={() => setSwitchMode('Income')}>
+            <Text
+              style={[
+                styles.switchText,
+                {
+                  color: switchMode == 'Income' ? COLORS.white : COLORS.black,
+                },
+              ]}>
+              Income
+            </Text>
+          </TouchableOpacity>
+        </View>
         {/* //container view ends */}
       </View>
     </TabContainer>
@@ -118,7 +160,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.lightgrey,
+    borderColor: COLORS.grey,
     borderRadius: 13,
     //justifyContent: 'space-between',
   },
@@ -131,5 +173,30 @@ const styles = StyleSheet.create({
     //backgroundColor: COLORS.Food,
     //borderRadius: 20,
     paddingHorizontal: 10,
+  },
+  switch: {
+    flexDirection: 'row',
+    width: '90%',
+    minHeight: 50,
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.switchColor,
+    borderRadius: 22,
+    justifyContent: 'space-between',
+    backgroundColor: COLORS.switchColor,
+  },
+  switchbutton: {
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.primary,
+    width: '50%',
+    minHeight: 50,
+  },
+  switchText: {
+    fontSize: 16,
+    color: COLORS.white,
+    fontWeight: 'bold',
   },
 });
