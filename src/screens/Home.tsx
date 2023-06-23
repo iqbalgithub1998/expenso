@@ -12,6 +12,7 @@ import {
   ScrollView,
   StatusBar,
   Platform,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
@@ -20,26 +21,20 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomDropDown from '../components/CustomDropDown';
 import {monthNames, timeFrame} from '../constants/Categories';
 import {AuthContext} from '../navigation/AuthStackProvider';
-import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import firestore from '@react-native-firebase/firestore';
 
-import {AppNavigationParams} from '../navigation/AppNavigation';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Cards from '../components/Cards';
 import CustomButton from '../components/CustomButton';
-import LineChart from '../components/LineChart';
 
 import {ExpenseValue, LentValue} from '../Api/Fetch';
 import {TransactionItemProps} from '../interface/User.interface';
 import {useFocusEffect} from '@react-navigation/native';
 import {getUserId} from '../utils/UserID';
-
-type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
+import FloatingButton from '../components/containers/FloatingButton';
 
 const tab = (activePeriod: string, item: string): ViewStyle => ({
   flex: 1,
@@ -66,6 +61,7 @@ const Home: React.FC<any> = ({navigation, route}) => {
   const {logout} = useContext(AuthContext);
 
   const [transaction, setTransaction] = useState<TransactionItemProps[]>([]);
+  const [isFloatingButtonOpen, setIsFloatingButtonOpen] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -108,6 +104,11 @@ const Home: React.FC<any> = ({navigation, route}) => {
     //   });
   };
 
+  // const topSectionStyles = {
+  //   ...styles.topSection,
+  //   backgroundColor: isFloatingButtonOpen ? COLORS.secondary : COLORS.white,
+  // };
+
   const pressHandler = () => {
     // console.log('Pressed See all');
     navigation.navigate('Transaction');
@@ -117,6 +118,10 @@ const Home: React.FC<any> = ({navigation, route}) => {
     return () => {
       navigation.navigate('Details', {item});
     };
+  };
+
+  const closeFloatingButton = () => {
+    setIsFloatingButtonOpen(false);
   };
 
   const renderTransactionItem = ({item}: {item: TransactionItemProps}) => {
@@ -261,6 +266,16 @@ const Home: React.FC<any> = ({navigation, route}) => {
     StatusBar.setBackgroundColor('transparent');
   }
 
+  const expenseNav = () => {
+    navigation.navigate('Expense');
+  };
+  const incomeNav = () => {
+    navigation.navigate('Income');
+  };
+  const transferNav = () => {
+    navigation.navigate('Transfer');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
@@ -314,13 +329,6 @@ const Home: React.FC<any> = ({navigation, route}) => {
       </View>
 
       <View style={styles.bottomSection}>
-        {/* <Text style={styles.bottomtext}>Spend Frequency</Text> */}
-        {/* <View>
-            {/* <Text style = {{textAlign:'center'}}>Graph/Chart</Text> 
-            <LineChart />
-          </View>
-           */}
-
         <FlatList
           ListHeaderComponent={
             <View
@@ -353,6 +361,11 @@ const Home: React.FC<any> = ({navigation, route}) => {
           renderItem={renderTransactionItem}
         />
       </View>
+      <FloatingButton
+        expenseNav={expenseNav}
+        incomeNav={incomeNav}
+        transferNav={transferNav}
+      />
     </View>
   );
 };
@@ -363,23 +376,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: COLORS.light,
+    backgroundColor: COLORS.white,
     height: '100%',
   },
   topSection: {
     paddingTop: SIZES.STATUSBAR_HEIGHT,
     flex: 4,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
 
     backgroundColor: COLORS.light,
     // Replace with your desired styles
   },
   bottomSection: {
     flex: 6,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
     backgroundColor: 'white',
     alignItems: 'stretch',
-    elevation: 1,
+    //elevation: 1,
     //justifyContent:'space-between'
   },
   topbar: {

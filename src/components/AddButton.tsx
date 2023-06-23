@@ -13,7 +13,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../constants/theme';
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AppNavigationParams} from '../navigation/AppNavigation';
 
 interface AddButtonProps {
   opened: boolean;

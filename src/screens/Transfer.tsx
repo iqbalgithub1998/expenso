@@ -12,7 +12,6 @@ import {
 import React, {useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {AppNavigationParams} from '../navigation/AppNavigation';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '../components/CustomButton';
 import CustomNumberInput from '../components/CustomNumberInput';
@@ -23,9 +22,7 @@ import {uploadTransferData} from '../Api/FireBaseInsertion';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-type Props = NativeStackScreenProps<AppNavigationParams, 'Login'>;
-
-const Transfer: React.FC<Props> = ({navigation}) => {
+const Transfer: React.FC<any> = ({navigation}) => {
   const handlePress = () => {
     navigation.goBack();
   };

@@ -7,15 +7,10 @@ import {
 } from 'react-native';
 import React from 'react';
 import {COLORS, SIZES} from '../constants/theme';
-import {AppNavigationParams} from '../navigation/AppNavigation';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../components/CustomButton';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-type Props = NativeStackScreenProps<AppNavigationParams, 'Login'>;
-
-const Details: React.FC<Props> = ({navigation, route}) => {
+const Details: React.FC<any> = ({navigation, route}) => {
   const {item} = route.params;
 
   let bgColor = COLORS.white;
