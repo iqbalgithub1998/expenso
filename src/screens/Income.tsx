@@ -10,25 +10,20 @@ import {
 import React, {useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {AppNavigationParams} from '../navigation/AppNavigation';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '../components/CustomButton';
 import CustomNumberInput from '../components/CustomNumberInput';
 import CustomDropDown from '../components/CustomDropDown';
 import {Categories} from '../constants/Categories';
 import {savingsTypes} from '../constants/Categories';
 import CustomTextInput from '../components/CustomTextInput';
-import AddAttachment from '../components/AddAttachment';
+
 import RepeatTransaction from '../components/RepeatTransaction';
 import DateSelect from '../components/Date';
-import firestore from '@react-native-firebase/firestore';
 import {uploadCustomData} from '../Api/FireBaseInsertion';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-type Props = NativeStackScreenProps<AppNavigationParams, 'Login'>;
-
-const Income: React.FC<Props> = ({navigation}) => {
+const Income: React.FC<any> = ({navigation}) => {
   const [expenseValue, setExpenseValue] = useState<number | undefined>(
     undefined,
   );

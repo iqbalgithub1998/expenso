@@ -8,6 +8,8 @@ import Transaction from '../screens/Transaction';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Budget from '../screens/Budget';
 import Profile from '../screens/Profile';
+import HomeStack from './HomeStack';
+import TransactionStack from './TransactionStack';
 
 const AppTabNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -21,7 +23,7 @@ const AppTabNavigator = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={HomeStack}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
@@ -36,7 +38,7 @@ const AppTabNavigator = () => {
       />
       <Tab.Screen
         name="Transaction"
-        component={Transaction}
+        component={TransactionStack}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>

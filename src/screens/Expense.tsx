@@ -12,7 +12,6 @@ import {
 import React, {useEffect, useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {AppNavigationParams} from '../navigation/AppNavigation';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '../components/CustomButton';
 import CustomNumberInput from '../components/CustomNumberInput';
@@ -28,9 +27,7 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import SuccessModal from '../components/SuccessModal';
 
-type Props = NativeStackScreenProps<AppNavigationParams, 'Login'>;
-
-const Expense: React.FC<Props> = ({navigation}) => {
+const Expense: React.FC<any> = ({navigation}) => {
   // const height = useHeaderHeight()
   const [expenseValue, setExpenseValue] = useState<number | undefined>(
     undefined,
@@ -202,7 +199,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: COLORS.red,
-    flexBasis: '100%',
+    paddingTop: SIZES.STATUSBAR_HEIGHT,
   },
   topSection: {
     height: SIZES.height * 0.3,

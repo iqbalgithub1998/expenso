@@ -12,7 +12,7 @@ import firestore from '@react-native-firebase/firestore';
 //import firebase  from '@react-native-firebase/app';
 
 import DateSelect from '../components/Date';
-import {COLORS} from '../constants/theme';
+import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -24,7 +24,6 @@ import CustomButton from '../components/CustomButton';
 import {useFocusEffect} from '@react-navigation/native';
 import {getUserId} from '../utils/UserID';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AppNavigationParams} from '../navigation/AppNavigation';
 // import auth from '@react-native-firebase/auth';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
@@ -38,8 +37,6 @@ interface TransactionItemProps {
   createdAt: FirebaseFirestoreTypes.Timestamp;
   method: string;
 }
-
-type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
 
 // const getUserId = async () => {
 //   const currentUser = auth().currentUser;
@@ -61,6 +58,7 @@ type Props = NativeStackScreenProps<AppNavigationParams, 'HomeTab'>;
 
 const Transaction: React.FC<any> = ({navigation}) => {
   const [transaction, setTransaction] = useState<TransactionItemProps[]>([]);
+  const [switchMode, setSwitchMode] = useState('All');
 
   // useEffect(() => {
   //   console.log('transaction run');
@@ -258,7 +256,7 @@ const Transaction: React.FC<any> = ({navigation}) => {
           <Ionicons name="md-filter-sharp" size={30} />
         </TouchableOpacity>
       </View>
-      <View style={{flexDirection: 'row'}}>
+      {/* <View style={{flexDirection: 'row'}}>
         <CustomButton
           title="See your Financial report"
           onPress={() => console.log('Report !1')}
@@ -266,6 +264,69 @@ const Transaction: React.FC<any> = ({navigation}) => {
           titleStyle={styles.ButtonText}
           backgroundColor={COLORS.secondary}
         />
+      </View> */}
+      <View style={styles.switch}>
+        <TouchableOpacity
+          style={[
+            styles.switchbutton,
+            {
+              backgroundColor:
+                switchMode == 'All' ? COLORS.primary : COLORS.switchColor,
+            },
+          ]}
+          onPress={() => setSwitchMode('All')}>
+          <Text
+            style={[
+              styles.switchText,
+              {
+                color: switchMode == 'All' ? COLORS.white : COLORS.black,
+                borderBottomRightRadius: 12,
+                borderTopRightRadius: 12,
+              },
+            ]}>
+            All
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.switchbutton,
+            {
+              backgroundColor:
+                switchMode == 'Expense' ? COLORS.red : COLORS.switchColor,
+            },
+          ]}
+          onPress={() => setSwitchMode('Expense')}>
+          <Text
+            style={[
+              styles.switchText,
+              {
+                color: switchMode == 'Expense' ? COLORS.white : COLORS.black,
+                borderBottomRightRadius: 12,
+                borderTopRightRadius: 12,
+              },
+            ]}>
+            Expense
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.switchbutton,
+            {
+              backgroundColor:
+                switchMode == 'Income' ? COLORS.green : COLORS.switchColor,
+            },
+          ]}
+          onPress={() => setSwitchMode('Income')}>
+          <Text
+            style={[
+              styles.switchText,
+              {
+                color: switchMode == 'Income' ? COLORS.white : COLORS.black,
+              },
+            ]}>
+            Income
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <FlatList
@@ -287,6 +348,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
     flexDirection: 'column',
+    paddingTop: SIZES.STATUSBAR_HEIGHT * 1.5,
     //justifyContent:'center',
     // alignItems:'center'
   },
@@ -328,6 +390,7 @@ const styles = StyleSheet.create({
     margin: 3,
     flexDirection: 'row',
     alignItems: 'center',
+    //alignSelf: 'center',
     justifyContent: 'space-between', // Align items at opposite ends
     paddingHorizontal: 10,
     width: '100%',
@@ -386,5 +449,30 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: COLORS.black,
     marginLeft: 15,
+  },
+  switch: {
+    flexDirection: 'row',
+    width: '90%',
+    minHeight: 50,
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.switchColor,
+    borderRadius: 22,
+    justifyContent: 'space-between',
+    backgroundColor: COLORS.switchColor,
+  },
+  switchbutton: {
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.primary,
+    width: '33%',
+    minHeight: 50,
+  },
+  switchText: {
+    fontSize: 16,
+    color: COLORS.white,
+    fontWeight: 'bold',
   },
 });

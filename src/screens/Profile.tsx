@@ -40,7 +40,9 @@ const Profile = () => {
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start'}}>
       <Text style={styles.heading}>Hello !!</Text>
       <Text style={styles.name}>{user.name}</Text>
-      <Button title="logout" onPress={logout}></Button>
+      <View style={styles.button}>
+        <Button color="red" title="logout" onPress={logout}></Button>
+      </View>
     </View>
   );
 };
@@ -60,5 +62,9 @@ const styles = StyleSheet.create({
     fontSize: 80,
     fontWeight: 'bold',
     color: COLORS.primary,
+  },
+  button: {
+    marginTop: 15,
+    alignSelf: 'center',
   },
 });
