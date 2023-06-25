@@ -13,6 +13,7 @@ export const getUserId = async () => {
       userId = currentUser?.user.id || '';
     } catch (error) {
       console.log('Google Sign-In error:', error);
+      return error;
     }
   }
   return userId;

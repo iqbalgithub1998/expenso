@@ -20,6 +20,7 @@ const getUserId = async () => {
       userId = currentUser?.user.id || '';
     } catch (error) {
       console.log('Google Sign-In error:', error);
+      return error;
     }
   }
   return userId;
@@ -49,6 +50,7 @@ export const ExpenseValue: React.FC = () => {
       dispatch(setExpenseSum(sum));
     } catch (error) {
       console.log('Error fetching expense sum:', error);
+      return error;
     }
   };
 
@@ -88,6 +90,7 @@ export const LentValue: React.FC = () => {
       //setLentSum(sum);
     } catch (error) {
       console.log('Error fetching expense sum:', error);
+      return error;
     }
   };
 

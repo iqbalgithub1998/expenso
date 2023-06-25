@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {Ref, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {COLORS} from '../../constants/theme';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {Modal} from 'react-native-paper';
 
 interface FunctionProps {
   expenseNav: () => void;
@@ -17,11 +19,10 @@ interface FunctionProps {
   transferNav: () => void;
 }
 
-const FloatingButton: React.FC<FunctionProps> = ({
-  expenseNav,
-  incomeNav,
-  transferNav,
-}) => {
+const FloatingButton: React.ForwardRefRenderFunction<
+  TouchableOpacity,
+  FunctionProps
+> = ({expenseNav, incomeNav, transferNav}, ref) => {
   const [icon_1] = useState(new Animated.Value(20));
   const [icon_2] = useState(new Animated.Value(20));
   const [icon_3] = useState(new Animated.Value(20));
@@ -133,6 +134,7 @@ const FloatingButton: React.FC<FunctionProps> = ({
         </TouchableOpacity>
       </Animated.View>
       <TouchableOpacity
+        ref={ref}
         activeOpacity={0.8}
         onPress={() => {
           pop === false ? popIn() : popOut();
@@ -146,7 +148,7 @@ const FloatingButton: React.FC<FunctionProps> = ({
   );
 };
 
-export default FloatingButton;
+export default React.forwardRef(FloatingButton);
 
 const styles = StyleSheet.create({
   circle: {

@@ -144,6 +144,7 @@ const SignUp: React.FC<any> = ({navigation}) => {
     } catch (error: any) {
       console.log(error);
       Alert.alert('Registration Error', 'User already Registered');
+      return error;
     } finally {
       setShowPass(false);
       resetForm({values: initialValues});

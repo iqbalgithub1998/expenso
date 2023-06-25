@@ -14,7 +14,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {COLORS, SIZES} from '../constants/theme';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -61,7 +61,8 @@ const Home: React.FC<any> = ({navigation, route}) => {
   const {logout} = useContext(AuthContext);
 
   const [transaction, setTransaction] = useState<TransactionItemProps[]>([]);
-  const [isFloatingButtonOpen, setIsFloatingButtonOpen] = useState(false);
+  // const [isFloatingButtonOpen, setIsFloatingButtonOpen] = useState(false);
+  const floatingButtonRef = useRef<any>(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -69,6 +70,16 @@ const Home: React.FC<any> = ({navigation, route}) => {
       fetchTransactions();
     }, []),
   );
+
+  const handleOutsideTouch = () => {
+    // Handle touch outside logic here
+    console.log('Touched outside button');
+  };
+
+  const handleInsideTouch = () => {
+    // Handle touch inside logic here
+    console.log('Touched inside button');
+  };
 
   const fetchTransactions = async () => {
     const userId = await getUserId();
@@ -118,10 +129,6 @@ const Home: React.FC<any> = ({navigation, route}) => {
     return () => {
       navigation.navigate('Details', {item});
     };
-  };
-
-  const closeFloatingButton = () => {
-    setIsFloatingButtonOpen(false);
   };
 
   const renderTransactionItem = ({item}: {item: TransactionItemProps}) => {
@@ -362,6 +369,7 @@ const Home: React.FC<any> = ({navigation, route}) => {
         />
       </View>
       <FloatingButton
+        ref={floatingButtonRef}
         expenseNav={expenseNav}
         incomeNav={incomeNav}
         transferNav={transferNav}
@@ -376,15 +384,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.light,
     height: '100%',
   },
   topSection: {
     paddingTop: SIZES.STATUSBAR_HEIGHT,
     flex: 4,
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
-
+    // borderBottomLeftRadius: 40,
+    // borderBottomRightRadius: 40,
+    // elevation: 1,
     backgroundColor: COLORS.light,
     // Replace with your desired styles
   },
@@ -392,7 +400,9 @@ const styles = StyleSheet.create({
     flex: 6,
     backgroundColor: 'white',
     alignItems: 'stretch',
-    //elevation: 1,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    elevation: 1,
     //justifyContent:'space-between'
   },
   topbar: {

@@ -50,5 +50,6 @@ export const signIn = async (navigation: NavigationProp<any>) => {
     } else {
       console.log(error);
     }
+    return error;
   }
 };

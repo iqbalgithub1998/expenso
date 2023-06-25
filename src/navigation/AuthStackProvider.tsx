@@ -11,7 +11,7 @@ interface AuthContextProps {
   setUser: (user: FirebaseAuthTypes.User | null) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  logout: () => Promise<any>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -104,6 +104,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
       await auth().signOut();
     } catch (e) {
       console.log(e);
+      return e;
     }
   };
 

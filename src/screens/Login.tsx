@@ -107,6 +107,7 @@ const Login: React.FC<any> = ({navigation}) => {
       } else {
         Alert.alert('Login Error', 'An error occurred during login');
       }
+      return error;
     }
   };
 

@@ -6,11 +6,12 @@ export const CheckAuth = (): Promise<Partial<UserType>> => {
     try {
       const userDataValue = await AsyncStorage.getItem('ExpensoUserData');
       if (!!userDataValue) {
-        return resolve(JSON.parse(userDataValue));
+        resolve(JSON.parse(userDataValue));
       }
-      return reject(false);
+      reject(false);
     } catch (error) {
-      return reject(false);
+      console.log(error);
+      reject(false);
     }
   });
 };
@@ -27,11 +28,11 @@ export const getDataFromAsyncStorage = async (key: string) => {
     try {
       const data = await AsyncStorage.getItem(key);
       if (!!data) {
-        return resolve(JSON.parse(data));
+        resolve(JSON.parse(data));
       }
-      return reject(false);
+      reject(false);
     } catch (error) {
-      return reject(false);
+      reject(false);
     }
   });
 };

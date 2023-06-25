@@ -71,6 +71,7 @@ const Expense: React.FC<any> = ({navigation}) => {
           userId = currentUser?.user.id || '';
         } catch (error) {
           console.log('Google Sign-In error:', error);
+          return 'google sign error';
         }
       }
 
