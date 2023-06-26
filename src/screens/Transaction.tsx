@@ -24,6 +24,8 @@ import CustomButton from '../components/CustomButton';
 import {useFocusEffect} from '@react-navigation/native';
 import {getUserId} from '../utils/UserID';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useDispatch} from 'react-redux';
+import {setUserData} from '../Store/Slice/UserDataSlice';
 // import auth from '@react-native-firebase/auth';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
@@ -34,7 +36,7 @@ interface TransactionItemProps {
   deadline: string;
   type: string;
   category: string;
-  createdAt: FirebaseFirestoreTypes.Timestamp;
+  createdAt?: FirebaseFirestoreTypes.Timestamp;
   method: string;
 }
 
@@ -57,6 +59,7 @@ interface TransactionItemProps {
 // };
 
 const Transaction: React.FC<any> = ({navigation}) => {
+  const dispatch = useDispatch();
   const [transaction, setTransaction] = useState<TransactionItemProps[]>([]);
   const [switchMode, setSwitchMode] = useState('All');
 
@@ -87,12 +90,20 @@ const Transaction: React.FC<any> = ({navigation}) => {
       type: doc.data().type,
       category: doc.data().category,
       method: doc.data().transactionType,
-      createdAt: firestore.Timestamp.fromMillis(
-        Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
-      ),
+      // createdAt: firestore.Timestamp.fromMillis(
+      //   Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
+      // ),
     }));
     setTransaction(data);
+    console.log(data);
+    dispatch(setUserData(data));
   };
+  let filteredData;
+  if (switchMode === 'All') {
+    filteredData = transaction;
+  } else {
+    filteredData = transaction.filter(item => item.type === switchMode);
+  }
 
   const presstoDetail = (item: TransactionItemProps) => {
     return () => {
@@ -211,7 +222,10 @@ const Transaction: React.FC<any> = ({navigation}) => {
                 paddingLeft: 10,
               }}>
               <Text style={styles.title}>{item.category}</Text>
-              <Text>{item.description}</Text>
+              <Text
+                style={{fontSize: 12, fontWeight: 'bold', color: COLORS.grey}}>
+                {item.method}
+              </Text>
             </View>
           </View>
           <View
@@ -224,7 +238,7 @@ const Transaction: React.FC<any> = ({navigation}) => {
               {' '}
               {expenseSign} ₹{item.expense}
             </Text>
-            <Text style={{fontSize: 10, fontWeight: '700'}}>
+            {/* <Text style={{fontSize: 10, fontWeight: '700'}}>
               {item.createdAt
                 ? item.createdAt.toDate().toLocaleDateString([], {
                     year: 'numeric',
@@ -232,7 +246,7 @@ const Transaction: React.FC<any> = ({navigation}) => {
                     day: 'numeric',
                   })
                 : ''}
-            </Text>
+            </Text> */}
           </View>
           {/* Render other transaction details */}
         </View>
@@ -292,15 +306,15 @@ const Transaction: React.FC<any> = ({navigation}) => {
             styles.switchbutton,
             {
               backgroundColor:
-                switchMode == 'Expense' ? COLORS.red : COLORS.switchColor,
+                switchMode == 'Borrowed' ? COLORS.red : COLORS.switchColor,
             },
           ]}
-          onPress={() => setSwitchMode('Expense')}>
+          onPress={() => setSwitchMode('Borrowed')}>
           <Text
             style={[
               styles.switchText,
               {
-                color: switchMode == 'Expense' ? COLORS.white : COLORS.black,
+                color: switchMode == 'Borrowed' ? COLORS.white : COLORS.black,
                 borderBottomRightRadius: 12,
                 borderTopRightRadius: 12,
               },
@@ -313,15 +327,15 @@ const Transaction: React.FC<any> = ({navigation}) => {
             styles.switchbutton,
             {
               backgroundColor:
-                switchMode == 'Income' ? COLORS.green : COLORS.switchColor,
+                switchMode == 'Lent' ? COLORS.green : COLORS.switchColor,
             },
           ]}
-          onPress={() => setSwitchMode('Income')}>
+          onPress={() => setSwitchMode('Lent')}>
           <Text
             style={[
               styles.switchText,
               {
-                color: switchMode == 'Income' ? COLORS.white : COLORS.black,
+                color: switchMode == 'Lent' ? COLORS.white : COLORS.black,
               },
             ]}>
             Income
@@ -333,7 +347,7 @@ const Transaction: React.FC<any> = ({navigation}) => {
         ListHeaderComponent={
           <Text style={styles.Heading}>Your Transactions</Text>
         }
-        data={transaction}
+        data={filteredData}
         keyExtractor={item => item.id}
         renderItem={renderTransactionItem}
       />
