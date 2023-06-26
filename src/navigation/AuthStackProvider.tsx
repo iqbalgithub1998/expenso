@@ -80,7 +80,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
             await user.updateProfile({
               displayName: name,
             });
-            await user.reload(); // Refresh the user data
+            await user.reload();
             const userData = {
               userId: user.uid,
               name: user.displayName || name,
