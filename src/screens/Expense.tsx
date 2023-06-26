@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
   Alert,
   KeyboardAvoidingView,
   StatusBar,
@@ -19,8 +18,7 @@ import CustomDropDown from '../components/CustomDropDown';
 import {Categories} from '../constants/Categories';
 import {savingsTypes} from '../constants/Categories';
 import CustomTextInput from '../components/CustomTextInput';
-import AddAttachment from '../components/AddAttachment';
-import RepeatTransaction from '../components/RepeatTransaction';
+
 import DateSelect from '../components/Date';
 import {uploadCustomData} from '../Api/FireBaseInsertion';
 import auth from '@react-native-firebase/auth';
@@ -100,7 +98,6 @@ const Expense: React.FC<any> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.red} barStyle="light-content" />
       <View style={styles.topSection}>
         <View
           style={{
@@ -213,7 +210,7 @@ const styles = StyleSheet.create({
     height: SIZES.height * 0.7 - SIZES.STATUSBAR_HEIGHT,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    //justifyContent:'space-between'
+    elevation: 1,
   },
   expense: {
     fontSize: 25,
