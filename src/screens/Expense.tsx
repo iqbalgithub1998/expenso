@@ -86,9 +86,8 @@ const Expense: React.FC<any> = ({navigation}) => {
       );
 
       console.log('Expense data uploaded successfully');
-      //Alert.alert('Data uploaded succesfuly');
-      setShowModal(true);
-      navigation.navigate('HomeTab');
+      Alert.alert('Data uploaded succesfuly');
+      navigation.navigate('InitialHome');
     } else {
       Alert.alert('Fill the fields');
     }

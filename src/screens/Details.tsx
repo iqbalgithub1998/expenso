@@ -103,6 +103,7 @@ const Details: React.FC<any> = ({navigation, route}) => {
         <View style={styles.descriptionContainer}>
           <Text style={styles.settleTransactionText}>Description:</Text>
           <Text style={styles.descriptionText}>{item.description}</Text>
+          {/* <Text style={styles.descriptionText}>{item.createdAt}</Text> */}
         </View>
 
         <CustomButton

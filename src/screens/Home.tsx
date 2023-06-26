@@ -97,9 +97,9 @@ const Home: React.FC<any> = ({navigation, route}) => {
       type: doc.data().type,
       category: doc.data().category,
       method: doc.data().transactionType,
-      createdAt: firestore.Timestamp.fromMillis(
-        Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
-      ),
+      createdAt: doc.data().createdAt
+        ? firestore.Timestamp.fromMillis(doc.data().createdAt.seconds * 1000)
+        : null,
     }));
     setTransaction(data);
   };

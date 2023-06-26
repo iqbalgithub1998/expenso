@@ -95,7 +95,7 @@ const Transfer: React.FC<any> = ({navigation}) => {
 
       console.log('Expense data uploaded successfully');
 
-      navigation.navigate('HomeTab');
+      navigation.navigate('InitialHome');
     } else {
       Alert.alert('Fill the fields');
     }

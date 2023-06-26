@@ -11,7 +11,6 @@ import {
 import firestore from '@react-native-firebase/firestore';
 //import firebase  from '@react-native-firebase/app';
 
-import DateSelect from '../components/Date';
 import {COLORS, SIZES} from '../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -27,16 +26,18 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 // import auth from '@react-native-firebase/auth';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-interface TransactionItemProps {
-  id: string;
-  expense: number;
-  description: string;
-  deadline: string;
-  type: string;
-  category: string;
-  //createdAt: FirebaseFirestoreTypes.Timestamp;
-  method: string;
-}
+import {TransactionItemProps} from '../interface/User.interface';
+
+// interface TransactionItemProps {
+//   id: string;
+//   expense: number;
+//   description: string;
+//   deadline: string;
+//   type: string;
+//   category: string;
+//   //createdAt: FirebaseFirestoreTypes.Timestamp;
+//   method: string;
+// }
 
 // const getUserId = async () => {
 //   const currentUser = auth().currentUser;
@@ -87,9 +88,9 @@ const Transaction: React.FC<any> = ({navigation}) => {
       type: doc.data().type,
       category: doc.data().category,
       method: doc.data().transactionType,
-      // createdAt: firestore.Timestamp.fromMillis(
-      //   Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
-      // ),
+      createdAt: firestore.Timestamp.fromMillis(
+        Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
+      ),
     }));
     setTransaction(data);
   };
@@ -100,6 +101,7 @@ const Transaction: React.FC<any> = ({navigation}) => {
   } else {
     filteredData = transaction.filter(item => item.type === switchMode);
   }
+  console.log(filteredData);
 
   const presstoDetail = (item: TransactionItemProps) => {
     return () => {
@@ -223,7 +225,10 @@ const Transaction: React.FC<any> = ({navigation}) => {
                 paddingLeft: 10,
               }}>
               <Text style={styles.title}>{item.category}</Text>
-              <Text>{item.description}</Text>
+              <Text
+                style={{fontSize: 12, color: COLORS.grey, fontWeight: 'bold'}}>
+                {item.method}
+              </Text>
             </View>
           </View>
           <View
@@ -246,7 +251,6 @@ const Transaction: React.FC<any> = ({navigation}) => {
                 : ''}
             </Text> */}
           </View>
-          {/* Render other transaction details */}
         </View>
       </TouchableOpacity>
     );
