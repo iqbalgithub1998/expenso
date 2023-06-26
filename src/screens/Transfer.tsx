@@ -49,9 +49,9 @@ const Transfer: React.FC<any> = ({navigation}) => {
     if (
       expenseValue &&
       senderValue &&
-      receiverValue &&
+      receiverValue //&&
       // descriptionValue &&  -----Add this when We need description to be there
-      dateValue
+      //dateValue
     ) {
       console.log('Expense:', expenseValue);
       console.log('From:', senderValue);
@@ -95,7 +95,7 @@ const Transfer: React.FC<any> = ({navigation}) => {
 
       console.log('Expense data uploaded successfully');
 
-      navigation.navigate('HomeTab');
+      navigation.navigate('InitialHome');
     } else {
       Alert.alert('Fill the fields');
     }

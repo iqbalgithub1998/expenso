@@ -97,9 +97,9 @@ const Home: React.FC<any> = ({navigation, route}) => {
       type: doc.data().type,
       category: doc.data().category,
       method: doc.data().transactionType,
-      createdAt: firestore.Timestamp.fromMillis(
-        Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
-      ),
+      // createdAt: firestore.Timestamp.fromMillis(
+      //   Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
+      // ),
     }));
     setTransaction(data);
   };
@@ -238,7 +238,11 @@ const Home: React.FC<any> = ({navigation, route}) => {
                 paddingLeft: 10,
               }}>
               <Text style={styles.title}>{item.category}</Text>
-              <Text>{item.description}</Text>
+              {/* <Text>{item.description}</Text> */}
+              <Text
+                style={{fontSize: 12, fontWeight: 'bold', color: COLORS.grey}}>
+                {item.method}
+              </Text>
               {/* <Text>{item.method}</Text> */}
             </View>
           </View>
@@ -252,7 +256,7 @@ const Home: React.FC<any> = ({navigation, route}) => {
               {' '}
               {expenseSign} ₹{item.expense}
             </Text>
-            <Text style={{fontSize: 10, fontWeight: '700'}}>
+            {/* <Text style={{fontSize: 10, fontWeight: '700'}}>
               {item.createdAt
                 ? item.createdAt.toDate().toLocaleDateString([], {
                     year: 'numeric',
@@ -260,7 +264,7 @@ const Home: React.FC<any> = ({navigation, route}) => {
                     day: 'numeric',
                   })
                 : ''}
-            </Text>
+            </Text> */}
           </View>
           {/* Render other transaction details */}
         </View>
