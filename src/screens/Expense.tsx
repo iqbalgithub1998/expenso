@@ -69,12 +69,13 @@ const Expense: React.FC<any> = ({navigation}) => {
           const currentUser = await GoogleSignin.getCurrentUser();
           //console.log(currentUser);
           userId = currentUser?.user.id || '';
+          console.log('woring 0');
         } catch (error) {
           console.log('Google Sign-In error:', error);
           return 'google sign error';
         }
       }
-
+      console.log('woring 1');
       await uploadCustomData(
         userId,
         expenseValue,
@@ -84,19 +85,19 @@ const Expense: React.FC<any> = ({navigation}) => {
         dateValue,
         typeValue,
       );
-
+      console.log('woring 2');
       console.log('Expense data uploaded successfully');
-      //Alert.alert('Data uploaded succesfuly');
-      setShowModal(true);
-      navigation.navigate('HomeTab');
+      Alert.alert('Data uploaded succesfuly');
+      //setShowModal(true);
+      navigation.navigate('InitialHome');
     } else {
       Alert.alert('Fill the fields');
     }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  // const handleCloseModal = () => {
+  //   setShowModal(false);
+  // };
 
   return (
     <View style={styles.container}>
