@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
   Alert,
   KeyboardAvoidingView,
   StatusBar,
@@ -19,8 +18,7 @@ import CustomDropDown from '../components/CustomDropDown';
 import {Categories} from '../constants/Categories';
 import {savingsTypes} from '../constants/Categories';
 import CustomTextInput from '../components/CustomTextInput';
-import AddAttachment from '../components/AddAttachment';
-import RepeatTransaction from '../components/RepeatTransaction';
+
 import DateSelect from '../components/Date';
 import {uploadCustomData} from '../Api/FireBaseInsertion';
 import auth from '@react-native-firebase/auth';
@@ -69,12 +67,13 @@ const Expense: React.FC<any> = ({navigation}) => {
           const currentUser = await GoogleSignin.getCurrentUser();
           //console.log(currentUser);
           userId = currentUser?.user.id || '';
+          console.log('woring 0');
         } catch (error) {
           console.log('Google Sign-In error:', error);
           return 'google sign error';
         }
       }
-
+      console.log('woring 1');
       await uploadCustomData(
         userId,
         expenseValue,
@@ -84,23 +83,22 @@ const Expense: React.FC<any> = ({navigation}) => {
         dateValue,
         typeValue,
       );
-
+      console.log('woring 2');
       console.log('Expense data uploaded successfully');
-      //Alert.alert('Data uploaded succesfuly');
-      setShowModal(true);
-      navigation.navigate('HomeTab');
+      Alert.alert('Data uploaded succesfuly');
+      //setShowModal(true);
+      navigation.navigate('InitialHome');
     } else {
       Alert.alert('Fill the fields');
     }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  // const handleCloseModal = () => {
+  //   setShowModal(false);
+  // };
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.red} barStyle="light-content" />
       <View style={styles.topSection}>
         <View
           style={{
@@ -213,7 +211,7 @@ const styles = StyleSheet.create({
     height: SIZES.height * 0.7 - SIZES.STATUSBAR_HEIGHT,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    //justifyContent:'space-between'
+    elevation: 1,
   },
   expense: {
     fontSize: 25,

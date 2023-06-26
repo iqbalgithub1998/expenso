@@ -30,6 +30,11 @@ const Profile = () => {
   //     setLoggedInUserName(name);
   //   }
   // };
+  // Inside your component
+  const userData = useSelector((state: RootState) => state.userdata);
+
+  // You can console.log or perform any desired actions with the userData
+  console.log('list for testing', userData);
 
   const logout = async () => {
     await deleteAsyncStorage('ExpensoUserData');

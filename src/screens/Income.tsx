@@ -88,7 +88,7 @@ const Income: React.FC<any> = ({navigation}) => {
       );
 
       Alert.alert('Data uploaded succesfuly');
-      navigation.navigate('HomeTab');
+      navigation.navigate('InitialHome');
     } else {
       Alert.alert('Fill the fields');
     }
