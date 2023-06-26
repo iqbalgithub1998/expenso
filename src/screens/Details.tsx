@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: COLORS.white,
+    marginTop: SIZES.STATUSBAR_HEIGHT,
     //flexBasis: '100%',
   },
   topSection: {
