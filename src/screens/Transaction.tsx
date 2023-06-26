@@ -94,6 +94,34 @@ const Transaction: React.FC<any> = ({navigation}) => {
     setTransaction(data);
   };
 
+  // const fetchTransactions = async () => {
+  //   const userId = await getUserId();
+  //   let query = firestore()
+  //     .collection('Transaction')
+  //     .where('userId', '==', userId);
+
+  //   if (switchMode === 'Expense') {
+  //     query = query.where('type', '==', 'Borrowed');
+  //   } else if (switchMode === 'Income') {
+  //     query = query.where('type', '==', 'Lent');
+  //   }
+
+  //   const snapshot = await query.orderBy('createdAt', 'desc').get();
+  //   const data = snapshot.docs.map(doc => ({
+  //     id: doc.id,
+  //     expense: doc.data().expense,
+  //     description: doc.data().description,
+  //     deadline: doc.data().deadline,
+  //     type: doc.data().type,
+  //     category: doc.data().category,
+  //     method: doc.data().transactionType,
+  //     createdAt: firestore.Timestamp.fromMillis(
+  //       Math.floor((doc.data().createdAt.seconds * 1000) / 60000) * 60000,
+  //     ),
+  //   }));
+  //   setTransaction(data);
+  // };
+
   const presstoDetail = (item: TransactionItemProps) => {
     return () => {
       navigation.navigate('Details', {item});
