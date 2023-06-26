@@ -13,6 +13,6 @@ export interface TransactionItemProps {
   deadline: string;
   type: string;
   category: string;
-  createdAt: FirebaseFirestoreTypes.Timestamp;
+  createdAt: FirebaseFirestoreTypes.Timestamp | null;
   method: string;
 }
