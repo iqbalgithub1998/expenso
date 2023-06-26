@@ -10,9 +10,24 @@ import Budget from '../screens/Budget';
 import Profile from '../screens/Profile';
 import HomeStack from './HomeStack';
 import TransactionStack from './TransactionStack';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 const AppTabNavigator = () => {
   const Tab = createBottomTabNavigator();
+
+  const getTabVisibility = (route: any) => {
+    const focusRoute = getFocusedRouteNameFromRoute(route);
+    if (
+      focusRoute === 'Expense' ||
+      focusRoute === 'Income' ||
+      focusRoute === 'Transfer' ||
+      focusRoute === 'Details'
+    ) {
+      return 'none';
+    }
+    return 'flex';
+  };
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -24,7 +39,11 @@ const AppTabNavigator = () => {
       <Tab.Screen
         name="Home"
         component={HomeStack}
-        options={{
+        options={({route}) => ({
+          tabBarStyle: {
+            display: getTabVisibility(route),
+            ...styles.tabBar,
+          },
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
               <Ionicons
@@ -34,7 +53,7 @@ const AppTabNavigator = () => {
               />
             </View>
           ),
-        }}
+        })}
       />
       <Tab.Screen
         name="Transaction"

@@ -5,18 +5,21 @@ import Expense from '../screens/Expense';
 import Income from '../screens/Income';
 import Transfer from '../screens/Transfer';
 import Details from '../screens/Details';
+import {HomeStackParamList} from '../interface/Navigation';
 
-const Stack = createNativeStackNavigator();
+const Home_Stack = createNativeStackNavigator<HomeStackParamList>();
 
 const HomeStack = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Initial" component={Home} />
-      <Stack.Screen name="Expense" component={Expense} />
-      <Stack.Screen name="Income" component={Income} />
-      <Stack.Screen name="Transfer" component={Transfer} />
-      <Stack.Screen name="Details" component={Details} />
-    </Stack.Navigator>
+    <Home_Stack.Navigator
+      initialRouteName="InitialHome"
+      screenOptions={{headerShown: false}}>
+      <Home_Stack.Screen name="InitialHome" component={Home} />
+      <Home_Stack.Screen name="Expense" component={Expense} />
+      <Home_Stack.Screen name="Income" component={Income} />
+      <Home_Stack.Screen name="Transfer" component={Transfer} />
+      <Home_Stack.Screen name="Details" component={Details} />
+    </Home_Stack.Navigator>
   );
 };
 
