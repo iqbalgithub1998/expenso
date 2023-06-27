@@ -24,6 +24,7 @@ import {uploadCustomData} from '../Api/FireBaseInsertion';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import SuccessModal from '../components/SuccessModal';
+import ExpenseDropDown from '../components/ExpenseDropDown';
 
 const Expense: React.FC<any> = ({navigation}) => {
   // const height = useHeaderHeight()
@@ -145,46 +146,41 @@ const Expense: React.FC<any> = ({navigation}) => {
       <View style={styles.bottomSection}>
         <View style={{flex: 1, marginHorizontal: 10, marginTop: 20}}>
           <KeyboardAvoidingView
-            keyboardVerticalOffset={Platform.select({ios: 0, android: 500})}
+            keyboardVerticalOffset={Platform.select({ios: 0, android: 600})}
             behavior="padding"
             style={{flex: 1}}
             enabled>
-            <CustomDropDown
+            <ExpenseDropDown
               options={Categories}
               placeholder="Category"
               onSelectValue={value => setCategoryValue(value)}
             />
-            <CustomDropDown
+            <ExpenseDropDown
               options={savingsTypes}
               placeholder="Transaction Type"
               onSelectValue={value => setTransactionTypeValue(value)}
             />
             <CustomTextInput
+              containerStyle={{minHeight: 60, borderRadius: 15}}
+              textArea={true}
               placeholder="Description"
-              placeholderTextColor="grey"
+              placeholderTextColor={COLORS.grey}
               onChangeText={value => setDescriptionValue(value)}
             />
-            {/* <AddAttachment
-                title="Add Attachment"
-                onPress={handleAttachment}
-              />  */}
+
             <DateSelect
               placeholder="Select date"
               onSelectDate={value => setDateValue(value)}
             />
-            {/* <DatePick/> */}
-            {/* <RepeatTransaction title="Repeat" subTitle="Repeat Transaction" /> */}
-          </KeyboardAvoidingView>
 
-          <CustomButton
-            title="Continue"
-            onPress={handleSubmit}
-            // Style={styles.button}
-            // titleStyle={styles.ButtonText}
-            Style={[styles.button]}
-            titleStyle={[styles.ButtonText]}
-            backgroundColor={COLORS.primary}
-          />
+            <CustomButton
+              title="Continue"
+              onPress={handleSubmit}
+              Style={[styles.button]}
+              titleStyle={[styles.ButtonText]}
+              backgroundColor={COLORS.primary}
+            />
+          </KeyboardAvoidingView>
         </View>
       </View>
     </View>
@@ -199,6 +195,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: COLORS.red,
     paddingTop: SIZES.STATUSBAR_HEIGHT,
+  },
+  customSelect: {
+    width: '100%',
+    height: 55,
+    borderRadius: 15,
+    borderColor: 'gray',
+    borderWidth: 2,
   },
   topSection: {
     height: SIZES.height * 0.3,
@@ -234,20 +237,13 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
-    // minHeight: 60,
-    // backgroundColor: COLORS.primary,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // marginBottom: 5,
-    // borderRadius: 15,
+    marginTop: 20,
     elevation: 8,
-    // marginTop:6,
-    // zIndex:0
-    // width: SIZES.width - 30,
+
     minHeight: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 5,
+
     borderRadius: 15,
   },
   ButtonText: {

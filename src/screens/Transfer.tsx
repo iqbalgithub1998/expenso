@@ -59,14 +59,6 @@ const Transfer: React.FC<any> = ({navigation}) => {
       console.log('Description:', descriptionValue);
       console.log('Date:', dateValue);
 
-      // const transferData = {
-      //   expense: expenseValue,
-      //   sender: senderValue,
-      //   receiver:  receiverValue,
-      //   description: descriptionValue,
-      //   deadline: dateValue,
-      //   createdAt: firestore.FieldValue.serverTimestamp(),
-      // };
       const currentUser = auth().currentUser;
       let userId = '';
 
@@ -119,7 +111,6 @@ const Transfer: React.FC<any> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
       <View style={styles.topSection}>
         <View
           style={{
@@ -142,7 +133,8 @@ const Transfer: React.FC<any> = ({navigation}) => {
           </TouchableOpacity>
           <Text style={styles.expense}>Transfer</Text>
         </View>
-        <View style={{marginTop: '45%', paddingLeft: 10}}>
+        <View
+          style={{flex: 1, alignSelf: 'stretch', justifyContent: 'flex-end'}}>
           <Text style={{color: COLORS.white, fontWeight: '600', fontSize: 16}}>
             How Much ?
           </Text>
@@ -164,8 +156,8 @@ const Transfer: React.FC<any> = ({navigation}) => {
         </View>
       </View>
       <View style={styles.bottomSection}>
-        <View style={{flex: 1, marginHorizontal: 20, marginVertical: 20}}>
-          <View style={{flex: 1, justifyContent: 'space-evenly'}}>
+        <View style={{flex: 1, marginHorizontal: 20}}>
+          <View style={{marginVertical: 10}}>
             <View
               style={{flexDirection: 'row', width: '50%', borderRadius: 15}}>
               <CustomTextInput
@@ -174,6 +166,7 @@ const Transfer: React.FC<any> = ({navigation}) => {
                 placeholder="From"
                 placeholderTextColor="grey"
                 style={styles.toFrom}
+                containerStyle={{minHeight: 18, borderRadius: 10}}
               />
               <View style={styles.imageContainer}>
                 <TouchableOpacity activeOpacity={1} onPress={handleSwitch}>
@@ -189,6 +182,7 @@ const Transfer: React.FC<any> = ({navigation}) => {
                 placeholder="To"
                 placeholderTextColor="grey"
                 style={styles.toFrom}
+                containerStyle={{minHeight: 18, borderRadius: 10}}
               />
             </View>
 
@@ -196,25 +190,16 @@ const Transfer: React.FC<any> = ({navigation}) => {
               placeholder="Description"
               placeholderTextColor="grey"
               onChangeText={value => setDescriptionValue(value)}
+              containerStyle={{minHeight: 60, borderRadius: 15}}
+              textArea={true}
             />
-            {/* <AddAttachment
-                title="Add Attachment"
-                onPress={handleAttachment}
-              />  */}
+
             <DateSelect
               placeholder="Select date"
               onSelectDate={value => setDateValue(value)}
             />
-            {/* <DatePick/> */}
           </View>
 
-          {/* <CustomButton
-              title="Continue"
-              onPress={handleSubmit}
-              Style={styles.button}
-              titleStyle={styles.ButtonText}
-
-            /> */}
           <CustomButton
             title="Continue"
             onPress={handleSubmit}
@@ -240,13 +225,13 @@ const styles = StyleSheet.create({
     //flexBasis:'100%'
   },
   topSection: {
-    flex: 5,
+    height: SIZES.height * 0.4 - SIZES.STATUSBAR_HEIGHT,
     marginVertical: 22,
     marginHorizontal: 20,
     // Replace with your desired styles
   },
   bottomSection: {
-    flex: 5,
+    height: SIZES.height * 0.6,
     backgroundColor: 'white',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
@@ -266,7 +251,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     //marginTop: 1,
-    width: SIZES.width / 1.4,
+    width: SIZES.width / 1.1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -277,11 +262,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 5,
     borderRadius: 15,
     elevation: 8,
-    marginTop: 6,
-    zIndex: 0,
+    marginTop: 20,
   },
   ButtonText: {
     fontWeight: '500',
@@ -308,7 +291,7 @@ const styles = StyleSheet.create({
   // },
   imageContainer: {
     position: 'absolute',
-    top: 5,
+    top: 10,
     right: -25,
     alignSelf: 'center',
     zIndex: 1,

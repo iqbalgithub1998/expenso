@@ -6,6 +6,7 @@ import {
   TextInputProps,
   TextStyle,
   KeyboardAvoidingView,
+  ViewStyle,
 } from 'react-native';
 import React from 'react';
 import {COLORS} from '../constants/theme';
@@ -17,6 +18,8 @@ interface CustomTextInputProps {
   onChangeText?: (text: string) => void;
   onBlur?: () => void;
   style?: TextStyle | TextStyle[];
+  containerStyle?: ViewStyle | ViewStyle[];
+  textArea?: boolean;
 }
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
@@ -26,14 +29,16 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
   onChangeText,
   onBlur,
   style,
+  containerStyle,
+  textArea = false,
 }) => {
   return (
-    <KeyboardAvoidingView style={styles.search}>
+    <KeyboardAvoidingView style={[styles.search, containerStyle]}>
       <TextInput
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor}
         multiline={true}
-        numberOfLines={10}
+        numberOfLines={textArea ? 10 : 1}
         style={[style, styles.text]}
         value={value}
         onChangeText={onChangeText}
@@ -50,8 +55,6 @@ const styles = StyleSheet.create({
   search: {
     marginVertical: 10,
     width: '100%',
-    minHeight: 60,
-    borderRadius: 15,
     borderWidth: 1,
     borderColor: COLORS.lightgrey,
     alignSelf: 'center',
@@ -60,10 +63,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   text: {
+    color: COLORS.grey,
     fontWeight: '300',
     fontSize: 18,
     width: '100%',
-    borderColor: 'gray',
     paddingLeft: 15,
     paddingRight: 10,
   },

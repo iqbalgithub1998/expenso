@@ -13,14 +13,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../constants/theme';
 import {Modal} from 'react-native';
 
-interface CustomDropdownProps {
+interface ExpenseDropDownProps {
   options: string[];
   placeholder: string;
   Style?: ViewStyle | TextStyle[];
   onSelectValue: (value: string) => void;
 }
 
-const CustomDropDown: React.FC<CustomDropdownProps> = ({
+const ExpenseDropDown: React.FC<ExpenseDropDownProps> = ({
   options,
   placeholder,
   Style,
@@ -43,7 +43,7 @@ const CustomDropDown: React.FC<CustomDropdownProps> = ({
   };
 
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View style={styles.customDropDown}>
       <TouchableOpacity
         onPress={() => {
           setIsModalVisible(!isModalVisible);
@@ -94,13 +94,23 @@ const CustomDropDown: React.FC<CustomDropdownProps> = ({
   );
 };
 
-export default CustomDropDown;
+export default ExpenseDropDown;
 
 const styles = StyleSheet.create({
+  customDropDown: {
+    minHeight: 60,
+    borderWidth: 1,
+    marginBottom: 10,
+    borderRadius: 10,
+    justifyContent: 'center',
+    borderColor: COLORS.lightgrey,
+    paddingHorizontal: 10,
+  },
+
   dropdownselector: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   dropdownArea: {
     width: '95%',
