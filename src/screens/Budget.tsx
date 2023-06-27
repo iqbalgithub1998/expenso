@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
 import PieChart from '../components/Chart';
 import {TransactionItemProps} from '../interface/User.interface';
+import BarChart from '../components/Barchart';
 const Budget = () => {
   const [viewMode, setViewMode] = useState('Chart');
   const [switchMode, setSwitchMode] = useState('Borrowed');
@@ -33,7 +34,7 @@ const Budget = () => {
     } else if (viewMode == 'Chart') {
       return (
         <View style={styles.chart}>
-          <Text>Line Chart</Text>
+          <BarChart data={filteredData} />
         </View>
       );
     }
