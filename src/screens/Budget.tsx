@@ -1,63 +1,43 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 //import TabContainer from '../components/TabContainer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS, SIZES} from '../constants/theme';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {VictoryPie} from 'victory-native';
-import {Categories} from '../constants/Categories';
+import {useSelector} from 'react-redux';
+import PieChart from '../components/Chart';
+import {TransactionItemProps} from '../interface/User.interface';
+import BarChart from '../components/Barchart';
 const Budget = () => {
   const [viewMode, setViewMode] = useState('Chart');
-  const [switchMode, setSwitchMode] = useState('Expense');
+  const [switchMode, setSwitchMode] = useState('Borrowed');
 
-  ////////////////Dummy Data////////////////////
-  const getRandomPercentages = () => {
-    const percentages = [];
-    let remainingPercentage = 100;
+  const userData = useSelector((state: any) => state.userdata.userData);
 
-    for (let i = 0; i < Categories.length - 1; i++) {
-      const randomPercentage = Math.floor(Math.random() * remainingPercentage);
-      percentages.push(randomPercentage);
-      remainingPercentage -= randomPercentage;
-    }
-
-    percentages.push(remainingPercentage);
-    return percentages;
-  };
-
-  const CATCOLORS: {[key: string]: string} = {
-    Food: '#E44D26',
-    Travel: '#1565C0',
-    Housing: '#434343',
-    Transportation: '#605C3C',
-    Entertainment: '#fdbb2d',
-    Utilities: '#EB5757',
-    Healthcare: '#44A08D',
-    Education: '#333399',
-    'Personal Care': '#F29492',
-    Miscellaneous: '#3C3B3F',
-    switchColor: '#F1F1FA',
-  };
-  const percentages = getRandomPercentages();
-  const data = Categories.map((category, index) => ({
-    x: category,
-    y: percentages[index],
-  }));
-  const colorScale = Categories.map(category => CATCOLORS[category]);
-  ////////////////Dummy Data////////////////////
-
+  const filteredData = userData.filter((item: TransactionItemProps) => {
+    return item.type === switchMode;
+  });
   const renderChart = () => {
-    return (
-      <View style={styles.chart}>
-        <VictoryPie
-          data={data}
-          colorScale={colorScale}
-          innerRadius={50} // Adjust the inner radius to create a donut chart
-          labels={({datum}) => `${datum.x}: ${datum.y}%`} // Custom label format
-        />
-      </View>
-    );
+    if (viewMode == 'Pie') {
+      return (
+        <View style={styles.chart}>
+          <PieChart data={filteredData} />
+        </View>
+      );
+    } else if (viewMode == 'Chart') {
+      return (
+        <View style={styles.chart}>
+          <BarChart data={filteredData} />
+        </View>
+      );
+    }
   };
 
   return (
@@ -134,15 +114,15 @@ const Budget = () => {
             styles.switchbutton,
             {
               backgroundColor:
-                switchMode == 'Expense' ? COLORS.primary : COLORS.switchColor,
+                switchMode == 'Borrowed' ? COLORS.primary : COLORS.switchColor,
             },
           ]}
-          onPress={() => setSwitchMode('Expense')}>
+          onPress={() => setSwitchMode('Borrowed')}>
           <Text
             style={[
               styles.switchText,
               {
-                color: switchMode == 'Expense' ? COLORS.white : COLORS.black,
+                color: switchMode == 'Borrowed' ? COLORS.white : COLORS.black,
                 borderBottomRightRadius: 12,
                 borderTopRightRadius: 12,
               },
@@ -155,15 +135,15 @@ const Budget = () => {
             styles.switchbutton,
             {
               backgroundColor:
-                switchMode == 'Income' ? COLORS.primary : COLORS.switchColor,
+                switchMode == 'Lent' ? COLORS.primary : COLORS.switchColor,
             },
           ]}
-          onPress={() => setSwitchMode('Income')}>
+          onPress={() => setSwitchMode('Lent')}>
           <Text
             style={[
               styles.switchText,
               {
-                color: switchMode == 'Income' ? COLORS.white : COLORS.black,
+                color: switchMode == 'Lent' ? COLORS.white : COLORS.black,
               },
             ]}>
             Income
@@ -255,5 +235,6 @@ const styles = StyleSheet.create({
   },
   chart: {
     alignSelf: 'center',
+    elevation: 10,
   },
 });

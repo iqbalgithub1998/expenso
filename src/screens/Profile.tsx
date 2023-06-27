@@ -31,8 +31,7 @@ const Profile = () => {
   //   }
   // };
   // Inside your component
-  const userData = useSelector((state: RootState) => state.userdata);
-
+  const userData = useSelector((state: RootState) => state.userdata.userData);
   // You can console.log or perform any desired actions with the userData
   console.log('list for testing', userData);
 
