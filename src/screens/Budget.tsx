@@ -1,12 +1,16 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 //import TabContainer from '../components/TabContainer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS, SIZES} from '../constants/theme';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {VictoryPie} from 'victory-native';
-import {Categories} from '../constants/Categories';
 import {useSelector} from 'react-redux';
 import PieChart from '../components/Chart';
 import {TransactionItemProps} from '../interface/User.interface';
