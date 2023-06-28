@@ -9,7 +9,7 @@ export const Categories = [
   'Utilities',
   'Healthcare',
   'Education',
-  'Personal Care',
+  'Personal',
   'Miscellaneous',
 ];
 

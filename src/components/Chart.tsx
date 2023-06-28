@@ -13,26 +13,31 @@ import {SIZES} from '../constants/theme';
 
 interface PieChartProps {
   data: TransactionItemProps[];
+  selectedCategory: string | null;
+  setSelectedCategory: (name: string) => void;
 }
 
 const COLORS: {[key: string]: string} = {
   primary: '#7F3DFF',
   Food: '#E44D26',
   Travel: '#1565C0',
-  Housing: '#434343',
+  Housing: '#dd1818',
   Transportation: '#605C3C',
   Entertainment: '#fdbb2d',
   Utilities: '#EB5757',
   Healthcare: '#44A08D',
   Education: '#333399',
-  PersonalCare: '#F29492',
+  Personal: '#F56217',
   Miscellaneous: '#3C3B3F',
 };
 
-const PieChart: React.FC<PieChartProps> = ({data}) => {
+const PieChart: React.FC<PieChartProps> = ({
+  selectedCategory,
+  setSelectedCategory,
+  data,
+}) => {
   const categories = data.map(item => item.category);
   const uniqueCategories = Array.from(new Set(categories));
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const colorScale = uniqueCategories.map(
     category => COLORS[category] || COLORS.primary,
@@ -64,88 +69,24 @@ const PieChart: React.FC<PieChartProps> = ({data}) => {
   });
 
   const handleChartPress = (_: any, props: any) => {
-    const categoryName = chartData[props.index].x;
-    setSelectedCategory(
-      selectedCategory === categoryName ? null : categoryName,
-    );
-    console.log(selectedCategory);
+    //const categoryName = chartData[props.index].name;
+    console.log('Category pressed:');
   };
-
-  // const renderItem = ({
-  //   item,
-  // }: {
-  //   item: {name: string; color: string; x: string};
-  // }) => (
-  //   <TouchableOpacity>
-  //     <View style={[styles.itemContainer, {backgroundColor: COLORS.white}]}>
-  //       <View
-  //         style={{
-  //           width: 40,
-  //           height: 40,
-  //           backgroundColor: item.color,
-  //           borderRadius: 5,
-  //           borderWidth: 1,
-  //           borderColor: COLORS.black,
-  //         }}></View>
-
-  //       <Text style={[styles.itemText, {fontSize: 20}]}>{item.name}</Text>
-  //       <Text style={styles.itemText}>{item.x}</Text>
-  //     </View>
-  //   </TouchableOpacity>
-  // );
-
-  const renderItem = ({
-    item,
-  }: {
-    item: {name: string; color: string; x: string};
-  }) => {
-    const categorySum = data.reduce((sum, currentItem) => {
-      if (currentItem.category === item.name) {
-        return sum + currentItem.expense;
-      }
-      return sum;
-    }, 0);
-
-    return (
-      <TouchableOpacity>
-        <View style={[styles.itemContainer, {backgroundColor: COLORS.white}]}>
-          <View
-            style={{
-              width: 40,
-              height: 40,
-              backgroundColor: item.color,
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: COLORS.black,
-            }}></View>
-
-          <Text style={[styles.itemText, {fontSize: 20}]}>{item.name}</Text>
-          <View style={{alignItems: 'center', justifyContent: 'flex-start'}}>
-            <Text
-              style={[
-                styles.itemText,
-                {fontSize: 18},
-              ]}>{`₹${categorySum}`}</Text>
-            <Text style={styles.itemText}>{item.x}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
+  let innerRadius = 70;
   return (
     <View style={styles.container}>
       <View style={styles.chartContainer}>
         <VictoryPie
           data={chartData}
+          //labels={datum => `${datum.x}`}
           colorScale={colorScale}
           radius={({datum}) =>
-            selectedCategory && selectedCategory === datum.x
-              ? SIZES.width * 0.4
-              : SIZES.width * 0.4 - 10
+            selectedCategory && selectedCategory === datum.name
+              ? SIZES.width * 0.37
+              : SIZES.width * 0.38 - 12
           }
           innerRadius={70}
-          labelRadius={({innerRadius}) =>
+          labelRadius={({innerRadius: any}) =>
             (SIZES.width * 0.4 + innerRadius) / 2.5
           }
           style={{
@@ -153,13 +94,33 @@ const PieChart: React.FC<PieChartProps> = ({data}) => {
           }}
           width={SIZES.width * 0.8}
           height={SIZES.width * 0.8}
+          events={[
+            {
+              target: 'data',
+              eventHandlers: {
+                onPressIn: () => {
+                  return [
+                    {
+                      target: 'labels',
+                      //eventKey: props.index,
+                      mutation: props => {
+                        let categoryName = chartData[props.index].name;
+                        setSelectedCategory(categoryName);
+                        console.log(categoryName);
+                      },
+                    },
+                  ];
+                },
+              },
+            },
+          ]}
         />
 
         <View
           style={{
             position: 'absolute',
             top: '42%',
-            left: '40%',
+            left: '38%',
             alignSelf: 'center',
           }}>
           <Text
@@ -182,13 +143,14 @@ const PieChart: React.FC<PieChartProps> = ({data}) => {
           </Text>
         </View>
       </View>
-      <View style={styles.flatListContainer}>
+
+      {/* <View style={styles.flatListContainer}>
         <FlatList
           data={chartData}
           renderItem={renderItem}
           keyExtractor={(item, index) => `${index}`}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

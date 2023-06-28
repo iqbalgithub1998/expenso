@@ -15,9 +15,11 @@ import {useSelector} from 'react-redux';
 import PieChart from '../components/Chart';
 import {TransactionItemProps} from '../interface/User.interface';
 import BarChart from '../components/Barchart';
+import ChartList from '../components/ChartList';
 const Budget = () => {
-  const [viewMode, setViewMode] = useState('Chart');
+  //const [viewMode, setViewMode] = useState('Chart');
   const [switchMode, setSwitchMode] = useState('Borrowed');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const userData = useSelector((state: any) => state.userdata.userData);
 
@@ -25,24 +27,24 @@ const Budget = () => {
     return item.type === switchMode;
   });
   const renderChart = () => {
-    if (viewMode == 'Pie') {
-      return (
-        <View style={styles.chart}>
-          <PieChart data={filteredData} />
-        </View>
-      );
-    } else if (viewMode == 'Chart') {
-      return (
-        <View style={styles.chart}>
-          <BarChart data={filteredData} />
-        </View>
-      );
-    }
+    // if (viewMode == 'Pie') {
+    //   return (
+    // <View style={styles.chart}>
+    //   <PieChart data={filteredData} />
+    // </View>;
+    // );
+    // } else if (viewMode == 'Chart') {
+    //   return (any
+    //     <View style={styles.chart}>
+    //       <BarChart data={filteredData} />
+    //     </View>
+    //   );
+    // }
   };
 
   return (
     <View style={styles.container}>
-      <View>
+      {/* <View>
         <Text style={styles.header}>Financial Transactions</Text>
         <Text style={styles.subheader}>Summary</Text>
       </View>
@@ -107,7 +109,7 @@ const Budget = () => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
       <View style={styles.switch}>
         <TouchableOpacity
           style={[
@@ -150,9 +152,19 @@ const Budget = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <Text>Chart here</Text>
-        {renderChart()}
+      <View style={styles.chart}>
+        <PieChart
+          selectedCategory={selectedCategory}
+          setSelectedCategory={(data: string) => setSelectedCategory(data)}
+          data={filteredData}
+        />
+      </View>
+      <View style={{flex: 6, paddingTop: 25}}>
+        <ChartList
+          data={filteredData}
+          setSelectedCategory={(data: string) => setSelectedCategory(data)}
+          selectedCategory={selectedCategory}
+        />
       </View>
       {/* //container view ends */}
     </View>
@@ -236,5 +248,6 @@ const styles = StyleSheet.create({
   chart: {
     alignSelf: 'center',
     elevation: 10,
+    flex: 4,
   },
 });
