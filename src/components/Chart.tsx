@@ -16,6 +16,9 @@ interface PieChartProps {
   selectedCategory: string | null;
   setSelectedCategory: (name: string) => void;
 }
+interface CategoryExpense {
+  [category: string]: number;
+}
 
 const COLORS: {[key: string]: string} = {
   primary: '#7F3DFF',
@@ -36,6 +39,7 @@ const PieChart: React.FC<PieChartProps> = ({
   setSelectedCategory,
   data,
 }) => {
+  const categoryExpenses: CategoryExpense = {};
   const categories = data.map(item => item.category);
   const uniqueCategories = Array.from(new Set(categories));
 
@@ -50,9 +54,21 @@ const PieChart: React.FC<PieChartProps> = ({
     },
     {},
   );
+  data.forEach(item => {
+    const {category, expense} = item;
+    if (categoryExpenses[category]) {
+      categoryExpenses[category] += expense;
+    } else {
+      categoryExpenses[category] = expense;
+    }
+  });
 
   const totalCount = Object.values(categoryCounts).reduce(
     (total, count) => total + count,
+    0,
+  );
+  const totalExpense = Object.values(categoryExpenses).reduce(
+    (total, expense) => total + expense,
     0,
   );
 
@@ -60,10 +76,12 @@ const PieChart: React.FC<PieChartProps> = ({
     const percentage = ((categoryCounts[category] / totalCount) * 100).toFixed(
       0,
     );
+    const expense = categoryExpenses[category];
+    const expensepercentage = ((expense / totalExpense) * 100).toFixed(0);
     return {
       name: category,
       color: COLORS[category] || COLORS.primary,
-      x: `${percentage}%`,
+      x: `${expensepercentage}%`,
       y: categoryCounts[category],
     };
   });
@@ -130,7 +148,7 @@ const PieChart: React.FC<PieChartProps> = ({
               color: 'black',
               fontSize: 20,
             }}>
-            {totalCount}
+            {totalCount - 1}
           </Text>
           <Text
             style={{

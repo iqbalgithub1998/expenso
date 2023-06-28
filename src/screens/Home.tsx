@@ -202,6 +202,14 @@ const Home: React.FC<any> = ({navigation, route}) => {
           color={COLORS.PersonalCare}
         />
       );
+    } else if (item.category === 'Personal') {
+      iconComponent = (
+        <MaterialCommunityIcons
+          name="lotion"
+          size={IconSize}
+          color={COLORS.PersonalCare}
+        />
+      );
     } else if (item.category === 'Miscellaneous') {
       iconComponent = (
         <FontAwesome5
