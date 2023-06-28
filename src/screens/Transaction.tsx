@@ -95,7 +95,7 @@ const Transaction: React.FC<any> = ({navigation}) => {
       // ),
     }));
     setTransaction(data);
-    //console.log(data);
+    console.log(data);
     dispatch(setUserData(data));
   };
   let filteredData;

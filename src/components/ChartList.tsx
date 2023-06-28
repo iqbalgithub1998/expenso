@@ -32,6 +32,7 @@ const COLORS: {[key: string]: string} = {
   Healthcare: '#44A08D',
   Education: '#333399',
   PersonalCare: '#F56217',
+  Personal: '#F56217',
   Miscellaneous: '#3C3B3F',
   secondary: '#EEE5FF',
 };
@@ -177,14 +178,15 @@ const ChartList: React.FC<PieChartProps> = ({
             {
               backgroundColor:
                 selectedCategory === item.name ? item.color : COLORS.white,
+              borderColor: selectedCategory === item.name ? item.color : 'grey',
+              //minHeight: selectedCategory === item.name ? 80 : 50,
             },
           ]}>
           <View
             style={[
               styles.icon,
               {
-                backgroundColor:
-                  selectedCategory === item.name ? 'white' : COLORS.secondary,
+                borderColor: selectedCategory === item.name ? 'white' : 'grey',
               },
             ]}>
             {iconComponent}
@@ -209,13 +211,13 @@ const ChartList: React.FC<PieChartProps> = ({
                   color: selectedCategory === item.name ? 'white' : 'black',
                 },
               ]}>{`₹${categorySum}`}</Text>
-            <Text
+            {/* <Text
               style={[
                 styles.itemText,
                 {color: selectedCategory === item.name ? 'white' : 'black'},
               ]}>
               {item.x}
-            </Text>
+            </Text> */}
           </View>
         </View>
       </TouchableOpacity>
