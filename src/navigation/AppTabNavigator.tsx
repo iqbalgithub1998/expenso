@@ -58,7 +58,27 @@ const AppTabNavigator = () => {
       <Tab.Screen
         name="Transaction"
         component={TransactionStack}
-        options={{
+        options={({route}) => ({
+          tabBarStyle: {
+            display: getTabVisibility(route),
+            ...styles.tabBar,
+          },
+          tabBarIcon: ({focused}) => (
+            <View style={styles.tabIconContainer}>
+              <FontAwesome5
+                name="people-arrows"
+                size={28}
+                color={focused ? COLORS.primary : COLORS.grey}
+              />
+            </View>
+          ),
+        })}
+      />
+      {/* <Tab.Screen
+        name="Transaction"
+        component={TransactionStack}
+        options={
+          {
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
               <FontAwesome5
@@ -69,7 +89,7 @@ const AppTabNavigator = () => {
             </View>
           ),
         }}
-      />
+      /> */}
 
       <Tab.Screen
         name="Budget"

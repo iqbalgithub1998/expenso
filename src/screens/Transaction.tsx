@@ -95,7 +95,7 @@ const Transaction: React.FC<any> = ({navigation}) => {
       // ),
     }));
     setTransaction(data);
-    console.log(data);
+    //console.log(data);
     dispatch(setUserData(data));
   };
   let filteredData;
@@ -172,6 +172,14 @@ const Transaction: React.FC<any> = ({navigation}) => {
           name="md-school-sharp"
           size={IconSize}
           color={COLORS.Education}
+        />
+      );
+    } else if (item.category === 'Personal') {
+      iconComponent = (
+        <MaterialCommunityIcons
+          name="lotion"
+          size={IconSize}
+          color={COLORS.PersonalCare}
         />
       );
     } else if (item.category === 'Personal Care') {
