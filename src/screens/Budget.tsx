@@ -160,7 +160,11 @@ const Budget = () => {
         />
       </View>
       <View style={{flex: 6, paddingTop: 25}}>
-        <ChartList data={filteredData} selectedCategory={selectedCategory} />
+        <ChartList
+          data={filteredData}
+          setSelectedCategory={(data: string) => setSelectedCategory(data)}
+          selectedCategory={selectedCategory}
+        />
       </View>
       {/* //container view ends */}
     </View>

@@ -18,6 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 interface PieChartProps {
   data: TransactionItemProps[];
   selectedCategory: string | null;
+  setSelectedCategory: (name: string) => void;
 }
 
 const COLORS: {[key: string]: string} = {
@@ -35,7 +36,11 @@ const COLORS: {[key: string]: string} = {
   secondary: '#EEE5FF',
 };
 
-const ChartList: React.FC<PieChartProps> = ({data, selectedCategory}) => {
+const ChartList: React.FC<PieChartProps> = ({
+  data,
+  selectedCategory,
+  setSelectedCategory,
+}) => {
   const categories = data.map(item => item.category);
   const uniqueCategories = Array.from(new Set(categories));
 
@@ -165,7 +170,7 @@ const ChartList: React.FC<PieChartProps> = ({data, selectedCategory}) => {
     }, 0);
 
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => setSelectedCategory(item.name)}>
         <View
           style={[
             styles.itemContainer,
