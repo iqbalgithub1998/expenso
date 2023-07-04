@@ -21,6 +21,7 @@ import firestore from '@react-native-firebase/firestore';
 import {uploadTransferData} from '../Api/FireBaseInsertion';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import Toast from 'react-native-toast-message';
 
 const Transfer: React.FC<any> = ({navigation}) => {
   const handlePress = () => {
@@ -85,8 +86,13 @@ const Transfer: React.FC<any> = ({navigation}) => {
         dateValue,
       );
 
-      console.log('Expense data uploaded successfully');
-
+      console.log('data uploaded successfully');
+      Toast.show({
+        type: 'success',
+        text1: 'Data uploaded successfully',
+        position: 'top',
+        visibilityTime: 3500, // Duration in milliseconds
+      });
       navigation.navigate('InitialHome');
     } else {
       Alert.alert('Fill the fields');

@@ -25,6 +25,7 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import SuccessModal from '../components/SuccessModal';
 import ExpenseDropDown from '../components/ExpenseDropDown';
+import Toast from 'react-native-toast-message';
 
 const Expense: React.FC<any> = ({navigation}) => {
   // const height = useHeaderHeight()
@@ -86,8 +87,13 @@ const Expense: React.FC<any> = ({navigation}) => {
       );
       console.log('woring 2');
       console.log('Expense data uploaded successfully');
-      Alert.alert('Data uploaded succesfuly');
-      //setShowModal(true);
+      //Alert.alert('Data uploaded succesfuly');
+      Toast.show({
+        type: 'success',
+        text1: 'Data uploaded successfully',
+        position: 'top',
+        visibilityTime: 3500, // Duration in milliseconds
+      });
       navigation.navigate('InitialHome');
     } else {
       Alert.alert('Fill the fields');

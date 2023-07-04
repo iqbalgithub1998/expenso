@@ -95,7 +95,7 @@ const Transaction: React.FC<any> = ({navigation}) => {
       // ),
     }));
     setTransaction(data);
-    console.log(data);
+    //console.log(data);
     dispatch(setUserData(data));
   };
   let filteredData;
@@ -413,9 +413,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     //alignSelf: 'center',
-    justifyContent: 'space-between', // Align items at opposite ends
-    paddingHorizontal: 10,
+    justifyContent: 'space-around', // Align items at opposite ends
+    //paddingHorizontal: 10,
     width: '100%',
+    left: 20,
   },
 
   dropdownSelectorStyle: {

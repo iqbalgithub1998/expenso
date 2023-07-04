@@ -124,7 +124,7 @@ const PieChart: React.FC<PieChartProps> = ({
                       mutation: props => {
                         let categoryName = chartData[props.index].name;
                         setSelectedCategory(categoryName);
-                        console.log(categoryName);
+                        //console.log(categoryName);
                       },
                     },
                   ];
@@ -148,7 +148,7 @@ const PieChart: React.FC<PieChartProps> = ({
               color: 'black',
               fontSize: 20,
             }}>
-            {totalCount - 1}
+            {totalCount - 2}
           </Text>
           <Text
             style={{
