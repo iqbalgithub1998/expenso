@@ -247,7 +247,6 @@ const styles = StyleSheet.create({
   },
   chart: {
     alignSelf: 'center',
-    elevation: 10,
     flex: 4,
   },
 });
