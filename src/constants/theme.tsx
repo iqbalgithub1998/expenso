@@ -20,7 +20,7 @@ export const COLORS = {
   sulphur: '#ffff99',
   blue: '#0083B0',
   lightgreen: '#7befb2',
-  lightred: '#ff5e62',
+  //lightred: '#ff5e62',
   Food: '#E44D26',
   Travel: '#1565C0',
   Housing: '#dd1818',
@@ -32,6 +32,9 @@ export const COLORS = {
   PersonalCare: '#F56217',
   Miscellaneous: '#3C3B3F',
   switchColor: '#F1F1FA',
+  lightred: '#FFE2E4',
+  bglight:'#F6F6F6',
+  bordergrey:'#EEE5FF'
 };
 
 export const SIZES = {
