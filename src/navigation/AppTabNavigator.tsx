@@ -11,6 +11,7 @@ import Profile from '../screens/Profile';
 import HomeStack from './HomeStack';
 import TransactionStack from './TransactionStack';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import ProfileStack from './ProfileStack';
 
 const AppTabNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -108,7 +109,7 @@ const AppTabNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileStack}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
