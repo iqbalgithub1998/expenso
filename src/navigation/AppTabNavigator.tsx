@@ -22,7 +22,10 @@ const AppTabNavigator = () => {
       focusRoute === 'Expense' ||
       focusRoute === 'Income' ||
       focusRoute === 'Transfer' ||
-      focusRoute === 'Details'
+      focusRoute === 'Details' ||
+      focusRoute === 'Settings' ||
+      focusRoute === 'Export' ||
+      focusRoute === 'Account'
     ) {
       return 'none';
     }
@@ -110,6 +113,25 @@ const AppTabNavigator = () => {
       <Tab.Screen
         name="Profile"
         component={ProfileStack}
+        options={({route}) => ({
+          tabBarStyle: {
+            display: getTabVisibility(route),
+            ...styles.tabBar,
+          },
+          tabBarIcon: ({focused}) => (
+            <View style={styles.tabIconContainer}>
+              <FontAwesome5
+                name="people-arrows"
+                size={28}
+                color={focused ? COLORS.primary : COLORS.grey}
+              />
+            </View>
+          ),
+        })}
+      />
+      {/* <Tab.Screen
+        name="Profile"
+        component={ProfileStack}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
@@ -121,7 +143,7 @@ const AppTabNavigator = () => {
             </View>
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

@@ -123,7 +123,11 @@ const Profile: React.FC<any> = ({navigation}) => {
           if (item.label === 'Logout') {
             handleLogoutConfirmation();
           } else if (item.label === 'Settings') {
-            handlesettingsClick();
+            navigation.navigate('Settings');
+          } else if (item.label === 'Account') {
+            navigation.navigate('Account');
+          } else if (item.label === 'Export Data') {
+            navigation.navigate('Export');
           } else {
             handleListItemPress(item.label);
           }
