@@ -105,14 +105,7 @@ const Home: React.FC<any> = ({navigation, route}) => {
   };
 
   const handleSubmit = () => {
-    // logout()
-    //   .then(() => {
-    //     Alert.alert('Logout', 'Successfully Logged Out');
-    //     // navigation.navigate('Login');
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
+    navigation.navigate('Profile');
   };
 
   // const topSectionStyles = {

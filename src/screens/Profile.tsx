@@ -23,6 +23,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Modal from 'react-native-modal';
+import CustomButton from '../components/CustomButton';
 
 interface ListItem {
   label: string;
@@ -30,7 +32,7 @@ interface ListItem {
   library: any; // Replace 'any' with the specific type of the library component
 }
 
-const Profile = () => {
+const Profile: React.FC<any> = ({navigation}) => {
   const dispatch = useDispatch();
   const user = useSelector((store: RootState) => store.user);
   // const [loggedInUserName, setLoggedInUserName] = useState('');
@@ -69,32 +71,33 @@ const Profile = () => {
     if (label === 'Logout') {
       logout();
     } else {
-      console.log('Other List items clicked');
+      console.log(`${label} clicked`);
     }
   };
 
   const handleLogoutConfirmation = () => {
-    Alert.alert(
-      'Logout Confirmation',
-      'Are you sure you want to logout?',
-      [
-        {text: 'No', style: 'cancel'},
-        {text: 'Yes', onPress: logout},
-      ],
-      {cancelable: true},
-    );
+    // Alert.alert(
+    //   'Logout Confirmation',
+    //   'Are you sure you want to logout?',
+    //   [
+    //     {text: 'No', style: 'cancel'},
+    //     {text: 'Yes', onPress: logout},
+    //   ],
+    //   {cancelable: true},
+    // );
+    toggleModal();
   };
 
-  // const listItemData = [
-  //   'Account',
-  //   'Settings',
-  //   'Export Data',
-  //   'Logout',
-  // ];
-  //entypo - wallet
-  //Ionicons -md-settings
-  //AntDesign - upload
-  //MaterialIcons - logout
+  const handlesettingsClick = () => {
+    navigation.navigate('Settings');
+  };
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const listItemData = [
     {label: 'Account', icon: 'wallet', library: Entypo},
     {label: 'Settings', icon: 'md-settings', library: Ionicons},
@@ -119,6 +122,8 @@ const Profile = () => {
         onPress={() => {
           if (item.label === 'Logout') {
             handleLogoutConfirmation();
+          } else if (item.label === 'Settings') {
+            handlesettingsClick();
           } else {
             handleListItemPress(item.label);
           }
@@ -195,6 +200,53 @@ const Profile = () => {
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
+        <Modal
+          style={{width: '100%', marginLeft: 0, marginBottom: 0}}
+          isVisible={isModalVisible}
+          onBackButtonPress={() => setModalVisible(false)}
+          onBackdropPress={() => setModalVisible(false)}>
+          <View style={styles.modalview}>
+            <View style={{alignItems: 'center'}}>
+              <Text style={styles.logouttext}>Logout ?</Text>
+              <Text style={{color: COLORS.grey, fontWeight: '500'}}>
+                Are you sure you want to log out?
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginHorizontal: 18,
+              }}>
+              <CustomButton
+                Style={[styles.modalbutton]}
+                title="No"
+                titleStyle={{
+                  color: COLORS.primary,
+                  fontSize: 15,
+                  fontWeight: '600',
+                }}
+                backgroundColor={COLORS.secondary}
+                onPress={toggleModal}
+              />
+              <CustomButton
+                Style={[styles.modalbutton]}
+                title="Yes"
+                titleStyle={{
+                  color: COLORS.white,
+                  fontSize: 15,
+                  fontWeight: '600',
+                }}
+                backgroundColor={COLORS.primary}
+                onPress={() => {
+                  logout();
+                }}
+              />
+            </View>
+            {/* <Button title="Hide modal" onPress={toggleModal} /> */}
+          </View>
+        </Modal>
 
         {/* <View style={styles.button}>
         <Button color="red" title="logout" onPress={logout}></Button>
@@ -304,5 +356,32 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
+  },
+  modalview: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 200,
+    backgroundColor: COLORS.white,
+    width: '100%',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  logouttext: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: COLORS.black,
+    marginBottom: 10,
+  },
+  modalbutton: {
+    minHeight: 60,
+    width: '50%',
+    // borderWidth: 1,
+    // borderColor: 'black',
+    borderRadius: 15,
+    marginHorizontal: 5,
   },
 });

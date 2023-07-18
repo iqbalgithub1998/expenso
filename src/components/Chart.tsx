@@ -148,7 +148,7 @@ const PieChart: React.FC<PieChartProps> = ({
               color: 'black',
               fontSize: 20,
             }}>
-            {totalCount - 2}
+            {totalCount}
           </Text>
           <Text
             style={{
