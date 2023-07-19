@@ -89,6 +89,7 @@ const Profile: React.FC<any> = ({navigation}) => {
   };
 
   const handlesettingsClick = () => {
+    console.log('Settings clicked');
     navigation.navigate('Settings');
   };
 
