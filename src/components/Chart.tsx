@@ -63,10 +63,14 @@ const PieChart: React.FC<PieChartProps> = ({
     }
   });
 
-  const totalCount = Object.values(categoryCounts).reduce(
-    (total, count) => total + count,
-    0,
-  );
+  // const totalCount = Object.values(categoryCounts).reduce(
+  //   (total, count) => total + count,
+  //   0,
+  // );
+  //const totalCount = chartData.reduce((total, item) => total + item.y, 0);
+  const totalCount = Object.keys(categoryCounts).length;
+  //console.log('Total Count:', totalCount);
+
   const totalExpense = Object.values(categoryExpenses).reduce(
     (total, expense) => total + expense,
     0,
@@ -85,6 +89,7 @@ const PieChart: React.FC<PieChartProps> = ({
       y: categoryCounts[category],
     };
   });
+  //const totalCount = chartData.reduce((total, item) => total + item.y, 0);
 
   const handleChartPress = (_: any, props: any) => {
     //const categoryName = chartData[props.index].name;

@@ -120,9 +120,9 @@ const AppTabNavigator = () => {
           },
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
-              <FontAwesome5
-                name="people-arrows"
-                size={28}
+              <Ionicons
+                name="person-circle-sharp"
+                size={32}
                 color={focused ? COLORS.primary : COLORS.grey}
               />
             </View>
